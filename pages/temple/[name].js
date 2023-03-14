@@ -98,9 +98,9 @@ const temple = () => {
 
                 <div style={{marginBottom:`${unit*5}px`}} id="programContainer">
                     <h1 className="fw-bold text-secondary ps-4" id="programTitle">프로그램</h1>
-                    <Container style={{marginTop:`${unit*2}px`}} id={'cardContainer'}>
+                    <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
-                            <Col md={4} style={{ flexBasis: '432px' }}><Card style={{ width: '100%' }}>
+                            <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}><Card style={{ width: '100%' }}>
                                 <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2231.png" style={{height: '280px'}}/>
                                 <Card.Body>
                                     <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
@@ -108,20 +108,42 @@ const temple = () => {
                                     <Button variant="primary">예약하러 가기</Button>
                                 </Card.Body>
                             </Card></Col>
-                            <Col md={4} style={{ flexBasis: '432px' }}><Card style={{ width: '100%' }}>
-                                <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_11381.png" style={{height: '280px'}} />
+                            <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}><Card style={{ width: '100%' }}>
+                                <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2231.png" style={{height: '280px'}}/>
                                 <Card.Body>
-                                    <Card.Title style={{height:`70px`}}>[갑사] [2022 문화가있는날] 템플스테이</Card.Title>
+                                    <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
+                                    </Card.Title>
                                     <Button variant="primary">예약하러 가기</Button>
                                 </Card.Body>
-                            </Card></Col>
-                            <Col md={4} style={{ flexBasis: '432px' }}><Card style={{ width: '100%' }}>
-                                <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2401.png" style={{height: '280px'}} />
-                                <Card.Body>
-                                    <Card.Title style={{height:`70px`}}>[갑사] 주말 휴일 템플스테이</Card.Title>
-                                    <Button variant="primary">예약하러 가기</Button>
-                                </Card.Body>
-                            </Card></Col>
+                            </Card></Col><Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}><Card style={{ width: '100%' }}>
+                            <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2231.png" style={{height: '280px'}}/>
+                            <Card.Body>
+                                <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
+                                </Card.Title>
+                                <Button variant="primary">예약하러 가기</Button>
+                            </Card.Body>
+                        </Card></Col><Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}><Card style={{ width: '100%' }}>
+                            <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2231.png" style={{height: '280px'}}/>
+                            <Card.Body>
+                                <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
+                                </Card.Title>
+                                <Button variant="primary">예약하러 가기</Button>
+                            </Card.Body>
+                        </Card></Col><Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}><Card style={{ width: '100%' }}>
+                            <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2231.png" style={{height: '280px'}}/>
+                            <Card.Body>
+                                <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
+                                </Card.Title>
+                                <Button variant="primary">예약하러 가기</Button>
+                            </Card.Body>
+                        </Card></Col><Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}><Card style={{ width: '100%' }}>
+                            <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2231.png" style={{height: '280px'}}/>
+                            <Card.Body>
+                                <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
+                                </Card.Title>
+                                <Button variant="primary">예약하러 가기</Button>
+                            </Card.Body>
+                        </Card></Col>
                         </Row>
                     </Container>
                 </div>
