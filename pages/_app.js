@@ -3,7 +3,7 @@ import '../styles/css/Nav.css'
 import '../styles/globals.css'
 import Layout from "./layout/Layout"
 
-
+//dkanrjsk
 function MyApp({ Component, pageProps }) {
   return (
       //
