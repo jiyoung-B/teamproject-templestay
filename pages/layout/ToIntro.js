@@ -1,6 +1,4 @@
-import Link from 'next/link'
 import {NavLink} from "react-bootstrap";
-import collapse from "bootstrap/js/src/collapse";
 
 
 
