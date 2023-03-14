@@ -1,0 +1,16 @@
+.title {
+    font-size: 23px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+}
+.title a:link {
+    text-decoration: none;
+    color: #331904;
+}
+.title a:hover { color: #fd7e14; }
+.title a:visited { color: #331904; }
+.title a:active { color: #fd7e14; }
+.bi-person {
+    font-size: 27px;
+}

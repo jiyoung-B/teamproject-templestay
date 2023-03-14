@@ -1,6 +1,6 @@
 import Nav from "./Nav";
 import Footer from "./Footer";
-import ToIntro from "../../components/ToIntro";
+import ToIntro from "./ToIntro";
 
 
 const Layout =({children}) =>{
@@ -8,12 +8,10 @@ const Layout =({children}) =>{
         <div className="container" id="wrapper">
             <ToIntro />
             <Nav />
-            <main>
-              {children}
-            </main>
+            <main>{children}</main>
             <Footer />
         </div>
     )
 }
 
-export default Layout;
+export default Layout ;
