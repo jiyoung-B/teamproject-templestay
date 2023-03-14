@@ -7,20 +7,23 @@ import axios from 'axios'
 
 export async function getServerSideProps(ctx) {
 
-    let url = `http://localhost:3000/api/temple?id=갑사`
+    let {id} = ctx.query
+
+    let param = `?id=${id}`
+    let url = `http://localhost:3000/api/temple${param}`
+
     const res = await axios.get(url)
 
-    let {temple, templePic} = await res.data;
-    console.log(templePic);
+    let {temple, templePic, distinctProPic} = await res.data;
 
-    return {props:{temple,templePic}}
+    return {props:{temple,templePic,distinctProPic}}
 }
 
 
 // css 단위 변수
 const unit = 28
 
-const temple = ({temple,templePic}) => {
+const temple = ({temple,templePic,distinctProPic}) => {
 
     return(
         <div id="templeWrapper">
@@ -84,20 +87,22 @@ const temple = ({temple,templePic}) => {
 
                 <div style={{marginBottom:`${unit*5}px`}} id="programContainer">
                     <h1 className="fw-bold text-secondary ps-4" id="programTitle">프로그램</h1>
-                    <div className={''} style={{display: 'flex',
-                        flexWrap: 'wrap'}} id={'cardContainer'}>
-                        <div id={'card'}>
-                            <Card style={{ width: '100%' }}>
-                            <Card.Img variant="top" src="https://noms.templestay.com/images//RsImage/L_2231.png" style={{height: '280px'}}/>
-                            <Card.Body>
-                                <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
-                                </Card.Title>
-                                <Button variant="primary">예약하러 가기</Button>
-                            </Card.Body>
-                        </Card>
-                        </div>
-                    </div>
-
+                    <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
+                        <Row>
+                        {distinctProPic.map((program)=>(
+                            <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}>
+                                <Card style={{ width: '100%' }}>
+                                <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}}/>
+                                <Card.Body>
+                                    <Card.Title style={{height:`70px`}}>{program.P_NAME}
+                                    </Card.Title>
+                                    <Button variant="primary">예약하러 가기</Button>
+                                </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                        </Row>
+                    </Container>
                 </div>
 
             </div>
