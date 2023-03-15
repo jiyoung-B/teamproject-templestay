@@ -3,6 +3,8 @@ import { HiOutlineMapPin } from 'react-icons/hi2';
 import { BsCalendar } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
 import Link from 'next/link';
+import Footer from "./Footer";
+import Intro from "../intro";
 
 const Nav = () => {
     return (
@@ -43,5 +45,6 @@ const Nav = () => {
         </div>
     );
 };
+// Nav.getLayout = (page) => <Nav>{page}</Nav>;
 
 export default Nav;
