@@ -5,3 +5,39 @@
 .bi-person {
     font-size: 27px;
 }
+
+
+.calbtn {
+    background-color: white;
+    color: #331904;
+    font-size: 23px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid white;
+}
+.calbtn:hover {
+    background-color: white;
+    color: #331904;
+    border: 1px solid white;
+}
+.calbtn:active {
+    background-color: white;
+    color: #331904;
+    border: 1px solid white;
+}
+.cal {
+    display: flex;
+}
+
+button.btn:nth-child(2) {
+    background-color: #984C0C;
+    border: 1px solid white;
+}
+
+div.react-datepicker-wrapper:nth-child(1) > div:nth-child(1) {
+    text-align: center;
+}
+
+div.react-datepicker-wrapper:nth-child(2) > div:nth-child(1) {
+    text-align: center;
+}
