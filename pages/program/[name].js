@@ -137,16 +137,16 @@ const Program = () => {
                             <p className={'fs-5 fw-bold'}>원하는 날</p>
                             <Table>
                                 <thead>
-                                    <tr>
-                                        <th>시작시간</th>
-                                        <th>일정명</th>
-                                    </tr>
+                                <tr>
+                                    <th>시작시간</th>
+                                    <th>일정명</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>10:00~11:30</td>
-                                        <td>보물투어</td>
-                                    </tr>
+                                <tr>
+                                    <td>10:00~11:30</td>
+                                    <td>보물투어</td>
+                                </tr>
                                 <tr><td>11:30~12:30</td><td>점심공양</td></tr>
                                 <tr><td>12:30~14:00</td><td>용문폭포 걷기 명상</td></tr>
                                 <tr><td>14:00~15:00</td><td>108 여의보주 만들기</td></tr>
