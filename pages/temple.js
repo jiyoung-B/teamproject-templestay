@@ -89,18 +89,18 @@ const temple = ({temple,templePic,distinctProPic}) => {
                     <h1 className="fw-bold text-secondary ps-4" id="programTitle">프로그램</h1>
                     <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
-                        {distinctProPic.map((program)=>(
-                            <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}>
-                                <Card style={{ width: '100%' }}>
-                                <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}}/>
-                                <Card.Body>
-                                    <Card.Title style={{height:`70px`}}>{program.P_NAME}
-                                    </Card.Title>
-                                    <Button variant="primary">예약하러 가기</Button>
-                                </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
+                            {distinctProPic.map((program)=>(
+                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}>
+                                    <Card style={{ width: '100%' }}>
+                                        <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}}/>
+                                        <Card.Body>
+                                            <Card.Title style={{height:`70px`}}>{program.P_NAME}
+                                            </Card.Title>
+                                            <Button variant="primary">예약하러 가기</Button>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            ))}
                         </Row>
                     </Container>
                 </div>
