@@ -11,7 +11,7 @@ const Nav = () => {
                 <Row className='title'>
                     <Col md={{ span: 2 }}>
                         <NavLink href='/'>
-                            Temfo
+                            Temfo,
                         </NavLink>
                     </Col>
                     <Col md={{ span: 1, offset: 3 }}>
