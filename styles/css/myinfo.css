@@ -1,0 +1,56 @@
+.lnm2 {
+    font-size: 25px;
+    border-bottom: 1px solid #331904;
+    margin-bottom: 1%;
+    padding-bottom: 1%;
+}
+.likesmenu2 {   /*좋아요*/
+    text-align: right;
+    margin-left: -1%;
+    padding: 0;
+}
+.likesmenu2 a:link { text-decoration: none; }
+.likesmenu2 a:hover { color: #fd7e14; }
+.likesmenu2 a:visited { color: #331904; }
+.likesmenu2 a:active { color: #fd7e14; }
+.bar2 {   /* | */
+    max-width: 2%;
+    text-align: center;
+    padding: 0;
+}
+.infomenu2 {   /*내정보*/
+    font-weight: bold;
+    text-align: left;
+    padding: 0;
+}
+
+
+.msg {   /*개인정보 유출에 조심하세요*/
+    font-weight: bold;
+    font-size: 25px;
+    text-align: left;
+    color: #331904;
+    margin-bottom: 1%;
+}
+
+.psinfo {
+    min-height: 200px;
+    margin-bottom: 1%;
+}
+.psinfo > div:nth-child(1) {
+    border: 2px solid #984C0C;
+    border-radius: 12px;
+    min-height: 200px;
+    text-align: left;
+}
+
+.bkinfo {
+    min-height: 150px;
+    margin-bottom: 3%;
+}
+.bkinfo > div:nth-child(1) {
+    border: 2px solid #984C0C;
+    border-radius: 12px;
+    min-height: 150px;
+    text-align: left;
+}
