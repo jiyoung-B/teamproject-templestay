@@ -5,10 +5,10 @@ import ToIntro from "./ToIntro";
 
 const Layout =({children}) =>{
     return(
-        <div className="container" id="wrapper">
+        <div id="wrapper">
             <ToIntro />
             <Nav />
-            <main>{children}</main>
+            <main className="container">{children}</main>
             <Footer />
         </div>
     )

@@ -1,0 +1,53 @@
+.lnm {
+    font-size: 25px;
+    border-bottom: 1px solid #331904;
+    margin-bottom: 1%;
+    padding-bottom: 1%;
+}
+.likesmenu1 {   /*좋아요*/
+    font-weight: bold;
+    text-align: right;
+    margin-left: -1%;
+    padding: 0;
+}
+.bar1 {   /* | */
+    max-width: 2%;
+    text-align: center;
+    padding: 0;
+}
+.infomenu1 {   /*내정보*/
+    text-align: left;
+    padding: 0;
+}
+.infomenu1 a:link { text-decoration: none; }
+.infomenu1 a:hover { color: #fd7e14; }
+.infomenu1 a:visited { color: #331904; }
+.infomenu1 a:active { color: #fd7e14; }
+
+.temples {   /*좋아요를 누른 사찰*/
+    /*margin-top: 20px;*/
+    margin-bottom: 20px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #331904;
+    text-align: left;
+}
+.likeslist {
+    display: flex;
+    border: 2px solid #984C0C;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    padding: 1.5% 0;
+}
+.likeslist > div {
+    font-size: 20px;
+    text-align: center;
+}
+
+.tpl {
+    margin-bottom: 20px;
+}
+.tpl:last-child {
+    margin-bottom: 3%;
+}
