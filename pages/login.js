@@ -4,12 +4,7 @@ export default function login() {
     return (
         <div>
 
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
-                로그인
-            </button>
-            <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#joinModal">
-                회원가입
-            </button>
+
 
             {/*login modal*/}
             <div className="modal fade" id="loginModal" tabIndex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" >
