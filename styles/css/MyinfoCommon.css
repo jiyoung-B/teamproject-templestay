@@ -1,0 +1,17 @@
+.fstr {   /* 메인 첫 번째 로우 */
+    padding-top: 60px;
+}
+
+.welcome {   /*환영합니다*/
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    color: #331904;
+    padding-bottom: 5%;
+}
+.email {   /*이메일*/
+    text-align: left;
+    font-size: 14px;
+    color: #331904;
+    padding-left: 1%;
+}
