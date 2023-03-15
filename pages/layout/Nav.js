@@ -31,7 +31,9 @@ const Nav = () => {
                     <Col md={{ span: 1, offset: 4 }}>
                         <NavLink href='/login'>
                             <NavLink>
-                                <CiUser />
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal"
+                                        style={{border: "1px solid white", backgroundColor: "white"}}
+                                ><CiUser /></button>
                             </NavLink>
                         </NavLink>
                     </Col>
