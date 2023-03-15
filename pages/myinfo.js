@@ -18,13 +18,13 @@ export default function Myinfo () {
                     <Col className="offset-1">개인정보 유출에 조심하세요</Col>
                 </Row>
                 <Row className="psinfo">
-                    <Col className="col-10 offset-1">카드링크</Col>
+                    <Col className="col-10 offset-1">카드</Col>
                 </Row>
                 <Row className="msg">
                     <Col className="offset-1">예약 정보</Col>
                 </Row>
                 <Row className="bkinfo">
-                    <Col className="col-10 offset-1">카드링크</Col>
+                    <Col className="col-10 offset-1">카드</Col>
                 </Row>
             </Container>
         </main>
