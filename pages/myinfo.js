@@ -25,6 +25,7 @@ export default function Myinfo () {
                 </Row>
                 <Row className="bkinfo">
                     <Col className="col-10 offset-1">카드</Col>
+                    {/*!!*/}
                 </Row>
             </Container>
         </main>
