@@ -45,7 +45,7 @@ const Nav = () => {
 
 
     return (
-        <div className='border-bottom border-2 border-primary' id='navWrapper'>
+        <div className='border-bottom border-2 border-primary bg-white' id='navWrapper'>
             <Container fluid='xxl'>
                 <Row className='title'>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
