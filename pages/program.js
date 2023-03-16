@@ -25,7 +25,7 @@ const Program = ({proData}) => {
     const unit = 28
 
     return(
-        <div style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
+        <div className={'container'} style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
 
             <div id={'titleWrapper'}>
                 <h3 className={"text-primary ps-4"} key={proData[0][0].PID}>{proData[0][0].P_NAME}</h3>
