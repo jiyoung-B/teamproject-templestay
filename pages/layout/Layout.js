@@ -2,24 +2,30 @@ import Nav from "./Nav";
 import Footer from "./Footer";
 import ToIntro from "./ToIntro";
 import {Component} from "react";
-import IntroHead from "./IntroHead";
+import {Head} from "next/document";
 
+// 반영이 안돼?
+const Layout =({children, menu, meta}) =>{
+    const {description, icon} = meta;
 
-// 함수로 url받아서 if 문으로 표시하고 안하고.
-const Layout =({children}) =>{
-
-    // Intro.getLayout = (page) => <Footer>{page}</Footer>;
     return(
-        <div id="wrapper">
-            <ToIntro />
-            <Nav />
-            {/*{getLayout(<Component {...pageProps} />)}*/}
-            {/*<IntroHead />*/}
+        <html lang="ko">
+        <head>
+            <link rel="icon" href="/comma1.png" />
+            <title>Temfo,</title>
+        </head>
 
+        <body>
+        <div id="wrapper">
             <main>{children}</main>
             <Footer />
+
         </div>
+        </body>
+        </html>
     )
 }
+
+
 
 export default Layout ;
