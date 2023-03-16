@@ -6,6 +6,9 @@ import Link from 'next/link';
 import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {ko} from "date-fns/locale";
+
+
 
 
 
@@ -25,12 +28,20 @@ const Nav = () => {
         }
     };
 
+
+    const tomorrow = new Date().setDate(new Date().getDate() + 1);
+
     const [show, setShow] = useState(false);
+    const [startDate, setStartDate] = useState(tomorrow);
+    const [endDate, setEndDate] = useState(null);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState('');
+    const onChange = (dates) => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+    };
 
 
     return (
@@ -44,45 +55,34 @@ const Nav = () => {
                     </Col>
                     <Col md={{ span: 5 }} style={{textAlign: "right"}}>
                         <Link href='/region'>
-                            <NavLink style={{paddingTop: "0.5%"}}>
-                                <HiOutlineMapPin style={{marginTop: "-1.5%"}} />지역
+                            <NavLink style={{marginTop: "0.2%"}}>
+                                <HiOutlineMapPin style={{marginTop: "-2%"}} />지역
                             </NavLink>
                         </Link>
                     </Col>
                     <Col md={{ span: 5 }} style={{textAlign: "left"}}>
-                        {/*<Link href='/calendar'>
-                            <NavLink>
-                                일정<BsCalendar />
-                            </NavLink>
-                        </Link>*/}
                         <>
-                            <Button className="calbtn" onClick={handleShow}>일정<BsCalendar style={{marginTop: "-10%"}} /></Button>
+                            <Button className="calbtn" onClick={handleShow}>일정<BsCalendar style={{marginTop: "-13%"}} /></Button>
                             <Modal show={show} onHide={handleClose}>
-                                <Modal.Header closeButton>
+                                <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
                                     <Modal.Title>날짜 선택</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body className="cal">
                                     <DatePicker
                                         selected={startDate}
-                                        onChange={(date) => setStartDate(date)}
-                                        selectsStart
+                                        onChange={onChange}
+                                        inline
                                         startDate={startDate}
                                         endDate={endDate}
+                                        minDate={tomorrow}
+                                        monthsShown={2}
+                                        selectsRange
                                         dateFormat="yyyy-MM-dd"
-                                        language="ko"
-                                    />
-                                    <DatePicker
-                                        selected={endDate}
-                                        onChange={(date) => setEndDate(date)}
-                                        selectsEnd
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        dateFormat="yyyy-MM-dd"
-                                        language="ko"
+                                        locale={ko}
                                     />
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button variant="secondary" onClick={handleClose}>
+                                    <Button variant="secondary" onClick={handleClose} style={{backgroundColor: "#331904"}}>
                                         닫기
                                     </Button>
                                     <Button variant="primary" onClick={handleClose}>
@@ -95,9 +95,13 @@ const Nav = () => {
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                         <NavLink href='/login'>
                             <NavLink>
+
+                                <CiUser style={{marginTop: "-5%"}} />
+
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal"
                                         style={{border: "1px solid white", backgroundColor: "white"}}
                                 ><CiUser /></button>
+
                             </NavLink>
                         </NavLink>
                     </Col>
