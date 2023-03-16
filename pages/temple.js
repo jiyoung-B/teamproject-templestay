@@ -1,6 +1,7 @@
 import Carousel from 'react-bootstrap/Carousel';
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import axios from 'axios'
+import {useEffect} from "react";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,
 // 빈 화면이 표시 될 수 있다.
@@ -23,7 +24,51 @@ export async function getServerSideProps(ctx) {
 // css 단위 변수
 const unit = 28
 
-const temple = ({temple,templePic,distinctProPic}) => {
+export default function temple ({temple,templePic,distinctProPic}) {
+
+    useEffect(() => {
+        const script = document.createElement('script');
+
+        script.async = true;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=89da95ceb6fd3e9c3e590a9f8786d5e8&libraries=services&autoload=false`;
+
+        document.head.appendChild(script);
+
+        const onLoadKakaoMap = () => {
+            kakao.maps.load(() => {
+                let mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                    mapOption = {
+                        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                        level: 3 // 지도의 확대 레벨
+                    };
+
+                // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+                let map = new kakao.maps.Map(mapContainer, mapOption);
+
+                let geocoder = new kakao.maps.services.Geocoder();
+
+                // 주소로 좌표를 검색합니다
+                geocoder.addressSearch(temple[0].T_ADDR, function(result, status) {
+
+                    // 정상적으로 검색이 완료됐으면
+                    if (status === kakao.maps.services.Status.OK) {
+
+                        let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                        // 결과값으로 받은 위치를 마커로 표시합니다
+                        let marker = new kakao.maps.Marker({
+                            map: map,
+                            position: coords
+                        });
+
+                        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                        map.setCenter(coords);
+                    }
+                });
+            });
+        };
+        script.addEventListener('load', onLoadKakaoMap);
+    }, []);
 
     return(
         <div id="templeWrapper">
@@ -74,8 +119,8 @@ const temple = ({temple,templePic,distinctProPic}) => {
 
                         </Col>
                         <Col sm={8}>
-                            <div id="mapWrap">
-                                <img src="https://cis.seoul.go.kr/ko/totalalimi_new/images/map/map_0.png" className="img-thumbnail" height="860" width="100%"/>
+                            <div id="mapWrap" key={'mapWrap'}>
+                                <div style={{width: '100%', height: '600px'}} id='map' key={'map'} />
                             </div>
                         </Col>
 
@@ -110,7 +155,3 @@ const temple = ({temple,templePic,distinctProPic}) => {
         </div>
     )
 }
-
-
-
-export default temple
