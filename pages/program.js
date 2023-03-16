@@ -1,13 +1,7 @@
 import Carousel from "react-bootstrap/Carousel";
-import {Button, Card, Col, Container, NavLink, Row, Table} from "react-bootstrap";
+import {Button, Card, Col, Container, Row, Table} from "react-bootstrap";
 import {BsCheck2} from "react-icons/bs";
 import axios from "axios";
-import Layout from "./layout/Layout";
-import Nav from "./layout/Nav";
-import shortid from 'shortid'
-import {handleImgError} from "../components/Util";
-//shortid.generate()
-
 
 export async function getServerSideProps(ctx) {
 
@@ -20,8 +14,12 @@ export async function getServerSideProps(ctx) {
 
     let proData = await res.data;
 
+
+
+
     return {props:{proData}}
 }
+
 
 export default function Program ({proData}) {
     const unit = 28
@@ -30,7 +28,7 @@ export default function Program ({proData}) {
         <div className={'container'} style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
 
             <div id={'titleWrapper'}>
-                <h3 className={"text-primary ps-4"}>{proData[0][0].P_NAME}</h3>
+                <h3 className={"text-primary ps-4"} key={proData[0][0].PID}>{proData[0][0].P_NAME}</h3>
             </div>
             <div style={{marginTop:`${unit*1}px`}} id={'imgWrapper'}>
                 <div id="carouseContainer">
@@ -38,14 +36,12 @@ export default function Program ({proData}) {
                     <Carousel>
 
                         {proData[1].map(pic => (
-                            <Carousel.Item key={shortid.generate()}>
+                            <Carousel.Item>
                                 <img
                                 className="d-block w-100"
-                                src={pic}
+                                src={pic.P_PICLINK}
                                 alt="First slide"
                                 height="800px"
-                                onError={handleImgError}
-                                key={shortid.generate()}
                                 />
                             </Carousel.Item>
                         ))}
@@ -92,14 +88,14 @@ export default function Program ({proData}) {
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={11}>
-                            <span className={'fs-3 me-3 text-primary'}>참가비용</span> <span className={'ms-5 text-danger'}>{proData[0][0].P_CAUTION}</span>
-                            <div className={'mt-2'} id={'priceTableContainer'}>
+                            <span className={'fs-3 me-3 text-primary'} key={proData[0][0].PID}>참가비용</span> <span className={'ms-5 text-danger'} key={proData[0][0].PID}>{proData[0][0].P_CAUTION}</span>
+                            <div className={'mt-2'}id={'priceTableContainer'}>
                                 <Table striped bordered hover>
                                     <thead>
                                     <tr>
                                         <th>구 분</th>
                                         {proData[2].map(clas =>(
-                                            <th key={shortid.generate()}>{clas.PR_CLASS}</th>
+                                            <th>{clas.PRICECLASS}</th>
                                         ))}
                                     </tr>
                                     </thead>
@@ -107,7 +103,7 @@ export default function Program ({proData}) {
                                     <tr>
                                         <td>{proData[2][0].DIVISION}</td>
                                         {proData[2].map(pri =>(
-                                            <td key={shortid.generate()}>{pri.PRICE}</td>
+                                            <td>{pri.PRICE}</td>
                                         ))}
                                     </tr>
                                     </tbody>
@@ -121,7 +117,7 @@ export default function Program ({proData}) {
             <div  style={{marginTop:`${unit*4}px`}} id={'contentWrapper'}>
                 <div id={'contentContainer'}>
                     <p className="fs-3 fw-bold text-secondary">프로그램 소개</p>
-                    <p> <span className={'text-warning fs-4'}> {proData[2][0].DIVISION}</span>&nbsp;{proData[0][0].P_INTRO}</p>
+                    <p key={proData[0].PID}> <span className={'text-warning fs-4'} key={proData[0][0].PID}> {proData[0][0].P_CLASS}</span>&nbsp;{proData[0][0].P_INTRO}</p>
                 </div>
             </div>
             <div style={{marginTop:`${unit*2}px`}} id={'scheduleWrapper'}>
@@ -132,34 +128,24 @@ export default function Program ({proData}) {
                             <p>기타 코멘트</p>
                         </Col>
                         <Col md={9}>
-                        {proData[4].map(day => (
-                            <Row key={shortid.generate()}>
-
-                                <Col key={shortid.generate()}>
-                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
-
-                                    <Table key={shortid.generate()}>
-                                        <thead key={shortid.generate()}>
-                                        <tr key={shortid.generate()}>
-                                            <th style={{width:'50%'}} key={shortid.generate()}>시작시간</th>
-                                            <th key={shortid.generate()}>일정명</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody key={shortid.generate()}>
-
-                                        {day.P_INFO.map(sch => (
-                                            <tr key={shortid.generate()}>
-                                                <td style={{width:'50%'}} key={shortid.generate()}>{sch.P_TIME}</td>
-                                                <td key={shortid.generate()}>{sch.P_CONTENT}</td>
-                                            </tr>
-                                        ))}
-
-                                        </tbody>
-                                    </Table>
-                                </Col>
-                            </Row>
-                        )
-                        )}
+                            <p className={'fs-5 fw-bold'}>원하는 날</p>
+                            <Table>
+                                <thead>
+                                <tr>
+                                    <th>시작시간</th>
+                                    <th>일정명</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>10:00~11:30</td>
+                                    <td>보물투어</td>
+                                </tr>
+                                <tr><td>11:30~12:30</td><td>점심공양</td></tr>
+                                <tr><td>12:30~14:00</td><td>용문폭포 걷기 명상</td></tr>
+                                <tr><td>14:00~15:00</td><td>108 여의보주 만들기</td></tr>
+                                </tbody>
+                            </Table>
                         </Col>
                     </Row>
                 </Container>
@@ -170,23 +156,17 @@ export default function Program ({proData}) {
                     <p className={'fs-3 fw-bold text-secondary'} id="programTitle">다른 프로그램</p>
                     <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
-                            {proData[5].map(program => (
-
-                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
-
-                                        <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                            <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
-                                            <Card.Body key={shortid.generate()}>
-                                                <Card.Title style={{height:`70px`}} key={shortid.generate()}>
-                                                    {program.P_NAME}
-                                                </Card.Title>
-                                            <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
-                                            </Card.Body>
-                                        </Card>
-
+                            {proData[3].map((program)=>(
+                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}>
+                                    <Card style={{ width: '100%' }}>
+                                        <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}}/>
+                                        <Card.Body>
+                                            <Card.Title style={{height:`70px`}}>{program.P_NAME}
+                                            </Card.Title>
+                                            <Button variant="primary">예약하러 가기</Button>
+                                        </Card.Body>
+                                    </Card>
                                 </Col>
-
-
                             ))}
                         </Row>
                     </Container>
@@ -198,9 +178,3 @@ export default function Program ({proData}) {
 
     )
 }
-Program.getLayout = (page) => (
-    <Layout meta={{title: '프로그램 페이지'}}>
-        <Nav />
-        {page}
-    </Layout>
-)

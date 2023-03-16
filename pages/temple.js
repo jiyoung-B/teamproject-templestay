@@ -1,18 +1,14 @@
 import Carousel from 'react-bootstrap/Carousel';
-import {Button, Card, Col, Container, NavLink, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import axios from 'axios'
 import {useEffect} from "react";
-import Layout from "./layout/Layout";
-import Nav from "./layout/Nav";
-import shortid from "shortid";
-import {handleImgError} from "../components/Util";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,
 // 빈 화면이 표시 될 수 있다.
 
 export async function getServerSideProps(ctx) {
 
-    let {id, pid} = ctx.query
+    let {id} = ctx.query
 
     let param = `?id=${id}`
     let url = `http://localhost:3000/api/temple${param}`
@@ -21,14 +17,14 @@ export async function getServerSideProps(ctx) {
 
     let {temple, templePic, distinctProPic} = await res.data;
 
-    return {props:{temple,templePic,distinctProPic,pid}}
+    return {props:{temple,templePic,distinctProPic}}
 }
 
 
 // css 단위 변수
 const unit = 28
 
-export default function temple ({temple,templePic,distinctProPic,pid}) {
+export default function temple ({temple,templePic,distinctProPic}) {
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -52,7 +48,7 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                 let geocoder = new kakao.maps.services.Geocoder();
 
                 // 주소로 좌표를 검색합니다
-                geocoder.addressSearch(temple[0].ADDR, function(result, status) {
+                geocoder.addressSearch(temple[0].T_ADDR, function(result, status) {
 
                     // 정상적으로 검색이 완료됐으면
                     if (status === kakao.maps.services.Status.OK) {
@@ -76,18 +72,15 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
 
     return(
         <div id="templeWrapper">
-            <div className='container' id='templeContainer'>
-
             <div id="carouselWrapper" style={{marginTop:`${unit*2}px`}}>
                 <div id="carouseContainer">
                     <Carousel>
                         {templePic.map(pic => (
-                            <Carousel.Item key={shortid.generate()}>
+                            <Carousel.Item key={pic.T_PICTURE}>
                                 <img
                                     className="d-block w-100"
                                     src={pic.T_PICTURE}
-                                    onError={handleImgError}
-                                    key={shortid.generate()}
+                                    key={pic.T_NAME}
                                     alt="First slide"
                                     height="800px"
                                 />
@@ -98,19 +91,18 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                 </div>
             </div>
 
-            <div id="contentWrapper" style={{marginTop:`${unit*4}px`}}>
+            <div id="contentWrapper" style={{marginTop:`${unit*5}px`}}>
                 <div id="contentContainer">
-                    <h1 className="fw-bold text-primary ps-4 mb-1"
-                        id="contentTitle" key={shortid.generate()} >{temple[0].T_NAME}</h1>
-                    <p className={'mb-0 text-primary fs-2 ps-4'}>{temple[0].T_COPY}</p>
-                    <p className="fs-4 pt-1 ps-4 " style={{marginTop:`${unit*1}px`}}
+                    <h1 className="fw-bold text-primary ps-4"
+                        id="contentTitle" key={temple[0].T_NAME} >{temple[0].T_NAME}</h1>
+                    <p className="fs-4 pt-3" style={{marginTop:`${unit*2}px`}}
                        id="content" >
-                        {temple[0].T_DES}
+                        {temple[0].T_COPY}
                     </p>
                 </div>
             </div>
 
-            <div className="bg-light border-top border-bottom border-1 border-primary"style={{marginTop:`${unit*4}px`}} id="mapWrapper">
+            <div className="bg-light border-top border-bottom border-1 border-primary"style={{marginTop:`${unit*5}px`}} id="mapWrapper">
                 <Container id="mapContainer">
                     <Row id="mapRow">
 
@@ -121,7 +113,7 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                                 <br/>
                                 <br/>
                                 <p className="fs-4 text-center fw-bold">오시는길</p>
-                                <p className="fs-5 text-center fw-bold" key={temple[0].ADDR}>{temple[0].ADDR}</p>
+                                <p className="fs-5 text-center fw-bold" key={temple[0].T_ADDR}>{temple[0].T_ADDR}</p>
                                 <p className="fs-5 text-center fw-bold" key={temple[0].T_PHONE}>{temple[0].T_PHONE}</p>
                             </div>
 
@@ -142,32 +134,24 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                     <h1 className="fw-bold text-secondary ps-4" id="programTitle">프로그램</h1>
                     <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
-                            {
-                                distinctProPic.map((program)=>(
-                                <Col md={4} className={pid === program.PID ? 'border border-2 border-danger' : ''} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
-                                    <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                        <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
-                                        <Card.Body key={shortid.generate()}>
-                                            <Card.Title style={{height:`70px`}} key={shortid.generate()}>{program.P_NAME}
+                            {distinctProPic.map((program)=>(
+                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}>
+                                    <Card style={{ width: '100%' }}>
+                                        <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}}/>
+                                        <Card.Body>
+                                            <Card.Title style={{height:`70px`}}>{program.P_NAME}
                                             </Card.Title>
-                                            <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
+                                            <Button variant="primary">예약하러 가기</Button>
                                         </Card.Body>
                                     </Card>
                                 </Col>
-
                             ))}
                         </Row>
                     </Container>
                 </div>
 
             </div>
-            </div>
+
         </div>
     )
 }
-temple.getLayout = (page) => (
-    <Layout meta={{title: '사찰 페이지'}}>
-        <Nav />
-        {page}
-    </Layout>
-)
