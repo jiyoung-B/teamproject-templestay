@@ -3,6 +3,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Link from "next/link";
 import MyinfoCommon from "./layout/MyinfoCommon";
+import Layout from "./layout/Layout";
+import Nav from "./layout/Nav";
+import Likes from "./likes";
 
 export default function Myinfo () {
     return (
@@ -31,3 +34,10 @@ export default function Myinfo () {
         </main>
     )
 }
+
+Myinfo.getLayout = (page) => (
+    <Layout meta={{title: '마이페이지-내정보'}}>
+        <Nav />
+        {page}
+    </Layout>
+)
