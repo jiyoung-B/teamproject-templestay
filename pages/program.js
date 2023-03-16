@@ -21,7 +21,7 @@ export async function getServerSideProps(ctx) {
 }
 
 
-const Program = ({proData}) => {
+export default function Program ({proData}) {
     const unit = 28
 
     return(
@@ -176,10 +176,5 @@ const Program = ({proData}) => {
 
         </div>
 
-
     )
-
 }
-
-
-export default Program
