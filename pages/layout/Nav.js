@@ -10,6 +10,8 @@ import {ko} from "date-fns/locale";
 
 
 
+
+
 const Nav = () => {
 
     const handlejoin = async () => {
@@ -26,6 +28,7 @@ const Nav = () => {
         }
     };
 
+
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
 
     const [show, setShow] = useState(false);
@@ -39,6 +42,7 @@ const Nav = () => {
         setStartDate(start);
         setEndDate(end);
     };
+
 
     return (
         <div className='border-bottom border-2 border-primary' id='navWrapper'>
@@ -91,7 +95,13 @@ const Nav = () => {
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                         <NavLink href='/login'>
                             <NavLink>
+
                                 <CiUser style={{marginTop: "-5%"}} />
+
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal"
+                                        style={{border: "1px solid white", backgroundColor: "white"}}
+                                ><CiUser /></button>
+
                             </NavLink>
                         </NavLink>
                     </Col>
