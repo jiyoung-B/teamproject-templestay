@@ -95,13 +95,10 @@ const Nav = () => {
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                         <NavLink href='/login'>
                             <NavLink>
-
-                                <CiUser style={{marginTop: "-5%"}} />
-
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal"
-                                        style={{border: "1px solid white", backgroundColor: "white"}}
-                                ><CiUser /></button>
-
+                                        style={{border: "1px solid white", backgroundColor: "white"}}>
+                                    <CiUser />
+                                </button>
                             </NavLink>
                         </NavLink>
                     </Col>
