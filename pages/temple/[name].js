@@ -4,6 +4,10 @@
 // css 단위 변수
 import Carousel from "react-bootstrap/Carousel";
 import {Button, Col, Container, Card, Row} from "react-bootstrap";
+import Layout from "../layout/Layout";
+import ToIntro from "../layout/ToIntro";
+import Nav from "../layout/Nav";
+import Home from "../index";
 
 const unit = 28
 
@@ -153,6 +157,12 @@ const temple = () => {
         </div>
     )
 }
+temple.getLayout = (page) => (
+    <Layout meta={{title: '프로그램'}}>
+        <Nav />
+        {page}
+    </Layout>
+)
 
 
 
