@@ -4,7 +4,7 @@ import ToIntro from "./ToIntro";
 import {Component} from "react";
 import {Head} from "next/document";
 
-// 반영이 안돼?
+// Layout 수정 반영이 안돼?
 const Layout =({children, menu, meta}) =>{
     const {description, icon} = meta;
 
