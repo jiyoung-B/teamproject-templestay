@@ -9,7 +9,6 @@ import React from 'react';
 // import Layout from "./layout/Layout"
 import {useEffect} from "react";
 
-
 function MyApp({ Component, pageProps }) {
 
     const getLayout = Component.getLayout ?? ((page) => page);
