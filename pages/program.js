@@ -13,7 +13,8 @@ export async function getServerSideProps(ctx) {
     const res = await axios.get(url)
 
     let proData = await res.data;
-    console.log(proData[1])
+
+
 
 
     return {props:{proData}}
@@ -93,15 +94,17 @@ const Program = ({proData}) => {
                                     <thead>
                                     <tr>
                                         <th>구 분</th>
-                                        <th>성인</th>
-                                        <th>중고생</th>
+                                        {proData[2].map(clas =>(
+                                            <th>{clas.PRICECLASS}</th>
+                                        ))}
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>당일형</td>
-                                        <td>30,000원</td>
-                                        <td>30,000원</td>
+                                        <td>{proData[2][0].DIVISION}</td>
+                                        {proData[2].map(pri =>(
+                                            <td>{pri.PRICE}</td>
+                                        ))}
                                     </tr>
                                     </tbody>
                                 </Table>
@@ -114,7 +117,7 @@ const Program = ({proData}) => {
             <div  style={{marginTop:`${unit*4}px`}} id={'contentWrapper'}>
                 <div id={'contentContainer'}>
                     <p className="fs-3 fw-bold text-secondary">프로그램 소개</p>
-                    <p key={proData[0].PID}> <span className={'text-warning fs-4'} key={proData[0][0].PID}> {proData[0][0].P_CLASS}</span>{proData[0][0].P_INTRO}</p>
+                    <p key={proData[0].PID}> <span className={'text-warning fs-4'} key={proData[0][0].PID}> {proData[0][0].P_CLASS}</span>&nbsp;{proData[0][0].P_INTRO}</p>
                 </div>
             </div>
             <div style={{marginTop:`${unit*2}px`}} id={'scheduleWrapper'}>
@@ -151,30 +154,20 @@ const Program = ({proData}) => {
 
                 <div id="programContainer">
                     <p className={'fs-3 fw-bold text-secondary'} id="programTitle">다른 프로그램</p>
-                    <Container style={{marginTop:`${unit*2}px`}}>
+                    <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
-                            <Col md={4} style={{ flexBasis: '432px' }}><Card style={{ width: '100%' }}>
-                                <Card.Img variant="top" src="http://noms.templestay.com/images//RsImage/L_10908.png" style={{height: '280px'}}/>
-                                <Card.Body>
-                                    <Card.Title style={{height:`70px`}}>[갑사] 당일 템플스테이(단체 10명 이상 하루 체험)
-                                    </Card.Title>
-                                    <Button variant="primary">예약하러 가기</Button>
-                                </Card.Body>
-                            </Card></Col>
-                            <Col md={4} style={{ flexBasis: '432px' }}><Card style={{ width: '100%' }}>
-                                <Card.Img variant="top" src="http://noms.templestay.com/images//RsImage/L_11381.png" style={{height: '280px'}} />
-                                <Card.Body>
-                                    <Card.Title style={{height:`70px`}}>[갑사] 주말 휴일 템플스테이</Card.Title>
-                                    <Button variant="primary">예약하러 가기</Button>
-                                </Card.Body>
-                            </Card></Col>
-                            <Col md={4} style={{ flexBasis: '432px' }}><Card style={{ width: '100%' }}>
-                                <Card.Img variant="top" src="http://noms.templestay.com/images//RsImage/L_2409.png" style={{height: '280px'}} />
-                                <Card.Body>
-                                    <Card.Title style={{height:`70px`}}>[갑사] [2023 문화가있는날] 템플스테이</Card.Title>
-                                    <Button variant="primary">예약하러 가기</Button>
-                                </Card.Body>
-                            </Card></Col>
+                            {proData[3].map((program)=>(
+                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }}>
+                                    <Card style={{ width: '100%' }}>
+                                        <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}}/>
+                                        <Card.Body>
+                                            <Card.Title style={{height:`70px`}}>{program.P_NAME}
+                                            </Card.Title>
+                                            <Button variant="primary">예약하러 가기</Button>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            ))}
                         </Row>
                     </Container>
                 </div>
