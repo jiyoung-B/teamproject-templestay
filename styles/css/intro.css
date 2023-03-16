@@ -1,0 +1,23 @@
+.introCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    padding: 1.5% 0;
+}
+.likeslist > div {
+    font-size: 20px;
+    text-align: center;
+}
+
+.tpl {
+    margin-bottom: 20px;
+}
+
+.tpl2 {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+.tpl:last-child {
+    margin-bottom: 3%;
+}
