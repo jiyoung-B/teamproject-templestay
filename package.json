@@ -15,6 +15,7 @@
     "next": "10.2.3",
     "react": "16.14.0",
     "react-bootstrap": "^2.7.2",
+    "react-datepicker": "^4.10.0",
     "react-dom": "16.14.0",
     "react-icons": "^4.8.0"
   },
