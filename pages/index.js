@@ -1,3 +1,7 @@
+import Layout from "./layout/Layout";
+import ToIntro from "./layout/ToIntro";
+import Nav from "./layout/Nav";
+
 export default function Home() {
     return (
         <div>
@@ -7,3 +11,10 @@ export default function Home() {
         </div>
     )
 }
+Home.getLayout = (page) => (
+    <Layout meta={{title: 'Temfo, 홈'}}>
+        <ToIntro />
+        <Nav />
+        {page}
+    </Layout>
+)
