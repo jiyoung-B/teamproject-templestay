@@ -3,7 +3,6 @@ import {NavLink} from "react-bootstrap";
 
 
 
-
 const ToIntro = () => {
     return (
         <div className={"bg-primary"}>
