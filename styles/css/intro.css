@@ -21,3 +21,13 @@
 .tpl:last-child {
     margin-bottom: 3%;
 }
+
+.editorpick {
+    background: #fff3cd;
+    padding-bottom: 60px;
+
+    padding-bottom: 5%;
+}
+.mb {
+    padding-bottom: 400px;
+}
