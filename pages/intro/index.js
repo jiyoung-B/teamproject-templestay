@@ -7,6 +7,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import React from "react";
 import IntroHead from "../layout/IntroHead";
+import Home from "../index";
+import Layout from "../layout/Layout";
 
 const Intro = () => {
 
@@ -68,10 +70,17 @@ const Intro = () => {
                     </Col>
                 </Row>
             </Container>
-            <Footer />
+            {/*<Footer />*/}
 
         </>
     )
 }
+Intro.getLayout = (page) => (
+    <Layout meta={{title: 'Temfo, 인트로'}}>
+        {page}
+    </Layout>
+)
+
+// Intro.getLayout = (page) => <Footer>{page}</Footer>;
 
 export default Intro
