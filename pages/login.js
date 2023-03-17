@@ -4,8 +4,6 @@ export default function login() {
     return (
         <div>
 
-
-
             {/*login modal*/}
             <div className="modal fade" id="loginModal" tabIndex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" >
                 <div className="modal-dialog modal-dialog-centered modal-sm">
