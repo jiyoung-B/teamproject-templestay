@@ -1,20 +1,28 @@
 import React from "react";
-import Link from "next/link";
 import img from "next/image";
+import {NavLink} from "react-bootstrap";
+
 
 const IntroHead = () => {
     return (
         <div>
-            <Link href="/">
-                <div style={{background: "grey"}}>
-                    <h1> Temfo, </h1>
-                    <p>마음챙김, 템포와 함께 떠나보아요.</p>
-                    <img src="/img/sampleImg_1.png" alt="intro_img_1" width={1940} height={400}/>
+            <NavLink className={"text-center pb-1"} style={{color: "white"}} href="/">
+                <div className="card bg-dark text-white">
+                    <img className="card-img" src="/img/sampleImg_1.png" alt="Card image" />
+                        <div className="card-img-overlay text-center"  style={{color: "white"}}>
+                            <h1> Temfo, </h1>
+                            <p className="card-text">마음챙김, 템포와 함께 떠나보아요.</p>
+                        </div>
                 </div>
-            </Link>
+            </NavLink>
+
 
         </div>
     )
 }
-
-export default IntroHead;
+// <div style={{background: "black"}}>
+//     <h1> Temfo, </h1>
+//     <p>마음챙김, 템포와 함께 떠나보아요.</p>
+//     <img src="/img/sampleImg_1.png" alt="intro_img_1" width={1940} height={400}/>
+// </div>
+export default IntroHead
