@@ -1,16 +1,16 @@
 import Link from 'next/link'
 import img from "next/image";
-import Footer from "../layout/Footer";
-import MyinfoCommon from "../layout/MyinfoCommon";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import React from "react";
 import IntroHead from "../layout/IntroHead";
-import Home from "../index";
+
 import Layout from "../layout/Layout";
 
-const Intro = () => {
+import Card from 'react-bootstrap/Card';
+
+const Intro = ({temple,templePic,distinctProPic}) => {
 
     return (
         <>
@@ -19,58 +19,88 @@ const Intro = () => {
                 <Row className="tpl2">
                     <Col className="introCard col-10 offset-1">
                         <Row className="tpl2">
-                        <Col className="col-6"><img src="/img/sampleImg_1.png" alt="intro_img_1" width={"100%"} height={550}/></Col>
-
+                        <Col className="col-6"><img src="/img/sampleImg_1.png"  class="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
                         <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
                             </Row>
                     </Col>
                 </Row>
-
-            </Container>
-
-            <div>
-                중앙-소개
-                <div><img src="/img/sampleImg_2.png" alt="intro_img_2" width={500} height={400} /></div>
-                <div><img src="/img/sampleImg_2.png" alt="intro_img_2" width={500} height={400} /></div>
-                <div><img src="/img/sampleImg_2.png" alt="intro_img_2" width={500} height={400} /></div>
-                <div><img src="/img/sampleImg_2.png" alt="intro_img_2" width={500} height={400} /></div>
-            </div>
-            <div style={{width:1800}}>
-                하단-에디터픽
-                <ul style={{display: 'inline-block'}}>
-                    <li><Link href="/temple"><img src="/img/sampleImg_2.png" alt="intro_img_2" width={200} height={150} /></Link></li>
-                    <li><Link href="/temple"><img src="/img/sampleImg_2.png" alt="intro_img_2" width={200} height={150} /></Link></li>
-                    <li><Link href="/temple"><img src="/img/sampleImg_2.png" alt="intro_img_2" width={200} height={150} /></Link></li>
-                </ul>
-            </div>
-            <div>
-                <img src="/img/sampleImg_1.png" alt="intro_img_1" width={1200} height={400}/>
-                <Container fluid>
-                    <Row className="fstr">
-                        <Col className="col-5 offset-1">
-                            <Col className="welcome">바꾸는중?</Col>
-
-                        </Col>
-                        <Col style={{textAlign: "right"}} className="buddhist col-5"><img src="/img/buddhist.png" /></Col>
-                    </Row>
-                </Container>
-            </div>
-            <Container fluid>
-                <Row>
-                    <Col className="temples col-11 offset-1" style={{fontSize: "25px"}}>좋아요를 누른 사찰</Col>
+                <Row className="tpl2">
+                    <Col className="introCard col-10 offset-1">
+                        <Row className="tpl2">
+                            <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
+                            <Col className="col-6 ps-5"><img src="/img/sampleImg_2.png" class="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
+                        </Row>
+                    </Col>
                 </Row>
-                <Row className="tpl">
-                    <Col className="likeslist col-10 offset-1">
-                        <Col className="col-1">(이미지)</Col>
-                        <Col className="col-1">XX사</Col>
-                        <Col className="col-3">주소</Col>
-                        <Col className="col-2">날짜</Col>
-                        <Col className="col-3">프로그램 이름</Col>
-                        <Col className="col-1">인원 수</Col>
+                <Row className="tpl2">
+                    <Col className="introCard col-10 offset-1">
+                        <Row className="tpl2">
+                            <Col className="col-6"><img src="/img/sampleImg_1.png"  class="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
+                            <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row className="tpl2">
+                    <Col className="introCard col-10 offset-1">
+                        <Row className="tpl2">
+                            <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
+                            <Col className="col-6 ps-5"><img src="/img/sampleImg_2.png" class="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
+                        </Row>
+                    </Col>
+                </Row>
+
+
+                <Row className="mb">
+                    <Col className="offset-1 editorpick">
+                        <Row className="pt-5">
+                            <h1 className="fw-bold text-secondary ps-4 mt-3" id="programTitle" >에디터픽</h1>
+                         <Col className="offset-3">
+                        <Row>
+                            <div className="row align-items-center mt-10" >
+                                <div className="col">
+                                    <a href='/temple/?'>
+                                        <Card>
+                                        <Card.Img variant="top" src="/img/sampleImg_2.png" />
+                                        <Card.Body>
+                                            <Card.Text>
+                                                프로그램명
+                                            </Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                    </a>
+                                </div>
+                                <div className="col">
+                                    <a href='/temple/?'>
+                                        <Card>
+                                            <Card.Img variant="top" src="/img/sampleImg_2.png" />
+                                            <Card.Body>
+                                                <Card.Text>
+                                                    프로그램명
+                                                </Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                    </a>
+                                </div>
+                                <div className="col">
+                                    <a href='/temple/?'>
+                                        <Card>
+                                            <Card.Img variant="top" src="/img/sampleImg_2.png" />
+                                            <Card.Body>
+                                                <Card.Text>
+                                                    프로그램명
+                                                </Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </Row>
+                    </Col>
+                        </Row>
                     </Col>
                 </Row>
             </Container>
-            {/*<Footer />*/}
 
         </>
     )
@@ -80,7 +110,5 @@ Intro.getLayout = (page) => (
         {page}
     </Layout>
 )
-
-// Intro.getLayout = (page) => <Footer>{page}</Footer>;
 
 export default Intro

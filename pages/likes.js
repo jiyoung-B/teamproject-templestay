@@ -3,6 +3,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Link from "next/link";
 import MyinfoCommon from "./layout/MyinfoCommon";
+import Layout from "./layout/Layout";
+import Nav from "./layout/Nav";
+import temple from "./temple/[name]";
 
 export default function Likes () {
     return (
@@ -51,3 +54,9 @@ export default function Likes () {
         </main>
     )
 }
+Likes.getLayout = (page) => (
+    <Layout meta={{title: '마이페이지-좋아요'}}>
+        <Nav />
+        {page}
+    </Layout>
+)
