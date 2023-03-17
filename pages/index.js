@@ -82,10 +82,8 @@ export default function Home() {
 
 Home.getLayout = (page) => (
     <Layout meta={{title: 'Temfo, 홈'}}>
-        <>
-        <ToIntro style={{position: "fixed", top:0}}/>
+        <ToIntro />
         <Nav />
-        </>
         {page}
     </Layout>
 )
