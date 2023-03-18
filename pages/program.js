@@ -194,7 +194,7 @@ export default function Program ({proData}) {
 
     )
 }
-Likes.getLayout = (page) => (
+Program.getLayout = (page) => (
     <Layout meta={{title: '프로그램 페이지'}}>
         <Nav />
         {page}
