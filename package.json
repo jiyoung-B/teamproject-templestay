@@ -18,7 +18,8 @@
     "react-bootstrap": "^2.7.2",
     "react-datepicker": "^4.10.0",
     "react-dom": "16.14.0",
-    "react-icons": "^4.8.0"
+    "react-icons": "^4.8.0",
+    "shortid": "^2.2.16"
   },
   "devDependencies": {
     "eslint": "7.23.0",
