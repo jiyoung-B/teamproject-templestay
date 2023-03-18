@@ -7,6 +7,7 @@ import Nav from "./layout/Nav";
 import Likes from "./likes";
 import shortid from "shortid";
 import Link from "next/link";
+import {handleImgError} from "../components/Util";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,
 // 빈 화면이 표시 될 수 있다.
@@ -88,6 +89,7 @@ export default function temple ({temple,templePic,distinctProPic}) {
                                 <img
                                     className="d-block w-100"
                                     src={pic.T_PICTURE}
+                                    onError={handleImgError}
                                     key={shortid.generate()}
                                     alt="First slide"
                                     height="800px"
@@ -146,7 +148,7 @@ export default function temple ({temple,templePic,distinctProPic}) {
                             {distinctProPic.map((program)=>(
                                 <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                        <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}} key={shortid.generate()}/>
+                                        <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
                                         <Card.Body key={shortid.generate()}>
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>{program.P_NAME}
                                             </Card.Title>
