@@ -5,13 +5,13 @@ import {Component} from "react";
 import {Head} from "next/document";
 
 // Layout 수정 반영이 안돼?
-const Layout =({children, menu, meta}) =>{
-    const {description, icon} = meta;
+const Layout =({children, meta}) =>{
+    const icon = meta;
 
     return(
-        <html lang="ko">
+<>
         <head>
-            <link rel="icon" href="/comma1.png" />
+            <link rel="icon" href={icon || '/favicon.ico'} />
             <title>Temfo,</title>
         </head>
 
@@ -22,7 +22,8 @@ const Layout =({children, menu, meta}) =>{
 
         </div>
         </body>
-        </html>
+</>
+
     )
 }
 
