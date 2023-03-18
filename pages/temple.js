@@ -164,7 +164,7 @@ export default function temple ({temple,templePic,distinctProPic}) {
         </div>
     )
 }
-Likes.getLayout = (page) => (
+temple.getLayout = (page) => (
     <Layout meta={{title: '사찰 페이지'}}>
         <Nav />
         {page}
