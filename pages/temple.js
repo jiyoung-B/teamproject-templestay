@@ -22,7 +22,6 @@ export async function getServerSideProps(ctx) {
     const res = await axios.get(url)
 
     let {temple, templePic, distinctProPic} = await res.data;
-    console.log(distinctProPic)
 
     return {props:{temple,templePic,distinctProPic}}
 }
