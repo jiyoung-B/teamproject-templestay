@@ -132,34 +132,36 @@ export default function Program ({proData}) {
                             <p className={'fs-5 fw-bold'}>프로그램 일정</p>
                             <p>기타 코멘트</p>
                         </Col>
-
+                        <Col md={9}>
                         {proData[4].map(day => (
-                            <Col md={9} key={shortid.generate()}>
-                            <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                            <Row key={shortid.generate()}>
 
-                            <Table key={shortid.generate()}>
-                                <thead key={shortid.generate()}>
-                                <tr key={shortid.generate()}>
-                                    <th key={shortid.generate()}>시작시간</th>
-                                    <th key={shortid.generate()}>일정명</th>
-                                </tr>
-                                </thead>
-                                <tbody key={shortid.generate()}>
+                                <Col key={shortid.generate()}>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
 
-                                {day.P_INFO.map(sch => (
-                                    <tr key={shortid.generate()}>
-                                        <td key={shortid.generate()}>{sch.P_TIME}</td>
-                                        <td key={shortid.generate()}>{sch.P_CONTENT}</td>
-                                    </tr>
-                                ))}
+                                    <Table key={shortid.generate()}>
+                                        <thead key={shortid.generate()}>
+                                        <tr key={shortid.generate()}>
+                                            <th style={{width:'50%'}} key={shortid.generate()}>시작시간</th>
+                                            <th key={shortid.generate()}>일정명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody key={shortid.generate()}>
 
-                                </tbody>
-                            </Table>
+                                        {day.P_INFO.map(sch => (
+                                            <tr key={shortid.generate()}>
+                                                <td style={{width:'50%'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                <td key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                            </tr>
+                                        ))}
 
-                        </Col>
+                                        </tbody>
+                                    </Table>
+                                </Col>
+                            </Row>
                         )
                         )}
-
+                        </Col>
                     </Row>
                 </Container>
             </div>
@@ -177,7 +179,7 @@ export default function Program ({proData}) {
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>
                                                 {program.P_NAME}
                                             </Card.Title>
-                                            <Button variant="primary" key={shortid.generate()}><Link href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</Link></Button>
+                                            <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
                                         </Card.Body>
                                     </Card>
                                 </Col>
