@@ -6,40 +6,37 @@ import mariadb from './MariaDB'
 // 프로그램에 항상 PID를 넣어보자!
 
 let programSql ={
-    selectPro :` select * from PROGRAM where PID = ?`,
-    selectProPic : `select * from PROGRAMPIC where P_NAME = ?`,
-    selectProPrice : `select DIVISION,PRICECLASS,PRICE from PROGRAMPRICE where PID = ?`,
-    selectProSchedule : ` select * from PROGRAMSCHEDULE where P_NAME = ?`,
-    selectOtherPro : `select P_NAME, P_PICLINK, PID from PROGRAMPIC where T_NAME = ?`
+    selectPro :` select P_NAME,T_NAME,P_CAUTION,P_STRDATE,P_ENDDATE,P_INTRO, P_LINK from PROGRAM2 where PID = ?`,
+    selectProPic : `select * from PROGRAMPIC2 where T_NAME = ?`,
+    selectProPrice : `select DIVISION,PR_CLASS,PRICE from PROGRAMPRICE2 where PID = ? order by PR_NO`,
+    selectProSchedule : ` select P_DAY, P_TIME,P_CONTENT from PROGRAMSCHEDULE2 where PID = ? ORDER BY PS_NO `,
+    selectProDes : ` select P_DES, P_DETAIL from PROGRAMDES2 WHERE PID = ? ORDER BY PD_NO `
 }
-
-async function selectPro(pid) {  // 프로그램 정보 출력
+async function selectPro(pid) {
     let conn = null;
 
-    let likeParams = ['%['+pid+']%']
-    let ProData = []; // 결과 저장용
-    let ProPicData = '';
-    let ProScheduleData = '';
-    let OtherProPic = '';
+    let ProData = [];
 
     try {
         conn = await mariadb.makeConn();
 
         let paramPid = [pid];
-        let ProInfo = await conn.query(programSql.selectPro, paramPid);
+        let P_Meta = await conn.query(programSql.selectPro, paramPid);
 
-        let paramPName = [await ProInfo[0].P_NAME]
-        let ProPic = await conn.query(programSql.selectProPic,paramPName)
+        let paramTName = [await P_Meta[0].T_NAME]
+        let P_PIC = await conn.query(programSql.selectProPic,paramTName)
 
-        let ProPrice = await conn.query(programSql.selectProPrice,paramPid)
+        let P_PRI = await conn.query(programSql.selectProPrice,paramPid)
 
-        let paramTNAME = [await ProInfo[0].T_NAME]
-        let OtherPro = await conn.query(programSql.selectOtherPro,paramTNAME)
+        let P_SCH = await conn.query(programSql.selectProSchedule,paramPid)
 
-        ProData.push(ProInfo)
-        ProData.push(ProPic)
-        ProData.push(ProPrice)
-        ProData.push(OtherPro)
+        let P_DES = await conn.query(programSql.selectProDes,paramPid)
+
+        ProData.push(P_Meta)
+        ProData.push(P_PIC)
+        ProData.push(P_PRI)
+        ProData.push(P_SCH)
+        ProData.push(P_DES)
 
     } catch (e) {
         console.log(e);
