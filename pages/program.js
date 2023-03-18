@@ -4,9 +4,8 @@ import {BsCheck2} from "react-icons/bs";
 import axios from "axios";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
-import Likes from "./likes";
 import shortid from 'shortid'
-import Link from "next/link";
+import {handleImgError} from "../components/Util";
 //shortid.generate()
 
 
@@ -23,7 +22,6 @@ export async function getServerSideProps(ctx) {
 
     return {props:{proData}}
 }
-
 
 export default function Program ({proData}) {
     const unit = 28
@@ -46,6 +44,7 @@ export default function Program ({proData}) {
                                 src={pic}
                                 alt="First slide"
                                 height="800px"
+                                onError={handleImgError}
                                 key={shortid.generate()}
                                 />
                             </Carousel.Item>
@@ -174,7 +173,7 @@ export default function Program ({proData}) {
                             {proData[5].map(program => (
                                 <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                        <Card.Img variant="top" src={program.P_PICLINK} style={{height: '280px'}} key={shortid.generate()}/>
+                                        <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
                                         <Card.Body key={shortid.generate()}>
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>
                                                 {program.P_NAME}
