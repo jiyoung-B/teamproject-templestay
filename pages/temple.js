@@ -76,8 +76,6 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
 
     return(
         <div id="templeWrapper">
-            <div className='container' id='templeContainer'>
-
             <div id="carouselWrapper" style={{marginTop:`${unit*2}px`}}>
                 <div id="carouseContainer">
                     <Carousel>
