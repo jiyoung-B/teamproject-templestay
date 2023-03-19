@@ -12,7 +12,7 @@ import {handleImgError} from "../components/Util";
 
 export async function getServerSideProps(ctx) {
 
-    let {id, pid} = ctx.query
+    let {id, pid = null} = ctx.query
 
     let param = `?id=${id}`
     let url = `http://localhost:3000/api/temple${param}`
