@@ -5,73 +5,75 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Link from "next/link";
-import img from "next/image";
 import React from "react";
+import axios from "axios";
+import * as PropTypes from "prop-types";
 
-export default function Home() {
+export async function getServerSideProps(ctx) {
+        let {lid = '서울'} = ctx.query
+
+
+
+        let param = `?lid=${lid}`
+        let url = `http://localhost:3000/api/${param}`
+
+        const res = await axios.get(url)
+        let indexInfo = res.data
+
+
+
+        return {props:{indexInfo}}
+
+}
+
+export default function Home({indexInfo}) {
     return (
         <div className="bg-white" id="wrapper">
-            <title>Temfo,</title>
-            <h1 style={{ paddingTop: "100px" }}></h1>
                 <Container fluid>
-                <Row>
+                        <Row style={{height: '100px'}}></Row>
+                        <Row className="likeslist tpl align-top">
+                                <Col>
+                                        {indexInfo.map(program => (
 
-                </Row>
+                                            <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`}>
+                                                    <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px'}}>
+                                                            <Col>
+                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" className={""} style={{width: '100%', height:'135px',paddingTop:'9px'}}/>
+                                                            </Col>
+                                                            <Col>
+                                                                <p className={"text-center fs-6"}>{program.ADDR}</p>
+                                                            </Col>
+                                                            <Col>
+                                                                 <p className={"text-center  fs-6"}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
+                                                            </Col>
+                                                            <Col>
+                                                                <p className={"text-center  fs-6"}>{program.P_NAME}</p>
+                                                            </Col>
+                                                    </Row>
+                                            </Link>
 
-                        <Row className="tpl">
-                                <Col className="likeslist col-12">
-                                        <Col className="col-6">
-                                                <Row className="tpl">
-                                                        <Col className="likeslist col-10 offset-1 pb-5 mt-5 mb-5">
-                                                                <Col className="col-2">(이미지)</Col>
-                                                                <Col className="col-3">주소</Col>
-                                                                <Col className="col-2">날짜</Col>
-                                                                <Col className="col-3">프로그램 이름</Col>
-                                                                <Col className="col-1">인원 수</Col>
-                                                        </Col>
-                                                        <Col className="likeslist col-10 offset-1 pb-5 mt-5 mb-5">
-                                                                <Col className="col-2">(이미지)</Col>
-                                                                <Col className="col-3">주소</Col>
-                                                                <Col className="col-2">날짜</Col>
-                                                                <Col className="col-3">프로그램 이름</Col>
-                                                                <Col className="col-1">인원 수</Col>
-                                                        </Col>
-                                                        <Col className="likeslist col-10 offset-1 pb-5 mt-5 mb-5">
-                                                                <Col className="col-2">(이미지)</Col>
-                                                                <Col className="col-3">주소</Col>
-                                                                <Col className="col-2">날짜</Col>
-                                                                <Col className="col-3">프로그램 이름</Col>
-                                                                <Col className="col-1">인원 수</Col>
-                                                        </Col>
-                                                        <Col className="likeslist col-10 offset-1 pb-5 mt-5 mb-5">
-                                                                <Col className="col-2">(이미지)</Col>
-                                                                <Col className="col-3">주소</Col>
-                                                                <Col className="col-2">날짜</Col>
-                                                                <Col className="col-3">프로그램 이름</Col>
-                                                                <Col className="col-1">인원 수</Col>
-                                                        </Col>
-                                                        <Col className="likeslist col-10 offset-1 pb-5 mt-5 mb-5">
-                                                                <Col className="col-2">(이미지)</Col>
-                                                                <Col className="col-3">주소</Col>
-                                                                <Col className="col-2">날짜</Col>
-                                                                <Col className="col-3">프로그램 이름</Col>
-                                                                <Col className="col-1">인원 수</Col>
-                                                        </Col>
-                                                        <Col className="likeslist col-10 offset-1 pb-5 mt-5 mb-5">
-                                                                <Col className="col-2">(이미지)</Col>
-                                                                <Col className="col-3">주소</Col>
-                                                                <Col className="col-2">날짜</Col>
-                                                                <Col className="col-3">프로그램 이름</Col>
-                                                                <Col className="col-1">인원 수</Col>
-                                                        </Col>
-
-
-                                                </Row></Col>
-                                        <Col className="col-6"><img src="/img/sampleImg_1.png" alt="intro_img_1" width={"90%"} height={"90%"}/></Col>
-
+                                        )
+                                        )}
+                                </Col>
+                                <Col>
+                                        <Row>
+                                                <Link href={"/?lid=인천"}>인천</Link>
+                                                <Link href={"/?lid=서울"}>서울</Link>
+                                                <Link href={"/?lid=강원"}>강원</Link>
+                                                <Link href={"/?lid=충남"}>충남</Link>
+                                                <Link href={"/?lid=경기"}>경기</Link>
+                                                <Link href={"/?lid=충북"}>충북</Link>
+                                                <Link href={"/?lid=경북"}>경북</Link>
+                                                <Link href={"/?lid=전북"}>전북</Link>
+                                                <Link href={"/?lid=대구"}>대구</Link>
+                                                <Link href={"/?lid=인천"}>광주</Link>
+                                                <Link href={"/?lid=광주"}>전남</Link>
+                                                <Link href={"/?lid=경남"}>경남</Link>
+                                                <Link href={"/?lid=부산"}>부산</Link>
+                                                <Link href={"/?lid=제주"}>제주</Link>
+                                        </Row>
                                 </Col>
                         </Row>
-
 
                 </Container>
 
