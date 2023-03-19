@@ -4,9 +4,7 @@ import axios from 'axios'
 import {useEffect} from "react";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
-import Likes from "./likes";
 import shortid from "shortid";
-import Link from "next/link";
 import {handleImgError} from "../components/Util";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,
@@ -14,7 +12,7 @@ import {handleImgError} from "../components/Util";
 
 export async function getServerSideProps(ctx) {
 
-    let {id} = ctx.query
+    let {id, pid} = ctx.query
 
     let param = `?id=${id}`
     let url = `http://localhost:3000/api/temple${param}`
@@ -23,14 +21,14 @@ export async function getServerSideProps(ctx) {
 
     let {temple, templePic, distinctProPic} = await res.data;
 
-    return {props:{temple,templePic,distinctProPic}}
+    return {props:{temple,templePic,distinctProPic,pid}}
 }
 
 
 // css 단위 변수
 const unit = 28
 
-export default function temple ({temple,templePic,distinctProPic}) {
+export default function temple ({temple,templePic,distinctProPic,pid}) {
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -123,7 +121,7 @@ export default function temple ({temple,templePic,distinctProPic}) {
                                 <br/>
                                 <br/>
                                 <p className="fs-4 text-center fw-bold">오시는길</p>
-                                <p className="fs-5 text-center fw-bold" key={temple[0].T_ADDR}>{temple[0].T_ADDR}</p>
+                                <p className="fs-5 text-center fw-bold" key={temple[0].ADDR}>{temple[0].ADDR}</p>
                                 <p className="fs-5 text-center fw-bold" key={temple[0].T_PHONE}>{temple[0].T_PHONE}</p>
                             </div>
 
@@ -144,8 +142,9 @@ export default function temple ({temple,templePic,distinctProPic}) {
                     <h1 className="fw-bold text-secondary ps-4" id="programTitle">프로그램</h1>
                     <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
-                            {distinctProPic.map((program)=>(
-                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
+                            {
+                                distinctProPic.map((program)=>(
+                                <Col md={4} className={pid === program.PID ? 'border border-2 border-danger' : ''} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
                                         <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
                                         <Card.Body key={shortid.generate()}>
@@ -155,6 +154,7 @@ export default function temple ({temple,templePic,distinctProPic}) {
                                         </Card.Body>
                                     </Card>
                                 </Col>
+
                             ))}
                         </Row>
                     </Container>
