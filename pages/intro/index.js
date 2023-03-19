@@ -5,12 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import React from "react";
 import IntroHead from "../layout/IntroHead";
-
 import Layout from "../layout/Layout";
-
 import Card from 'react-bootstrap/Card';
 
-const Intro = ({temple,templePic,distinctProPic}) => {
+const Intro = () => {
 
     return (
         <>
@@ -19,7 +17,7 @@ const Intro = ({temple,templePic,distinctProPic}) => {
                 <Row className="tpl2">
                     <Col className="introCard col-10 offset-1">
                         <Row className="tpl2">
-                        <Col className="col-6"><img src="/img/sampleImg_1.png"  class="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
+                        <Col className="col-6"><img src="https://noms.templestay.com/images/TiImage/H/L/3806.png"  className="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
                         <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
                             </Row>
                     </Col>
@@ -28,14 +26,14 @@ const Intro = ({temple,templePic,distinctProPic}) => {
                     <Col className="introCard col-10 offset-1">
                         <Row className="tpl2">
                             <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
-                            <Col className="col-6 ps-5"><img src="/img/sampleImg_2.png" class="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
+                            <Col className="col-6 ps-5"><img src="https://noms.templestay.com/images/TiImage/H/L/9826.png" className="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
                         </Row>
                     </Col>
                 </Row>
                 <Row className="tpl2">
                     <Col className="introCard col-10 offset-1">
                         <Row className="tpl2">
-                            <Col className="col-6"><img src="/img/sampleImg_1.png"  class="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
+                            <Col className="col-6"><img src="https://noms.templestay.com/images/TiImage/H/L/924.png"  className="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
                             <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
                         </Row>
                     </Col>
@@ -44,7 +42,7 @@ const Intro = ({temple,templePic,distinctProPic}) => {
                     <Col className="introCard col-10 offset-1">
                         <Row className="tpl2">
                             <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
-                            <Col className="col-6 ps-5"><img src="/img/sampleImg_2.png" class="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
+                            <Col className="col-6 ps-5"><img src="https://noms.templestay.com/images/TiImage/H/L/11330.png" className="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
                         </Row>
                     </Col>
                 </Row>
