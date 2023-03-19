@@ -79,7 +79,8 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
             <div id="carouselWrapper" style={{marginTop:`${unit*2}px`}}>
                 <div id="carouseContainer">
                     <Carousel>
-                        {templePic.map(pic => (
+                        { (templePic.length > 0) ? (
+                            templePic.map(pic => (
                             <Carousel.Item key={shortid.generate()}>
                                 <img
                                     className="d-block w-100"
@@ -89,8 +90,19 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                                     alt="First slide"
                                     height="800px"
                                 />
-                            </Carousel.Item>
-                        ))}
+                            </Carousel.Item>))
+                            )
+                                :
+                        (<Carousel.Item key={shortid.generate()}>
+                                <img
+                                    className="d-block w-100"
+                                    src={'https://www.templestay.com/images/templeinfo-00.jpg'}
+                                    key={shortid.generate()}
+                                    alt="First slide"
+                                    height="800px"
+                                />
+                            </Carousel.Item>)
+                        }
                     </Carousel>
 
                 </div>
