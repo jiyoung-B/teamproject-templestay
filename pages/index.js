@@ -63,6 +63,7 @@ export default function Home({indexInfo}) {
                                                 <Link href={"/?lid=충남"}>충남</Link>
                                                 <Link href={"/?lid=경기"}>경기</Link>
                                                 <Link href={"/?lid=충북"}>충북</Link>
+                                                <Link href={"/?lid=세종"}>세종</Link>
                                                 <Link href={"/?lid=경북"}>경북</Link>
                                                 <Link href={"/?lid=전북"}>전북</Link>
                                                 <Link href={"/?lid=대구"}>대구</Link>
