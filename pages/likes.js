@@ -5,7 +5,6 @@ import Link from "next/link";
 import MyinfoCommon from "./layout/MyinfoCommon";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
-import temple from "./temple/[name]";
 
 export default function Likes () {
     return (

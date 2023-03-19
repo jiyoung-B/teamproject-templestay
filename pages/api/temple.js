@@ -12,10 +12,6 @@ export default async (req, res) => {
             return templeProPic.findIndex(item => item.P_NAME === obj.P_NAME) === index;
         })
 
-        // let distinctProPic = await templeProPic.filter((obj,index) => {
-        //     templeProPic.findIndex(item => item.P_NAME === obj.P_NAME) === index
-        // })
-
         let templeView = {temple, templePic, distinctProPic}
 
         res.status(200).json(templeView)
