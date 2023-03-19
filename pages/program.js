@@ -171,17 +171,22 @@ export default function Program ({proData}) {
                     <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
                             {proData[5].map(program => (
+
                                 <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
-                                    <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                        <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
-                                        <Card.Body key={shortid.generate()}>
-                                            <Card.Title style={{height:`70px`}} key={shortid.generate()}>
-                                                {program.P_NAME}
-                                            </Card.Title>
+
+                                        <Card style={{ width: '100%' }} key={shortid.generate()}>
+                                            <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
+                                            <Card.Body key={shortid.generate()}>
+                                                <Card.Title style={{height:`70px`}} key={shortid.generate()}>
+                                                    {program.P_NAME}
+                                                </Card.Title>
                                             <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
-                                        </Card.Body>
-                                    </Card>
+                                            </Card.Body>
+                                        </Card>
+
                                 </Col>
+
+
                             ))}
                         </Row>
                     </Container>
