@@ -7,6 +7,7 @@ import React from "react";
 import IntroHead from "../layout/IntroHead";
 import Layout from "../layout/Layout";
 import Card from 'react-bootstrap/Card';
+import {Button, NavLink} from "react-bootstrap";
 
 const Intro = () => {
 
@@ -14,90 +15,97 @@ const Intro = () => {
         <>
             <IntroHead />
             <Container fluid>
-                <Row className="tpl2">
-                    <Col className="introCard col-10 offset-1">
-                        <Row className="tpl2">
-                        <Col className="col-6"><img src="https://noms.templestay.com/images/TiImage/H/L/3806.png"  className="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
-                        <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
-                            </Row>
+                <Row style={{marginTop:'160px'}}>
+                    <Col md={{ span: 6, offset: 1 }}>
+                       <img src="https://noms.templestay.com/images/TiImage/H/L/3806.png"  className="rounded" alt="intro_img_1" width={"100%"} height={550}/>
+                    </Col>
+                    <Col>
+                        <p className={"fs-1 fw-bold text-end mb-0"} style={{marginTop:'250px', marginRight:'123px', color:'#E5BA26'}}>세계문화유산 불국사, 천 년의 향기</p>
                     </Col>
                 </Row>
-                <Row className="tpl2">
-                    <Col className="introCard col-10 offset-1">
-                        <Row className="tpl2">
-                            <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
-                            <Col className="col-6 ps-5"><img src="https://noms.templestay.com/images/TiImage/H/L/9826.png" className="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
-                        </Row>
+                <Row style={{marginTop:'160px'}}>
+                    <Col md={5}>
+                        <p className={"fs-1 fw-bold text-end mb-0"} style={{marginTop:'250px', color:'#666D8A'}}>남해 쪽빛바다가 보이는 절</p>
+                    </Col>
+                    <Col md={1}></Col>
+                    <Col md={{ span: 6 }}>
+                        <img src="https://noms.templestay.com/images/TiImage/H/L/9826.png"  className="rounded" alt="intro_img_1" width={"100%"} height={550}/>
                     </Col>
                 </Row>
-                <Row className="tpl2">
-                    <Col className="introCard col-10 offset-1">
-                        <Row className="tpl2">
-                            <Col className="col-6"><img src="https://noms.templestay.com/images/TiImage/H/L/924.png"  className="rounded float-left" alt="intro_img_1" width={"100%"} height={550}/></Col>
-                            <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
-                        </Row>
+                <Row style={{marginTop:'160px'}}>
+                    <Col md={{ span: 6, offset: 1 }}>
+                        <img src="https://noms.templestay.com/images/TiImage/H/L/924.png"  className="rounded" alt="intro_img_1" width={"100%"} height={550}/>
+                    </Col>
+                    <Col>
+                        <p className={"fs-1 fw-bold text-start mb-0"} style={{marginTop:'250px', marginLeft:'45px', color:'#AA9345'}}>오롯이 내면과 마주하는 시간</p>
                     </Col>
                 </Row>
-                <Row className="tpl2">
-                    <Col className="introCard col-10 offset-1">
-                        <Row className="tpl2">
-                            <Col className="col-5 ps-5">마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀마하반야바라밀</Col>
-                            <Col className="col-6 ps-5"><img src="https://noms.templestay.com/images/TiImage/H/L/11330.png" className="rounded float-right" alt="intro_img_1" width={"100%"} height={550}/></Col>
-                        </Row>
+                <Row style={{marginTop:'160px'}}>
+                    <Col md={5}>
+                        <p className={"fs-1 fw-bold text-end text-primary mb-0"} style={{marginTop:'250px'}}>몸과 마음에 쉼표를 찾다,</p>
+                    </Col>
+                    <Col md={1}></Col>
+                    <Col md={{ span: 6 }}>
+                        <img src="https://noms.templestay.com/images/TiImage/H/L/11330.png"  className="rounded" alt="intro_img_1" width={"100%"} height={550}/>
                     </Col>
                 </Row>
 
 
-                <Row className="mb">
+
+                <Row style={{marginTop:'160px'}}>
                     <Col className="offset-1 editorpick">
                         <Row className="pt-5">
                             <h1 className="fw-bold text-secondary ps-4 mt-3" id="programTitle" >에디터픽</h1>
-                         <Col className="offset-3">
-                        <Row>
-                            <div className="row align-items-center mt-10" >
-                                <div className="col">
-                                    <a href='/temple/?'>
-                                        <Card>
-                                        <Card.Img variant="top" src="/img/sampleImg_2.png" />
-                                        <Card.Body>
-                                            <Card.Text>
-                                                프로그램명
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                    </a>
-                                </div>
-                                <div className="col">
-                                    <a href='/temple/?'>
-                                        <Card>
-                                            <Card.Img variant="top" src="/img/sampleImg_2.png" />
-                                            <Card.Body>
-                                                <Card.Text>
-                                                    프로그램명
-                                                </Card.Text>
-                                            </Card.Body>
-                                        </Card>
-                                    </a>
-                                </div>
-                                <div className="col">
-                                    <a href='/temple/?'>
-                                        <Card>
-                                            <Card.Img variant="top" src="/img/sampleImg_2.png" />
-                                            <Card.Body>
-                                                <Card.Text>
-                                                    프로그램명
-                                                </Card.Text>
-                                            </Card.Body>
-                                        </Card>
-                                    </a>
-                                </div>
-                            </div>
-
-                        </Row>
-                    </Col>
+                            <Col className="offset-3">
+                                <Row>
+                                    <div className="row align-items-center mt-10" >
+                                        <div className="col">
+                                                <a href='/temple/?'>
+                                                    <Card>
+                                                    <Card.Img variant="top" src="/img/sampleImg_2.png" />
+                                                    <Card.Body>
+                                                        <Card.Text>
+                                                            프로그램명
+                                                        </Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                                </a>
+                                            </div>
+                                        <div className="col">
+                                            <a href='/temple/?'>
+                                                <Card>
+                                                    <Card.Img variant="top" src="/img/sampleImg_2.png" />
+                                                    <Card.Body>
+                                                        <Card.Text>
+                                                            프로그램명
+                                                        </Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                            </a>
+                                        </div>
+                                        <div className="col">
+                                            <a href='/temple/?'>
+                                                <Card>
+                                                    <Card.Img variant="top" src="/img/sampleImg_2.png" />
+                                                    <Card.Body>
+                                                        <Card.Text>
+                                                            프로그램명
+                                                        </Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </Row>
+                            </Col>
                         </Row>
                     </Col>
                 </Row>
+
+                <div className={'d-flex align-items-center justify-content-center'} style={{marginTop:'150px',marginBottom:'100px'}}>
+                    <Button size="lg" ><Link href={'/'}><p className={'fs-2 px-2 mb-0'}>지금, 여기</p></Link></Button>
+                </div>
+
             </Container>
 
         </>
