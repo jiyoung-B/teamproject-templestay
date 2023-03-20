@@ -1,11 +1,11 @@
 import Carousel from "react-bootstrap/Carousel";
-import {Button, Card, Col, Container, Modal, NavLink, Row, Table} from "react-bootstrap";
+import {Button, Card, Col, Container, Modal, NavLink, Row, Table, Form} from "react-bootstrap";
 import {BsCheck2} from "react-icons/bs";
 import axios from "axios";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
 import shortid from 'shortid'
-import {handleImgError, milliFomatter, dateFomatter} from "../components/Util";
+import {handleImgError, dateFomatter, milliFomatter} from "../components/Util";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";
@@ -24,6 +24,8 @@ export async function getServerSideProps(ctx) {
 
     let proData = await res.data;
 
+    proData.push(pid)
+    console.log(proData)
     return {props:{proData}}
 }
 
@@ -33,9 +35,9 @@ export default function Program ({proData}) {
     // 내일의 날짜를 구하기
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
 
-
     // state 보여주는 부분
     const [show, setShow] = useState(false);
+
     const [startDate, setStartDate] = useState(tomorrow);
     const [endDate, setEndDate] = useState(null);
 
@@ -43,12 +45,66 @@ export default function Program ({proData}) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+
     //날짜가 선택되면 state를 변경해주는 함수
     const onChange = (dates) => {
         const [start, end] = dates;
         setStartDate(start);
         setEndDate(end);
     };
+
+    // 인원 선택 관련 함수
+    // 모달 on/off
+    const [show2, setShow2] = useState(false);
+    const handleClose2 = () => setShow2(false);
+    const handleShow2 = () => setShow2(true);
+
+    // 선택 인원 관리 함수
+    const [selectedOptions, setSelectedOptions] = useState([]);
+
+        // 예약정보에 키 추가.
+    const handleSelectChange = (e, index) => {
+        const selectedValue = e.target.value;
+        setSelectedOptions((prevSelectedOptions) => {
+            const newSelectedOptions = [...prevSelectedOptions];
+            newSelectedOptions[index] = selectedValue;
+            return newSelectedOptions;
+        });
+    }
+
+    // 날짜 관리 스테이트 startDate, endDate
+
+    // 예약정보를 state로 관리합니다.
+    // {userId:'test',
+    //  reservInfo : {
+    //      people : {
+    //          성인 : [수,가격],
+    //          중고생 : [수, 가격],
+    //          ...
+    //      },
+    //      dates : [
+    //          2013-03-21,2013-03-30
+    //      ]
+    //      }
+    //  }
+
+    const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {}, dates:[]}})
+
+
+    const handelReserve = () => {
+        setReservInfo((prevReservInfo) => {
+            const newReservInfo = {...prevReservInfo}
+            proData[2].map((clas,index) => {
+                let sumPrice = selectedOptions[index] * clas.PRICE
+                newReservInfo.reservInfo.people[clas.PR_CLASS] = [selectedOptions[index], sumPrice]
+            })
+            newReservInfo.reservInfo.pid = proData[6]
+            newReservInfo.reservInfo.dates = [milliFomatter(startDate),dateFomatter(endDate)]
+            console.log(newReservInfo)
+
+            return newReservInfo
+        })
+    }
 
 
     return(
@@ -95,46 +151,94 @@ export default function Program ({proData}) {
 
                 <Container id={'selectContainer'}>
                     <Row className={'d-flex justify-content-center'}>
-                        <Col lg={4}>
-                            <Container>
-                                <Row>
-                                    <Col>
+                        <Col className={'d-flex  justify-content-end me-5' }>
+                            <Row>
+                                <Button className="calbtn" onClick={handleShow}><p className={'text-center m-0 fs-3 text-primary'}>일정 <BsCheck2 className={"mb-2"}/></p></Button>
+                                <Modal show={show} onHide={handleClose}>
+                                    <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
+                                        <Modal.Title>날짜 선택</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body className="cal">
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={onChange}
+                                            inline
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            minDate={tomorrow}
+                                            monthsShown={2}
+                                            selectsRange
+                                            dateFormat="yyyy-mm-dd"
+                                            locale={ko}
+                                        />
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleClose} style={{backgroundColor: "#331904"}}>
+                                            닫기
+                                        </Button>
+                                        <Button variant="primary" onClick={handleClose}>
+                                            선택
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                            </Row>
+                        </Col>
+                        <Col className={'d-flex  justify-content-start ms-5'}>
+                            <Button className="calbtn" onClick={handleShow2}><p className={'text-start m-0 fs-3 text-primary'}>인원 <BsCheck2 className={"mb-2"}/></p></Button>
+                            <Modal show={show2} onHide={handleClose2}>
+                                <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
+                                    <Modal.Title>인원 선택</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body className="cal">
 
-                                        <>
-                                            <Button className="calbtn" onClick={handleShow}><p className={'text-center m-0 fs-3 text-primary'}>일정 <BsCheck2 className={"mb-2"}/></p></Button>
-                                            <Modal show={show} onHide={handleClose}>
-                                                <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
-                                                    <Modal.Title>날짜 선택</Modal.Title>
-                                                </Modal.Header>
-                                                <Modal.Body className="cal">
-                                                    <DatePicker
-                                                        selected={startDate}
-                                                        onChange={onChange}
-                                                        inline
-                                                        startDate={startDate}
-                                                        endDate={endDate}
-                                                        minDate={tomorrow}
-                                                        monthsShown={2}
-                                                        selectsRange
-                                                        dateFormat="yyyy-mm-dd"
-                                                        locale={ko}
-                                                    />
-                                                </Modal.Body>
-                                                <Modal.Footer>
-                                                    <Button variant="secondary" onClick={handleClose} style={{backgroundColor: "#331904"}}>
-                                                        닫기
-                                                    </Button>
-                                                    <Button variant="primary" onClick={handleClose}>
-                                                        선택
-                                                    </Button>
-                                                </Modal.Footer>
-                                            </Modal>
-                                        </>
+                                    {proData[2].map((clas, index) =>(
+                                        <Form.Select value={selectedOptions[index]} onChange={(e) => handleSelectChange(e, index)} aria-label="Default select example">
+                                            <option>{clas.PR_CLASS}</option>
+                                            <option value="1">1명</option>
+                                            <option value="2">2명</option>
+                                            <option value="3">3명</option>
+                                            <option value="4">4명</option>
+                                            <option value="5">5명</option>
+                                            <option value="6">6명</option>
+                                            <option value="7">7명</option>
+                                            <option value="8">8명</option>
+                                            <option value="9">9명</option>
+                                            <option value="10">10명</option>
+                                            <option value="11">11명</option>
+                                            <option value="12">12명</option>
+                                            <option value="13">13명</option>
+                                            <option value="14">14명</option>
+                                            <option value="15">15명</option>
+                                            <option value="16">16명</option>
+                                            <option value="17">17명</option>
+                                            <option value="18">18명</option>
+                                            <option value="19">19명</option>
+                                            <option value="20">20명</option>
+                                            <option value="21">21명</option>
+                                            <option value="22">22명</option>
+                                            <option value="23">23명</option>
+                                            <option value="24">24명</option>
+                                            <option value="25">25명</option>
+                                            <option value="26">26명</option>
+                                            <option value="27">27명</option>
+                                            <option value="28">28명</option>
+                                            <option value="29">29명</option>
+                                            <option value="30">30명</option>
+                                        </Form.Select>
+                                    ))}
 
-                                    </Col>
-                                    <Col><p className={'text-center m-0 fs-3 text-primary'}>인원 <BsCheck2 className={"mb-2"}/></p></Col>
-                                </Row>
-                            </Container>
+
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={handleClose2} style={{backgroundColor: "#331904"}}>
+                                        닫기
+                                    </Button>
+                                    <Button variant="primary" onClick={handleClose2}>
+                                        선택
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+
                         </Col>
                     </Row>
                 </Container>
@@ -145,17 +249,13 @@ export default function Program ({proData}) {
                 <Container>
                     <Row>
                         <Col>
-                            { dateFomatter(endDate) ? (<p className={'text-end pt-2 m-0'}>{dateFomatter(startDate)}~{dateFomatter(endDate)}</p>):(<p className={'text-end m-0'}>{dateFomatter(startDate)}</p>)}
+                            { dateFomatter(endDate) ? (<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight: '10px'}}>{dateFomatter(startDate)}~{dateFomatter(endDate)}</p>):(<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight:'60px'}} >{dateFomatter(startDate)}</p>)}
                         </Col>
                         <Col>
-                            <Container>
-                                <Row>
-                                    <Col><p className={'text-center pt-2 m-0'}>(2박) 2인</p></Col>
-                                    <Col><p className={'text-center pt-2 m-0'}>70,000 원</p></Col>
-                                </Row>
-                            </Container>
+                            <Row>
+                                <Col><p className={'text-start pt-2 m-0'}>(2박) 2인</p></Col>
+                            </Row>
                         </Col>
-                        <Col><p className={'text-center m-0 fs-3 text-primary'}><BsCheck2 className={"mb-2"}/>예약하기</p></Col>
                     </Row>
                 </Container>
 
@@ -188,6 +288,11 @@ export default function Program ({proData}) {
                             </div>
                         </Col>
                     </Row>
+                </Container>
+                <Container>
+                    <div>
+                        <Button onClick={handelReserve}>예약하기</Button>
+                    </div>
                 </Container>
 
             </div>
