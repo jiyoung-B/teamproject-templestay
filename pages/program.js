@@ -90,16 +90,24 @@ export default function Program ({proData}) {
 
     const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {}, dates:[]}})
 
+    console.log(dateFomatter(startDate))
 
     const handelReserve = () => {
         setReservInfo((prevReservInfo) => {
             const newReservInfo = {...prevReservInfo}
             proData[2].map((clas,index) => {
                 let sumPrice = selectedOptions[index] * clas.PRICE
-                newReservInfo.reservInfo.people[clas.PR_CLASS] = [selectedOptions[index], sumPrice]
+
+                newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[index] === undefined) ? null : selectedOptions[index], isNaN(sumPrice) ? 0 : sumPrice]
             })
             newReservInfo.reservInfo.pid = proData[6]
-            newReservInfo.reservInfo.dates = [milliFomatter(startDate),dateFomatter(endDate)]
+
+            let strDate = dateFomatter(startDate)
+            if (strDate === null) {
+                strDate = milliFomatter(tomorrow)
+            }
+
+            newReservInfo.reservInfo.dates = [strDate,dateFomatter(endDate)]
             console.log(newReservInfo)
 
             return newReservInfo
@@ -244,12 +252,12 @@ export default function Program ({proData}) {
                 </Container>
 
             </div>
-            <div id={'priceWrapper'}>
+            <div id={'reservWrapper'}>
 
                 <Container>
                     <Row>
                         <Col>
-                            { dateFomatter(endDate) ? (<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight: '10px'}}>{dateFomatter(startDate)}~{dateFomatter(endDate)}</p>):(<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight:'60px'}} >{dateFomatter(startDate)}</p>)}
+                            { dateFomatter(endDate) ? (<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight: '10px'}}>{(dateFomatter(startDate) === null) ? milliFomatter(tomorrow) : dateFomatter(startDate)}~{dateFomatter(endDate)}</p>):(<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight:'60px'}} >{dateFomatter(startDate)}</p>)}
                         </Col>
                         <Col>
                             <Row>
