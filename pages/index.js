@@ -33,27 +33,32 @@ export default function Home({indexInfo}) {
                         <Row style={{height: '100px'}}></Row>
                         <Row className="likeslist tpl align-top">
                                 <Col>
-                                        {indexInfo.map(program => (
+                                        { (indexInfo.length > 0 ) ? (      indexInfo.map(program => (
 
-                                            <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`}>
+                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`}>
+                                                        <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px'}}>
+                                                                <Col>
+                                                                        <img src={program.P_PICLINK} alt="프로그램 이미지" className={""} style={{width: '100%', height:'135px',paddingTop:'9px'}}/>
+                                                                </Col>
+                                                                <Col>
+                                                                        <p className={"text-center fs-6"}>{program.ADDR}</p>
+                                                                </Col>
+                                                                <Col>
+                                                                        <p className={"text-center  fs-6"}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
+                                                                </Col>
+                                                                <Col>
+                                                                        <p className={"text-center  fs-6"}>{program.P_NAME}</p>
+                                                                </Col>
+                                                        </Row>
+                                                </Link>
+
+                                            )
+                                        )) : (
                                                     <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px'}}>
-                                                            <Col>
-                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" className={""} style={{width: '100%', height:'135px',paddingTop:'9px'}}/>
-                                                            </Col>
-                                                            <Col>
-                                                                <p className={"text-center fs-6"}>{program.ADDR}</p>
-                                                            </Col>
-                                                            <Col>
-                                                                 <p className={"text-center  fs-6"}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
-                                                            </Col>
-                                                            <Col>
-                                                                <p className={"text-center  fs-6"}>{program.P_NAME}</p>
-                                                            </Col>
+                                                           <p className={'h1'}>프로그램이 없습니다.</p>
                                                     </Row>
-                                            </Link>
-
                                         )
-                                        )}
+                                          }
                                 </Col>
                                 <Col>
                                         <Row>
@@ -63,6 +68,7 @@ export default function Home({indexInfo}) {
                                                 <Link href={"/?lid=충남"}>충남</Link>
                                                 <Link href={"/?lid=경기"}>경기</Link>
                                                 <Link href={"/?lid=충북"}>충북</Link>
+                                                <Link href={"/?lid=세종"}>세종</Link>
                                                 <Link href={"/?lid=경북"}>경북</Link>
                                                 <Link href={"/?lid=전북"}>전북</Link>
                                                 <Link href={"/?lid=대구"}>대구</Link>

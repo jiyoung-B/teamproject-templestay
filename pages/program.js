@@ -37,18 +37,31 @@ export default function Program ({proData}) {
 
                     <Carousel>
 
-                        {proData[1].map(pic => (
+                        { (proData[1].length > 0) ? (proData[1].map(pic => (
                             <Carousel.Item key={shortid.generate()}>
                                 <img
-                                className="d-block w-100"
-                                src={pic}
-                                alt="First slide"
-                                height="800px"
-                                onError={handleImgError}
-                                key={shortid.generate()}
+                                    className="d-block w-100"
+                                    src={pic}
+                                    alt="First slide"
+                                    height="800px"
+                                    onError={handleImgError}
+                                    key={shortid.generate()}
                                 />
                             </Carousel.Item>
-                        ))}
+                        ))) :
+                            (
+                                <Carousel.Item key={shortid.generate()}>
+                                    <img
+                                        className="d-block w-100"
+                                        src={'https://www.templestay.com/images/templeinfo-00.jpg'}
+                                        alt="First slide"
+                                        height="800px"
+                                        onError={handleImgError}
+                                        key={shortid.generate()}
+                                    />
+                                </Carousel.Item>
+                            )
+                            }
                     </Carousel>
 
                 </div>
@@ -170,24 +183,34 @@ export default function Program ({proData}) {
                     <p className={'fs-3 fw-bold text-secondary'} id="programTitle">다른 프로그램</p>
                     <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
-                            {proData[5].map(program => (
-
+                            {(proData[5].length > 0 ) ? (proData[5].map(program => (
                                 <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
 
-                                        <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                            <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
-                                            <Card.Body key={shortid.generate()}>
-                                                <Card.Title style={{height:`70px`}} key={shortid.generate()}>
-                                                    {program.P_NAME}
-                                                </Card.Title>
+                                    <Card style={{ width: '100%' }} key={shortid.generate()}>
+                                        <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
+                                        <Card.Body key={shortid.generate()}>
+                                            <Card.Title style={{height:`70px`}} key={shortid.generate()}>
+                                                {program.P_NAME}
+                                            </Card.Title>
                                             <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
-                                            </Card.Body>
-                                        </Card>
-
+                                        </Card.Body>
+                                    </Card>
                                 </Col>
 
+                            ))) : ( <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
 
-                            ))}
+                                <Card style={{ width: '100%' }} key={shortid.generate()}>
+                                    <Card.Img variant="top" src={'https://www.templestay.com/images/templeinfo-00.jpg'} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
+                                    <Card.Body key={shortid.generate()}>
+                                        <Card.Title style={{height:`70px`}} key={shortid.generate()}>
+                                            {program.P_NAME}
+                                        </Card.Title>
+                                        <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
+                                    </Card.Body>
+                                </Card>
+
+                            </Col>)
+                                }
                         </Row>
                     </Container>
                 </div>
