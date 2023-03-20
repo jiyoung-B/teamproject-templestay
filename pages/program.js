@@ -25,7 +25,7 @@ export async function getServerSideProps(ctx) {
     let proData = await res.data;
 
     proData.push(pid)
-    console.log(proData)
+
     return {props:{proData}}
 }
 
