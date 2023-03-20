@@ -52,7 +52,6 @@ const Header = ({ pathname }) => {
                     <div className={showIntro ? "" : "fixed-top"}>
                         <Nav />
                     </div>
-                    {/* 나머지 컴포넌트들 */}
                 </div>
             </>
         );
