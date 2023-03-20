@@ -86,12 +86,3 @@ export default function Home({indexInfo}) {
         </div>
     )
 }
-
-
-Home.getLayout = (page) => (
-    <Layout meta={{title: 'Temfo, 홈'}}>
-        <ToIntro />
-        <Nav />
-        {page}
-    </Layout>
-)

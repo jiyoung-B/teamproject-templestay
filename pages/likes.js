@@ -53,9 +53,3 @@ export default function Likes () {
         </main>
     )
 }
-Likes.getLayout = (page) => (
-    <Layout meta={{title: '마이페이지-좋아요'}}>
-        <Nav />
-        {page}
-    </Layout>
-)
