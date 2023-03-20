@@ -88,7 +88,31 @@ export default function Program ({proData}) {
     //      }
     //  }
 
-    const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {}, dates:[]}})
+    const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {"성인":[null,0],"중고생":[null,0],"초등생":[null,0],"미취학":[null,0]}, dates:[]}})
+
+
+    const process_reservation = async (url, data) => {
+        console.log('reservation -',data.reservInfo.pid)
+        // json 형식으로 전처리
+        let preReservationDate = [
+            {userId:data.userId},{PID:data.reservInfo.pid},{strData:data.reservInfo.dates[0]},
+            {endDate: (data.reservInfo.dates[1] === null) ? data.reservInfo.dates[0] : data.reservInfo.dates[1]},
+            {adult: (data.reservInfo.people["성인"][0] === null) ? 0 : Number(data.reservInfo.people["성인"][0])},
+            {middle: (data.reservInfo.people["중고생"][0] === null) ? 0 : Number(data.reservInfo.people["중고생"][0])},
+            {young:(data.reservInfo.people["초등생"][0] === null) ? 0 : Number(data.reservInfo.people["초등생"][0])},
+            {preschool:(data.reservInfo.people["미취학"][0] === null) ? 0 : Number(data.reservInfo.people["미취학"][0])}
+        ]
+        console.log(preReservationDate)
+
+        const cnt = fetch(url, {
+            method: 'POST', mode: 'cors',
+            body: JSON.stringify(preReservationDate),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json());
+
+        return (await cnt).cnt;
+    }
+
 
 
     const handelReserve = () => {
@@ -100,6 +124,7 @@ export default function Program ({proData}) {
                 newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[index] === undefined) ? null : selectedOptions[index], isNaN(sumPrice) ? 0 : sumPrice]
             })
             newReservInfo.reservInfo.pid = proData[6]
+
 
             let strDate = dateFomatter(startDate)
             if (strDate === null) {
@@ -116,13 +141,16 @@ export default function Program ({proData}) {
             newReservInfo.reservInfo.sum = sum
 
             if(sum === 0) {
+                // 성인이 1이상 있는 것으로, 조건을 바꿔보자.
                 alert('인원을 선택하세요.')
+            } else {
+               process_reservation('/api/reservation',newReservInfo)
+
             }
 
             return newReservInfo
         })
     }
-    console.log(reservInfo)
 
     return(
         <div className={'container'} style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
@@ -209,38 +237,38 @@ export default function Program ({proData}) {
                                 <Modal.Body className="cal">
 
                                     {proData[2].map((clas, index) =>(
-                                        <Form.Select value={selectedOptions[index]} onChange={(e) => handleSelectChange(e, index)} aria-label="Default select example">
-                                            <option>{clas.PR_CLASS}</option>
-                                            <option value="1">1명</option>
-                                            <option value="2">2명</option>
-                                            <option value="3">3명</option>
-                                            <option value="4">4명</option>
-                                            <option value="5">5명</option>
-                                            <option value="6">6명</option>
-                                            <option value="7">7명</option>
-                                            <option value="8">8명</option>
-                                            <option value="9">9명</option>
-                                            <option value="10">10명</option>
-                                            <option value="11">11명</option>
-                                            <option value="12">12명</option>
-                                            <option value="13">13명</option>
-                                            <option value="14">14명</option>
-                                            <option value="15">15명</option>
-                                            <option value="16">16명</option>
-                                            <option value="17">17명</option>
-                                            <option value="18">18명</option>
-                                            <option value="19">19명</option>
-                                            <option value="20">20명</option>
-                                            <option value="21">21명</option>
-                                            <option value="22">22명</option>
-                                            <option value="23">23명</option>
-                                            <option value="24">24명</option>
-                                            <option value="25">25명</option>
-                                            <option value="26">26명</option>
-                                            <option value="27">27명</option>
-                                            <option value="28">28명</option>
-                                            <option value="29">29명</option>
-                                            <option value="30">30명</option>
+                                        <Form.Select value={selectedOptions[index]} onChange={(e) => handleSelectChange(e, index)} key={shortid.generate()} aria-label="Default select example">
+                                            <option key={shortid.generate()} >{clas.PR_CLASS}</option>
+                                            <option value="1"  key={shortid.generate()} >1명</option>
+                                            <option value="2"  key={shortid.generate()} >2명</option>
+                                            <option value="3"  key={shortid.generate()} >3명</option>
+                                            <option value="4"  key={shortid.generate()} >4명</option>
+                                            <option value="5"  key={shortid.generate()} >5명</option>
+                                            <option value="6"  key={shortid.generate()} >6명</option>
+                                            <option value="7"  key={shortid.generate()} >7명</option>
+                                            <option value="8"  key={shortid.generate()} >8명</option>
+                                            <option value="9"  key={shortid.generate()} >9명</option>
+                                            <option value="10"  key={shortid.generate()} >10명</option>
+                                            <option value="11"  key={shortid.generate()} >11명</option>
+                                            <option value="12"  key={shortid.generate()} >12명</option>
+                                            <option value="13"  key={shortid.generate()} >13명</option>
+                                            <option value="14"  key={shortid.generate()} >14명</option>
+                                            <option value="15"  key={shortid.generate()} >15명</option>
+                                            <option value="16"  key={shortid.generate()} >16명</option>
+                                            <option value="17"  key={shortid.generate()} >17명</option>
+                                            <option value="18"  key={shortid.generate()} >18명</option>
+                                            <option value="19"  key={shortid.generate()} >19명</option>
+                                            <option value="20"  key={shortid.generate()} >20명</option>
+                                            <option value="21"  key={shortid.generate()} >21명</option>
+                                            <option value="22"  key={shortid.generate()} >22명</option>
+                                            <option value="23"  key={shortid.generate()} >23명</option>
+                                            <option value="24"  key={shortid.generate()} >24명</option>
+                                            <option value="25"  key={shortid.generate()} >25명</option>
+                                            <option value="26"  key={shortid.generate()} >26명</option>
+                                            <option value="27"  key={shortid.generate()} >27명</option>
+                                            <option value="28"  key={shortid.generate()} >28명</option>
+                                            <option value="29"  key={shortid.generate()} >29명</option>
+                                            <option value="30"  key={shortid.generate()} >30명</option>
                                         </Form.Select>
                                     ))}
 
@@ -393,9 +421,3 @@ export default function Program ({proData}) {
 
     )
 }
-Program.getLayout = (page) => (
-    <Layout meta={{title: '프로그램 페이지'}}>
-        <Nav />
-        {page}
-    </Layout>
-)
