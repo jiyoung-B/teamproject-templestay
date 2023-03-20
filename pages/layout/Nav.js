@@ -7,26 +7,55 @@ import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
+import {hashPassword, process_submit} from "../../components/Util";
+import {getSession, signIn, signOut, useSession} from "next-auth/client";
 
+export async function getServerSideProps(ctx) {
 
-//주석추가
+    const sess = await getSession(ctx);
+    if (sess) {
+        return {
+            redirect: {permanent: false, destination: '/'},
+            props: {}
+        }
+    }
+    return {props : {}}
+}
 
 
 const Nav = () => {
+    const [userid, setUserid] = useState(''); // userid=email(email로 회원가입)
+    const [name, setName] = useState('');
+    const [passwd, setPasswd] = useState('');
 
-    const handlejoin = async () => {
-        alert('회원가입을 축하합니다')
+    const [menuToggle, setMenuToggle] = useState(false);
+    const { data: session, status } = useSession();
+    if (status === "authenticated") console.log("session", session);
 
-    };
-    const handlelogin = async () => {
-        const error = 0;
-
-        if (error) { // 에러 발생시 - 인증 실패시
-            alert('로그인에 실패했습니다');
-        } else {
-            location.href = '/';
+    console.log('login -', session?.user?.userid);
+    const handlejoin = async (e) => {
+        console.log('hadlejoin - ', e.target.value);
+        let hshpwd = await hashPassword(passwd)
+        const data = {userid: userid, passwd:await hshpwd, name: name};
+        if (await process_submit('/api/member/join', data) > 0) {
+            alert('회원가입을 축하합니다')
+            location.href = '/'
         }
+
     };
+
+    const handlelogin = async () => {
+        const data = {userid: userid, passwd: passwd};
+
+        const {error} = await signIn('userid-passwd-credentials', {
+            userid, passwd,
+            redirect: true
+        });
+
+        console.log('pg login : ', await error);
+
+    };
+
 
 
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
@@ -46,7 +75,7 @@ const Nav = () => {
 //주석추가
     return (
         <>
-        <div className='border-bottom border-2 border-primary bg-white' id='navWrapper'>
+        <div className='border-bottom border-2 border-primary bg-white fixed-top' id='navWrapper'>
             <Container fluid='xxl'>
                 <Row className='title'>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
@@ -123,7 +152,7 @@ const Nav = () => {
                     <form>
                         <div className="row">
                             <div className="mb-3 col-md-12">
-                                <input type="email" className="form-control" id="email" placeholder="이메일주소"/>
+                                <input type="email" className="form-control" id="userid" placeholder="이메일주소"/>
                             </div>
                         </div>
                         <div className="row">
@@ -154,24 +183,21 @@ const Nav = () => {
                     <form>
                         {/* <div className="col-md-12"> */}
                         <div className="row">
-                            <div className="mb-3 col-md-4">
-                                <input type="text" className="form-control" id="fname" placeholder="성"/>
-                            </div>
-                            <div className="mb-3 col-md-8">
-                                <input type="text" className="form-control" id="lname" placeholder="이름"/>
+                            <div className="mb-3 col-md-12">
+                                <input type="text" className="form-control" id="name" placeholder="이름"/>
                             </div>
                         </div>
                         <div className="row">
                             <div className="mb-3 col-md-12">
-                                <input type="email" className="form-control" id="email2" placeholder="이메일주소"/>
+                                <input type="email" className="form-control" id="userid" placeholder="이메일주소"/>
                             </div>
                         </div>
                         <div className="row">
                             <div className="mb-5 col-md-12">
-                                <input type="password" className="form-control" id="password2" placeholder="비밀번호"/>
+                                <input type="password" className="form-control" id="password" placeholder="비밀번호"/>
                             </div>
                         </div>
-                        <div className="mb-3 text-center" ><button type="button" className="btn col-md-10" style={{backgroundColor: '#240a0a',color:'white'}} onClick={handlejoin}>회원가입</button></div>
+                        <div className="mb-3 text-center" ><button type="submit" className="btn col-md-10" style={{backgroundColor: '#240a0a',color:'white'}} onClick={handlejoin}>회원가입</button></div>
                     </form>
                 </div>
             </div>
