@@ -3,7 +3,7 @@ import { HiOutlineMapPin } from 'react-icons/hi2';
 import { BsCalendar } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
 import Link from 'next/link';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
@@ -28,21 +28,42 @@ const Nav = () => {
     const [name, setName] = useState('');
     const [passwd, setPasswd] = useState('');
 
-    const [menuToggle, setMenuToggle] = useState(false);
-    const { data: session, status } = useSession();
-    if (status === "authenticated") console.log("session", session);
+    const [session, loading] = useSession();
+    const [showModal, setShowModal] = useState(false);
 
-    console.log('login -', session?.user?.userid);
+    const [menuToggle, setMenuToggle] = useState(false);
+    //const { data: session, status } = useSession();
+    // if (status === "authenticated") console.log("session", session);
+
+    // const joinbtn = document.getElementById("joinbtn");
+   // let isLoggedIn = false;
+
+    //console.log('login -', session?.user?.userid);
+    useEffect(() => {
+        if (!loading && !session) {
+            setShowModal(true);
+        }
+    }, [loading, session]);
+
+    const closeModal = () => setShowModal(false);
+
     const handlejoin = async (e) => {
-        console.log('hadlejoin - ', e.target.value);
-        let hshpwd = await hashPassword(passwd)
-        const data = {userid: userid, passwd:await hshpwd, name: name};
+       e.preventDefault();
+        let frm = document.join;
+        console.log('frm!!!', frm)
+        console.log('userid!!!', frm.userid.value)
+        console.log('passwd!!!', frm.passwd.value)
+
+        const userid = frm.userid.value;
+        const name = frm.name.value;
+        const passwd = frm.passwd.value;
+        let hshpwd = await hashPassword(passwd) // 암호ㅎ를 해시화 함
+        const data = {userid: userid,  name: name, passwd: hshpwd};
         if (await process_submit('/api/member/join', data) > 0) {
-            alert('회원가입을 축하합니다')
             location.href = '/'
         }
+        }
 
-    };
 
     const handlelogin = async () => {
         const data = {userid: userid, passwd: passwd};
@@ -75,16 +96,14 @@ const Nav = () => {
 //주석추가
     return (
         <>
-        <div className='border-bottom border-2 border-primary bg-white fixed-top' id='navWrapper'>
+        <div className='border-bottom border-2 border-primary bg-white' id='navWrapper'>
             <Container fluid='xxl'>
                 <Row className='title'>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                         <Link href='/'>
-                            <a>
                             <NavLink>
                                 Temfo,
                             </NavLink>
-                            </a>
                         </Link>
                     </Col>
                     <Col md={{ span: 5 }} style={{textAlign: "right"}}>
@@ -127,14 +146,14 @@ const Nav = () => {
                         </>
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
-                        <NavLink href='/login'>
+                        <Link href='/login'>
                             <NavLink>
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal"
                                         style={{border: "1px solid white", backgroundColor: "white"}}>
                                     <CiUser />
                                 </button>
                             </NavLink>
-                        </NavLink>
+                        </Link>
                     </Col>
                 </Row>
             </Container>
@@ -149,10 +168,10 @@ const Nav = () => {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
-                    <form>
+                    <form name="login">
                         <div className="row">
                             <div className="mb-3 col-md-12">
-                                <input type="email" className="form-control" id="userid" placeholder="이메일주소"/>
+                                <input type="text" className="form-control" id="userid1" placeholder="이메일주소"/>
                             </div>
                         </div>
                         <div className="row">
@@ -180,24 +199,24 @@ const Nav = () => {
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
-                    <form>
+                    <form name="join">
                         {/* <div className="col-md-12"> */}
+                        <div className="row">
+                            <div className="mb-3 col-md-12">
+                                <input type="text" className="form-control" id="userid" placeholder="이메일주소"/>
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="mb-3 col-md-12">
                                 <input type="text" className="form-control" id="name" placeholder="이름"/>
                             </div>
                         </div>
                         <div className="row">
-                            <div className="mb-3 col-md-12">
-                                <input type="email" className="form-control" id="userid" placeholder="이메일주소"/>
-                            </div>
-                        </div>
-                        <div className="row">
                             <div className="mb-5 col-md-12">
-                                <input type="password" className="form-control" id="password" placeholder="비밀번호"/>
+                                <input type="password" className="form-control" id="passwd" placeholder="비밀번호"/>
                             </div>
                         </div>
-                        <div className="mb-3 text-center" ><button type="submit" className="btn col-md-10" style={{backgroundColor: '#240a0a',color:'white'}} onClick={handlejoin}>회원가입</button></div>
+                        <div className="mb-3 text-center" ><button type="submit" className="btn col-md-10" style={{backgroundColor: '#240a0a',color:'white'}} id="joinbtn" onClick={handlejoin}>회원가입</button></div>
                     </form>
                 </div>
             </div>
