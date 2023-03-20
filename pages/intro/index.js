@@ -13,7 +13,6 @@ const Intro = () => {
 
     return (
         <>
-            <IntroHead />
             <Container fluid>
                 <Row style={{marginTop:'160px'}}>
                     <Col md={{ span: 6, offset: 1 }}>
@@ -111,10 +110,4 @@ const Intro = () => {
         </>
     )
 }
-Intro.getLayout = (page) => (
-    <Layout meta={{title: 'Temfo, 인트로'}}>
-        {page}
-    </Layout>
-)
-
 export default Intro
