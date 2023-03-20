@@ -1,28 +1,29 @@
-import Nav from "./Nav";
 import Footer from "./Footer";
-import ToIntro from "./ToIntro";
-import {Component} from "react";
-import {Head} from "next/document";
+import {Component, useEffect, useLayoutEffect} from "react";
+import Header from "./Header";
 
-// Layout 수정 반영이 안돼?
-const Layout =({children, meta}) =>{
-    const icon = meta;
+export async function getServerSideProps(context) {
+    return {
+        props: {
+            pathname: context.req.url,
+        },
+    };
+}
+
+const Layout =({children, meta, pathname}) => {
+    const title = meta?.title;
+    useEffect(() => {
+        document.title = title ?? 'Temfo';
+    })
 
     return(
-<>
-        <head>
-            <link rel="icon" href={icon || '/favicon.ico'} />
-            <title>Temfo,</title>
-        </head>
-
-        <body>
-        <div id="wrapper">
-            <main>{children}</main>
+        <>
+            <Header pathname={pathname} />
+            <div className="container" id="wrapper">
+                <main>{children}</main>
+            </div>
             <Footer />
-
-        </div>
-        </body>
-</>
+        </>
 
     )
 }

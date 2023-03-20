@@ -177,9 +177,3 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
         </div>
     )
 }
-temple.getLayout = (page) => (
-    <Layout meta={{title: '사찰 페이지'}}>
-        <Nav />
-        {page}
-    </Layout>
-)
