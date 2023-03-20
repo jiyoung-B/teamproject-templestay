@@ -90,7 +90,6 @@ export default function Program ({proData}) {
 
     const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {}, dates:[]}})
 
-    console.log(dateFomatter(startDate))
 
     const handelReserve = () => {
         setReservInfo((prevReservInfo) => {
@@ -108,12 +107,22 @@ export default function Program ({proData}) {
             }
 
             newReservInfo.reservInfo.dates = [strDate,dateFomatter(endDate)]
-            console.log(newReservInfo)
+
+            let sum = 0;
+            for (let key in newReservInfo.reservInfo.people) {
+                sum += newReservInfo.reservInfo.people[key][1];
+            }
+
+            newReservInfo.reservInfo.sum = sum
+
+            if(sum === 0) {
+                alert('인원을 선택하세요.')
+            }
 
             return newReservInfo
         })
     }
-
+    console.log(reservInfo)
 
     return(
         <div className={'container'} style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
