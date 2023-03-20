@@ -9,7 +9,7 @@ export default async (req, res) => {
 
         const result = (await member)[0];
         const data = { cnt: parseInt(await result.cnt),
-            name: await result.name, email: await result.email}
+            name: await result.name, userid: await result.userid}
         console.log('api login : ', data);
 
         res.status(200).json(data);
