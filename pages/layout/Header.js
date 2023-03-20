@@ -56,7 +56,7 @@ const Header = ({ pathname }) => {
                         <ToIntro />
                     </div>
                 </div>
-                <div>{/* className={showIntro ? "" : "sticky-xxl-top"}>*/}
+                <div className={showIntro ? "" : "fixed-top"}>
                     <Nav />
                 </div>
             </div>)}

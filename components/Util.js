@@ -1,4 +1,5 @@
 
+import bcrypt from "bcryptjs";
 // 이미지가 로드되지 않을 경우 onError 이벤트 처리를 위한 함수.
 // ex
 // <img src='에러발생' onError ={handleImgError} />
@@ -8,13 +9,15 @@ const handleImgError = (e) => {
 
 
 const process_submit = async (url, data) => {
+    const bodydata = JSON.stringify(data)
+    console.log(bodydata);
     const cnt = fetch(url, {
         method: 'POST', mode: 'cors',
-        body: JSON.stringify(data),
+        body: bodydata,
+        // body: JSON.stringify(data),
         headers: {'Content-Type': 'application/json'},
-    }).then(res => res.json());
-
-    return (await cnt).cnt;
+    }).then(res => console.log('알이에스 -', res));
+    return await cnt;
 };
 
 
