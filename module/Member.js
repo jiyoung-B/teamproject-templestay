@@ -1,7 +1,7 @@
 const mariadb = require('../module/MariaDB');
 
 let membersql = {
-    insertsql : ' insert into member (name, userid, passwd) values (?,?,?) ',
+    insertsql : ' insert into member (userid, name, passwd) values (?,?,?) ',
     loginsql : ' select count(userid) cnt, name, userid from member ' +
         ' where userid = ? and passwd = ? ',
     selectOne: ' select mno, name, userid ' +
@@ -11,9 +11,9 @@ let membersql = {
 
 
 class Member {
-    constructor(name, userid, passwd ) {
-        this.name = name;
+    constructor(userid, name, passwd) {
         this.userid = userid;
+        this.name = name;
         this.passwd = passwd;
     }
 
@@ -21,7 +21,7 @@ class Member {
     async insert() {
         console.log('insert문 실행');
         let conn = null;
-        let params = [this.name, this.userid, this.passwd ];
+        let params = [this.userid, this.name, this.passwd ];
         let result = -1;
 
         try {
