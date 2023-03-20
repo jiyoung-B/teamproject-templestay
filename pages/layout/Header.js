@@ -1,8 +1,8 @@
 import ToIntro from "./ToIntro";
 import Nav from "./Nav";
 import {useRouter} from "next/router";
+import React, {useEffect, useRef, useState} from "react";
 import IntroHead from "./IntroHead";
-import {useEffect, useRef, useState} from "react";
 
 
 
@@ -41,18 +41,25 @@ const Header = ({ pathname }) => {
         setShowIntro(currentPath === "/");
     }, [currentPath]);
 
+    useEffect(() => {
+        setShowIntro(currentPath === "/intro");
+    }, [currentPath]);
+
+     // className="mb-5 text-right position-relative">
+     //    <div className="position-absolute top-0 end-0">
+
         return (
             <>
-                <div>
-                    <div ref={ref}>
-                        <div style={{ height: showIntro ? "auto" : 0, opacity: showIntro ? 1 : 0 }}>
-                            <ToIntro />
-                        </div>
-                    </div>
-                    <div className={showIntro ? "" : "fixed-top"}>
-                        <Nav />
+                {(currentPath === "/intro") ? (<IntroHead />) :(<div>
+                <div ref={ref}>
+                    <div style={{ height: showIntro ? "auto" : 0, opacity: showIntro ? 1 : 0 }}>
+                        <ToIntro />
                     </div>
                 </div>
+                <div>{/* className={showIntro ? "" : "sticky-xxl-top"}>*/}
+                    <Nav />
+                </div>
+            </div>)}
             </>
         );
 
