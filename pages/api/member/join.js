@@ -1,22 +1,16 @@
 import Member from "../../../module/Member";
 
 export default async (req, res) => {
-    const {passwd, name, email} = req.body;
+    const {name, userid, passwd} = req.body; // body로 넘겼기 때문에 body로 받아야함.
+    console.log(name, userid, passwd);
 
-    try {
-        const isEmail = await new Member().isEmail(email);
-        const isEmailCnt = parseInt(isEmail[0].cnt);
+    try{
+        const cnt = new Member(name, userid, passwd).insert().then(result => result);
 
-        if (isEmailCnt) {
-            res.status(200).json({ cnt: -1});
-        } else {
-            const cnt = new Member(passwd, name, email).insert()
-                .then(result => result);
-            res.status(200).json({cnt: await cnt});
-        }
+        console.log(await cnt);
+        res.status(200).json({cnt: await cnt})
 
-    } catch (err) {
-        res.status(500).json(err);
+    }catch (err){
+        res.status(500).json(err)
     }
 }
-
