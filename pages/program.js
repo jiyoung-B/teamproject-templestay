@@ -221,9 +221,3 @@ export default function Program ({proData}) {
 
     )
 }
-Program.getLayout = (page) => (
-    <Layout meta={{title: '프로그램 페이지'}}>
-        <Nav />
-        {page}
-    </Layout>
-)
