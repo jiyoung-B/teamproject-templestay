@@ -1,4 +1,4 @@
-import mariadb from "mariadb";
+import mariadb from 'mariadb';
 
 const dbconfig = {
     host : process.env.MARIADB_HOST,
