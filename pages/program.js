@@ -5,7 +5,7 @@ import axios from "axios";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
 import shortid from 'shortid'
-import {handleImgError, dateFomatter, milliFomatter} from "../components/Util";
+import {handleImgError, dateFomatter, milliFomatter} from "../module/Utils";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";
@@ -42,7 +42,8 @@ export default function Program ({proData}) {
 
     // state 보여주는 부분
     const [startDate, setStartDate] = useState(tomorrow);
-    const [endDate, setEndDate] = useState(null);
+    let [endDate, setEndDate] = useState(null);
+
 
     // 모달 on/off 해주는 함수
     const [show, setShow] = useState(false);
@@ -95,7 +96,8 @@ export default function Program ({proData}) {
 
 
     // handelReserve안에서 작동하는 함수 /api/preBook 에 post 요청을 한다.
-    const process_reservation = async (url, data) => {
+    const process_reservation = async (data) => {
+
         // json 형식으로 전처리
         let preReservationDate = [
             {userId:data.userId},{PID:data.reservInfo.pid},{strDate:data.reservInfo.dates[0]},
@@ -106,12 +108,12 @@ export default function Program ({proData}) {
             {preschool:(data.reservInfo.people["미취학"][0] === null) ? 0 : Number(data.reservInfo.people["미취학"][0])}
         ]
 
-        const cnt = fetch(url, {
+        const cnt = fetch('/api/preBook', {
             method: 'POST', mode: 'cors',
             body: JSON.stringify(preReservationDate),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json());
-        let result;
+        let result = false;
         if(await cnt.cnt >0) result = true
         return result;
     }
@@ -120,20 +122,23 @@ export default function Program ({proData}) {
     const handleReserve = async () => {
         setReservInfo((prevReservInfo) => {
             const newReservInfo = {...prevReservInfo}
-            console.log(newReservInfo)
 
             // people 객체에 입력값 전달 및 단위별 합계액 전달 부분. ex) 성인 : [수, 합계액]
             proData[2].map((clas) => {
                 let sumPrice = selectedOptions[clas.PR_CLASS] * clas.PRICE
                 newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[clas.PR_CLASS] === undefined) ? null : selectedOptions[clas.PR_CLASS], isNaN(sumPrice) ? 0 : sumPrice]
             })
+            // 현재 일정을 선택하지 않으면, 다음날이 시작 날짜로 지정되고 있다.
+            // 일정을 선택하지 않으면 화면에 일정 표시가 되지 않는다.
+            // 선택하지 않으면 일정을 선택하세요! 라는 경고 문구가 등장하게 해야 한다.
+            let B_strDate = milliFomatter(startDate)
+            let B_endDate = dateFomatter(endDate)
 
-            let strDate = dateFomatter(startDate)
-            if (strDate === null) {
-                strDate = milliFomatter(tomorrow)
+            if (B_endDate === null) {
+                B_endDate = B_strDate
             }
 
-            newReservInfo.reservInfo.dates = [strDate,dateFomatter(endDate)]
+            newReservInfo.reservInfo.dates = [B_strDate,B_endDate]
 
             // sum 계산 단위별 합계액 합산하여, 총액을 구한다.
             let sum = 0;
@@ -145,8 +150,8 @@ export default function Program ({proData}) {
             newReservInfo.reservInfo.sum = sum
 
             // api를 통해 db로 전달. 행이 추가되면 true를 리턴하고, url을 preBook 페이지로 변경 보낸다.
-            if(process_reservation('/api/preBook',newReservInfo)) {
-                location.href = `/preBook?userid=${newReservInfo.userId}`;
+            if(process_reservation(newReservInfo)) {
+               location.href = `/preBook?userid=${newReservInfo.userId}`;
             }
 
             return newReservInfo
@@ -295,7 +300,7 @@ export default function Program ({proData}) {
                 <Container>
                     <Row>
                         <Col>
-                            { dateFomatter(endDate) ? (<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight: '10px'}}>{(dateFomatter(startDate) === null) ? milliFomatter(tomorrow) : dateFomatter(startDate)}~{dateFomatter(endDate)}</p>):(<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight:'60px'}} >{dateFomatter(startDate)}</p>)}
+                            { dateFomatter(endDate) ? (<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight: '10px'}}>{(milliFomatter(startDate) === null) ? milliFomatter(tomorrow) : milliFomatter(startDate)}~{dateFomatter(endDate)}</p>):(<p className={'text-end pt-2 m-0 fw-1 fw-semibold'} style={{paddingRight:'60px'}} >{milliFomatter(startDate)}</p>)}
                         </Col>
                         <Col>
                             <Row>
