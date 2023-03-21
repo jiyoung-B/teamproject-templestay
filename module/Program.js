@@ -41,7 +41,7 @@ async function selectPro(pid) {
     } catch (e) {
         console.log(e);
     } finally {
-        await mariadb.closeConn();
+        await mariadb.closeConn(conn)
     }
     return ProData
 }

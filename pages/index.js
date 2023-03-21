@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Link from "next/link";
 import React from "react";
 import axios from "axios";
+import shortid from 'shortid'
 import * as PropTypes from "prop-types";
 
 export async function getServerSideProps(ctx) {
@@ -35,27 +36,27 @@ export default function Home({indexInfo}) {
                                 <Col>
                                         { (indexInfo.length > 0 ) ? (      indexInfo.map(program => (
 
-                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`}>
-                                                        <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px'}}>
-                                                                <Col>
-                                                                        <img src={program.P_PICLINK} alt="프로그램 이미지" className={""} style={{width: '100%', height:'135px',paddingTop:'9px'}}/>
+                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+                                                        <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px'}} key={shortid.generate()}>
+                                                                <Col key={shortid.generate()}>
+                                                                        <img src={program.P_PICLINK} alt="프로그램 이미지" className={""} style={{width: '100%', height:'135px',paddingTop:'9px'}} key={shortid.generate()}/>
                                                                 </Col>
-                                                                <Col>
-                                                                        <p className={"text-center fs-6"}>{program.ADDR}</p>
+                                                                <Col key={shortid.generate()}>
+                                                                        <p className={"text-center fs-6"} key={shortid.generate()}>{program.ADDR}</p>
                                                                 </Col>
-                                                                <Col>
-                                                                        <p className={"text-center  fs-6"}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
+                                                                <Col key={shortid.generate()}>
+                                                                        <p className={"text-center  fs-6"} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
                                                                 </Col>
-                                                                <Col>
-                                                                        <p className={"text-center  fs-6"}>{program.P_NAME}</p>
+                                                                <Col key={shortid.generate()}>
+                                                                        <p className={"text-center  fs-6"} key={shortid.generate()}>{program.P_NAME}</p>
                                                                 </Col>
                                                         </Row>
                                                 </Link>
 
                                             )
                                         )) : (
-                                                    <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px'}}>
-                                                           <p className={'h1'}>프로그램이 없습니다.</p>
+                                                    <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px'}} key={shortid.generate()}>
+                                                           <p className={'h1'} key={shortid.generate()}>프로그램이 없습니다.</p>
                                                     </Row>
                                         )
                                           }
