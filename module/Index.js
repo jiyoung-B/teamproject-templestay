@@ -20,7 +20,7 @@ async function selectIndex(lid) {
     } catch (e) {
         console.log(e);
     } finally {
-        await mariadb.closeConn();
+        await mariadb.closeConn(conn)
     }
    return indexData
 }
