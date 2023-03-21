@@ -29,24 +29,23 @@ export async function getServerSideProps(ctx) {
     return {props:{proData}}
 }
 
-// 여기서 api로 보내보자.
-// 그럼 데이터 베이스도 구상해야 한다.
-// page에서 api로 보내는 방법은?
-//
+// const tomorrow = new Date().setDate(new Date().getDate() + 1);
+// let check = milliFomatter(tomorrow) // 확인 결과 tomorrow는 변환했을 때 내일을 가르킨다.
+// console.log(check)
 
 export default function Program ({proData}) {
     const unit = 28
+    let PID = proData[6]
 
     // 내일의 날짜를 구하기
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
 
     // state 보여주는 부분
-    const [show, setShow] = useState(false);
-
     const [startDate, setStartDate] = useState(tomorrow);
     const [endDate, setEndDate] = useState(null);
 
     // 모달 on/off 해주는 함수
+    const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -65,21 +64,37 @@ export default function Program ({proData}) {
     const handleShow2 = () => setShow2(true);
 
     // 선택 인원 관리 함수
-    const [selectedOptions, setSelectedOptions] = useState([]);
+    // 선택 가능 옵션의 종류는 동적으로 결정된다.
+    // 이 스테이트에는 선택한 순서대로 저장된다.
+    // 좀 이상한 것 같다.
+    // 그동안 나는 설사 등장하지 않는 경우가 있더라도, 성인, 중고생, 초등생, 미취학 순으로 반드시 존재한다고 생각했고, 어떤 경우에도 성인은 포함된다고 생각했다.
+    // 하지만 살펴보니 성인이 없고 오직 중고생만 있는 경우가 있었다.
+    // 이 경우엔 배열의 첫번째 요소가 반드시 성인이라고 보장할 수 없다.
+    const [selectedOptions, setSelectedOptions] = useState({"성인": 0,"중고생":0,"초등생":0,"미취학":0});
 
         // 예약정보에 키 추가.
-    const handleSelectChange = (e, index) => {
+        // 일단 객체로 만들었을때 값이 잘 들어오는 것을 일단 확인하였다.
+        // 이제 선택지의 개수를 다르게 해보며 값을 확인한다.
+        // 테스트 리스트를 뽑는다.
+        // 4개 - 19326
+        // 3개 - 16622
+        // 중학생만 있는 곳을 찾을 수가 없다. 일단 넘어가 본다.
+    const handleSelectChange = (e, clas) => {
         const selectedValue = e.target.value;
         setSelectedOptions((prevSelectedOptions) => {
-            const newSelectedOptions = [...prevSelectedOptions];
-            newSelectedOptions[index] = selectedValue;
+            const newSelectedOptions = {...prevSelectedOptions};
+            newSelectedOptions[clas] = selectedValue;
             return newSelectedOptions;
         });
     }
 
-    const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {"성인":[0,0],"중고생":[0,0],"초등생":[0,0],"미취학":[0,0]}, dates:[]}})
+    // reservInfo의 기본값에 PID를 넣었다.
+    // 예약 객체를 state로 관리 하였다.
+    // 이유는 만약 사용자가 선택을 바꿀 경우 내용이 바뀌어야 하기 때문이다.
+    const [reservInfo, setReservInfo] = useState({userId:'test', reservInfo :{pid:PID, people: {"성인":[0,0],"중고생":[0,0],"초등생":[0,0],"미취학":[0,0]}, dates:[]}})
 
 
+    // handelReserve안에서 작동하는 함수 /api/preBook 에 post 요청을 한다.
     const process_reservation = async (url, data) => {
         // json 형식으로 전처리
         let preReservationDate = [
@@ -101,9 +116,8 @@ export default function Program ({proData}) {
         return result;
     }
 
-
-
-    const handelReserve = async () => {
+    // 예약 버튼을 눌렀을 때 작동
+    const handleReserve = async () => {
         setReservInfo((prevReservInfo) => {
             const newReservInfo = {...prevReservInfo}
             proData[2].map((clas,index) => {
@@ -111,8 +125,6 @@ export default function Program ({proData}) {
 
                 newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[index] === undefined) ? null : selectedOptions[index], isNaN(sumPrice) ? 0 : sumPrice]
             })
-            newReservInfo.reservInfo.pid = proData[6]
-
 
             let strDate = dateFomatter(startDate)
             if (strDate === null) {
@@ -125,7 +137,6 @@ export default function Program ({proData}) {
             for (let key in newReservInfo.reservInfo.people) {
                 sum += newReservInfo.reservInfo.people[key][1];
             }
-            console.log(newReservInfo.reservInfo.people["성인"][0]+newReservInfo.reservInfo.people["중고생"][0]+newReservInfo.reservInfo.people["초등생"][0])
 
             newReservInfo.reservInfo.sum = sum
             if(process_reservation('/api/preBook',newReservInfo)) {
@@ -220,8 +231,8 @@ export default function Program ({proData}) {
                                 </Modal.Header>
                                 <Modal.Body className="cal">
 
-                                    {proData[2].map((clas, index) =>(
-                                        <Form.Select value={selectedOptions[index]} onChange={(e) => handleSelectChange(e, index)} key={shortid.generate()} aria-label="Default select example">
+                                    {proData[2].map((clas) =>(
+                                        <Form.Select value={selectedOptions[clas.PR_CLASS]} onChange={(e) => handleSelectChange(e,clas.PR_CLASS)} key={shortid.generate()} aria-label="Default select example">
                                             <option key={shortid.generate()} >{clas.PR_CLASS}</option>
                                             <option value="1"  key={shortid.generate()} >1명</option>
                                             <option value="2"  key={shortid.generate()} >2명</option>
@@ -320,7 +331,7 @@ export default function Program ({proData}) {
                 </Container>
                 <Container>
                     <div>
-                        <Button onClick={handelReserve}>예약하기</Button>
+                        <Button onClick={handleReserve}>예약하기</Button>
                     </div>
                 </Container>
 
@@ -381,7 +392,7 @@ export default function Program ({proData}) {
                                 <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
 
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                        <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
+                                        <Card.Img variant="top" src={(program.P_PICLINK.length < 40) ? 'https://www.templestay.com/images/templeinfo-00.jpg' : program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
                                         <Card.Body key={shortid.generate()}>
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>
                                                 {program.P_NAME}
