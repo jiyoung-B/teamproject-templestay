@@ -25,29 +25,71 @@
 .infomenu1 a:active { color: #fd7e14; }
 
 .temples {   /*좋아요를 누른 사찰*/
-    /*margin-top: 20px;*/
     margin-bottom: 20px;
     font-size: 25px;
     font-weight: bold;
     color: #331904;
     text-align: left;
 }
-.likeslist {
-    display: flex;
-    border: 2px solid #984C0C;
-    justify-content: center;
-    align-items: center;
-    border-radius: 12px;
-    padding: 1.5% 0;
-}
-.likeslist > div {
-    font-size: 20px;
-    text-align: center;
+.likesncom {
+    padding-top: 10px;
 }
 
 .tpl {
-    margin-bottom: 20px;
-}
-.tpl:last-child {
     margin-bottom: 3%;
+}
+.temples-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.temples-list-item {
+    border: 2px solid #984C0C;
+    border-radius: 12px;
+    margin: 2% 0;
+    width: 1000px;
+    display: flex;
+    padding: 1.5% 0;
+    align-items: center;
+}
+
+
+.combtn {
+    border: 1px solid #331904 !important;
+    background-color: #331904 !important;
+}
+.combtn:active {
+    border: 1px solid #984C0C !important;
+    background-color: #984C0C !important;
+}
+
+.comlin { text-decoration: none; }
+.comlin:visited { color: white; }
+.comlin:active { color: white; }
+.comlin:hover { color: white; }
+
+.comtab {
+    display: flex;
+    justify-content: space-evenly;
+}
+.comtab table {
+    text-align: center;
+    border: 1px solid #331904;
+    width: 1000px;
+}
+.comtab tr {
+    border: 1px solid #331904;
+}
+.comtab th, .comtab td {
+    border: 1px solid #331904;
+}
+
+.gobkbtn td button {
+    border: 1px solid #984C0C !important;
+    background-color: #984C0C !important;
+}
+
+.checkbox {
+    padding-right: 15%;
+    padding-left: 10%;
 }
