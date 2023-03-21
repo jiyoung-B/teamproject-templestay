@@ -1,4 +1,4 @@
-import {Container, Row, Col, NavLink, Button, Modal} from 'react-bootstrap';
+import {Container, Row, Col, NavLink, Button, Modal, Form} from 'react-bootstrap';
 import { HiOutlineMapPin } from 'react-icons/hi2';
 import { BsCalendar } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
 import {handleInput, check_captcha, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
 import {error} from "next/dist/build/output/log";
-import {getSession, signIn, useSession} from "next-auth/react";
+import {getSession, signIn, useSession} from "next-auth/client";
 import axios from "axios";
 
 const Nav = () => {
@@ -21,9 +21,9 @@ const Nav = () => {
     const [passwdError, setPasswdError] = useState('');
 
 
-    const handlejoin = async () => {
+    const handleJoin = async () => {
 
-        if (passwd2 !==repasswd){
+        if (passwd2 !== repasswd){
             setPasswdError('비밀번호가 일치하지 않습니다!');
             return ;
         } else {
@@ -78,10 +78,19 @@ const Nav = () => {
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
 
     const [show, setShow] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
+    const [showJoin, setShowJoin] = useState(false);
     const [startDate, setStartDate] = useState(tomorrow);
     const [endDate, setEndDate] = useState(null);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleCloseLogin = () => setShowLogin(false);
+    const handleShowLogin = () => setShowLogin(true);
+    const handleShowJoin = () => {
+        setShowLogin(false);
+        setShowJoin(true);
+    };
+    const handleCloseJoin = () => setShowJoin(false);
 
     const onChange = (dates) => {
         const [start, end] = dates;
@@ -144,86 +153,96 @@ const Nav = () => {
                         </>
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
-                            <NavLink>
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#loginModal"
-                                        style={{border: "1px solid white", backgroundColor: "white"}}>
+                            <>
+                                <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
-                                </button>
-                            </NavLink>
+                                </Button>
+                                <Modal show={showLogin} onHide={handleCloseLogin}>
+                                    <Modal.Header>
+                                        <Modal.Title>로그인</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                                <Form.Control className="mb-3"
+                                                              type="text"
+                                                              placeholder="이메일"
+                                                              autoFocus
+                                                              onChange={e => handleInput(setEmail, e)}
+                                                />
+                                                <Form.Control className="mb-3"
+                                                              type="password"
+                                                              placeholder="비밀번호"
+                                                              autoFocus
+                                                              onChange={e => handleInput(setPasswd, e)}
+                                                />
+                                            </Form.Group>
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button type="button" variant="primary" onClick={handlelogin}>
+                                            로그인
+                                        </Button>
+                                        <Button type="button" variant="secondary" onClick={handleShowJoin}>
+                                            회원가입
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                                <Modal show={showJoin} onHide={handleCloseJoin}>
+                                    <Modal.Header>
+                                        <Modal.Title>회원가입</Modal.Title>
+                                    </Modal.Header>
+                                    {showJoin && (
+                                  <>
+                                    <Modal.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                                <Form.Control className="mb-3"
+                                                              type="text"
+                                                              placeholder="이름"
+                                                              autoFocus
+                                                              onChange={e => handleInput(setName, e)}
+                                                />
+                                                <Form.Control className="mb-3"
+                                                              type="email"
+                                                              placeholder="이메일"
+                                                              autoFocus
+                                                              onChange={e => handleInput(setEmail2, e)}
+                                                />
+                                                <Form.Control className="mb-3"
+                                                              type="password"
+                                                              placeholder="비밀번호"
+                                                              autoFocus
+                                                              onChange={e => handleInput(setPasswd2, e)}
+                                                />
+                                                <Form.Control className="mb-3"
+                                                              type="password"
+                                                              placeholder="비밀번호 확인"
+                                                              autoFocus
+                                                              onChange={e => handleInput(setRepasswd, e)}
+                                                />
+                                                <div style={{ color:"red",fontSize:"0.85em"}}>{passwdError}</div>
+                                            </Form.Group>
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={handleCloseJoin}>
+                                            취소
+                                        </Button>
+                                        <br />
+                                        <Button variant="primary" onClick={handleJoin}>
+                                            회원가입
+                                        </Button>
+                                    </Modal.Footer>
+                                        </>
+                                    )}
+                                </Modal>
+                            </>
                     </Col>
                 </Row>
             </Container>
             <div className='navBorder'></div>
         </div>
-    {/*login modal*/}
-    <div className="modal fade" id="loginModal" tabIndex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" >
-        <div className="modal-dialog modal-dialog-centered modal-sm">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h3 className="modal-title" id="loginModalLabel">어서 오세요</h3>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div className="modal-body">
-                    <form>
-                        <div className="row">
-                            <div className="mb-3 col-md-12">
-                                <input type="email" className="form-control" id="email" placeholder="이메일주소" onChange={e => handleInput(setEmail, e)}/>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="mb-1 col-md-12">
-                                <input type="password" className="form-control" id="password" placeholder="비밀번호" onChange={e => handleInput(setPasswd, e)}/>
-                            </div>
-
-                        </div>
-                        <div className="mb-5 text-right position-relative">
-                            <div className="position-absolute top-0 end-0"><a className="#"><span className="text-primary" style={{fontSize: '0.8em'}} >이메일/비밀번호</span></a></div>
-                        </div>
-                        <div className="mb-3 text-center" ><button type="button" className="btn col-md-10" style={{backgroundColor: 'saddlebrown', color: 'white'}} onClick={handlelogin}>로그인</button></div>
-                        <div className="text-center"><button type="button" className="btn col-md-10" style={{backgroundColor:'#240a0a',color:'white'}} data-bs-toggle="modal" data-bs-target="#joinModal">회원가입</button></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {/*Join Modal */}
-    <div className="modal fade" id="joinModal" tabIndex="-1" aria-labelledby="joinModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered modal-sm">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h3 className="modal-title" id="loginModalLabel">회원가입</h3>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div className="modal-body">
-                    <form>
-                        {/* <div className="col-md-12"> */}
-                        <div className="row">
-
-                            <div className="mb-3 col-md-12">
-                                <input type="text" className="form-control" id="name" placeholder="이름" onChange={e => handleInput(setName, e)}/>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="mb-3 col-md-12">
-                                <input type="email" className="form-control" id="email2" placeholder="이메일주소" onChange={e => handleInput(setEmail2, e)}/>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="mb-3 col-md-12">
-                                <input type="password" className="form-control" id="password2" placeholder="비밀번호" onChange={e => handleInput(setPasswd2, e)}/>
-                            </div>
-                            <div className="mb-3 col-md-12">
-                                <input type="password" className="form-control" id="repasswd" placeholder="비밀번호확인" onChange={e => handleInput(setRepasswd, e)}/>
-                            </div>
-                            <div style={{ color:"red",fontSize:"0.85em"}}>{passwdError}</div>
-                        </div>
-                        <div className="mt-4 mb-3 text-center" ><button type="button" className="btn col-md-10" style={{backgroundColor: '#240a0a',color:'white'}} onClick={handlejoin}>회원가입</button></div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
     </>
     );
 };
