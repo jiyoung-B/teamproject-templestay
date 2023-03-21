@@ -10,7 +10,7 @@ export const temples = [
     },
     {
         name: "22사",
-        location: '장소2',
+        location: "장소2",
         day: '날짜2',
         program: '프로그램2',
         number: 2,
