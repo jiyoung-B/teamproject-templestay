@@ -29,6 +29,11 @@ export async function getServerSideProps(ctx) {
     return {props:{proData}}
 }
 
+// 여기서 api로 보내보자.
+// 그럼 데이터 베이스도 구상해야 한다.
+// page에서 api로 보내는 방법은?
+//
+
 export default function Program ({proData}) {
     const unit = 28
 
@@ -72,50 +77,33 @@ export default function Program ({proData}) {
         });
     }
 
-    // 날짜 관리 스테이트 startDate, endDate
-
-    // 예약정보를 state로 관리합니다.
-    // {userId:'test',
-    //  reservInfo : {
-    //      people : {
-    //          성인 : [수,가격],
-    //          중고생 : [수, 가격],
-    //          ...
-    //      },
-    //      dates : [
-    //          2013-03-21,2013-03-30
-    //      ]
-    //      }
-    //  }
-
-    const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {"성인":[null,0],"중고생":[null,0],"초등생":[null,0],"미취학":[null,0]}, dates:[]}})
+    const [reservInfo, setReservInfo] =useState({userId:'test', reservInfo :{pid:'', people: {"성인":[0,0],"중고생":[0,0],"초등생":[0,0],"미취학":[0,0]}, dates:[]}})
 
 
     const process_reservation = async (url, data) => {
-        console.log('reservation -',data.reservInfo.pid)
         // json 형식으로 전처리
         let preReservationDate = [
-            {userId:data.userId},{PID:data.reservInfo.pid},{strData:data.reservInfo.dates[0]},
+            {userId:data.userId},{PID:data.reservInfo.pid},{strDate:data.reservInfo.dates[0]},
             {endDate: (data.reservInfo.dates[1] === null) ? data.reservInfo.dates[0] : data.reservInfo.dates[1]},
             {adult: (data.reservInfo.people["성인"][0] === null) ? 0 : Number(data.reservInfo.people["성인"][0])},
             {middle: (data.reservInfo.people["중고생"][0] === null) ? 0 : Number(data.reservInfo.people["중고생"][0])},
             {young:(data.reservInfo.people["초등생"][0] === null) ? 0 : Number(data.reservInfo.people["초등생"][0])},
             {preschool:(data.reservInfo.people["미취학"][0] === null) ? 0 : Number(data.reservInfo.people["미취학"][0])}
         ]
-        console.log(preReservationDate)
 
         const cnt = fetch(url, {
             method: 'POST', mode: 'cors',
             body: JSON.stringify(preReservationDate),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json());
-
-        return (await cnt).cnt;
+        let result;
+        if(await cnt.cnt >0) result = true
+        return result;
     }
 
 
 
-    const handelReserve = () => {
+    const handelReserve = async () => {
         setReservInfo((prevReservInfo) => {
             const newReservInfo = {...prevReservInfo}
             proData[2].map((clas,index) => {
@@ -137,15 +125,11 @@ export default function Program ({proData}) {
             for (let key in newReservInfo.reservInfo.people) {
                 sum += newReservInfo.reservInfo.people[key][1];
             }
+            console.log(newReservInfo.reservInfo.people["성인"][0]+newReservInfo.reservInfo.people["중고생"][0]+newReservInfo.reservInfo.people["초등생"][0])
 
             newReservInfo.reservInfo.sum = sum
-
-            if(sum === 0) {
-                // 성인이 1이상 있는 것으로, 조건을 바꿔보자.
-                alert('인원을 선택하세요.')
-            } else {
-               process_reservation('/api/reservation',newReservInfo)
-
+            if(process_reservation('/api/preBook',newReservInfo)) {
+                location.href = `/preBook?userid=${newReservInfo.userId}`;
             }
 
             return newReservInfo
