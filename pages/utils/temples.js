@@ -1,11 +1,12 @@
 export const temples = [
     {
         name: "11사",
-        location: '장소1',
-        day: '날짜1',
-        program: '프로그램1',
+        location: "장소1",
+        day: "날짜1",
+        program: "프로그램1",
         number: 1,
-        price: 10000
+        price: 10000,
+        details: "상세정보1"
     },
     {
         name: "22사",
@@ -13,7 +14,8 @@ export const temples = [
         day: '날짜2',
         program: '프로그램2',
         number: 2,
-        price: 20000
+        price: 20000,
+        details: "상세정보2"
     },
     {
         name: "33사",
@@ -21,7 +23,8 @@ export const temples = [
         day: '날짜3',
         program: '프로그램3',
         number: 3,
-        price: 30000
+        price: 30000,
+        details: "상세정보3"
     },
     {
         name: "44사",
@@ -29,7 +32,8 @@ export const temples = [
         day: '날짜4',
         program: '프로그램4',
         number: 4,
-        price: 40000
+        price: 40000,
+        details: "상세정보4"
     },
     {
         name: "55사",
@@ -37,7 +41,8 @@ export const temples = [
         day: '날짜5',
         program: '프로그램5',
         number: 5,
-        price: 50000
+        price: 50000,
+        details: "상세정보5"
     },
     {
         name: "66사",
@@ -45,6 +50,7 @@ export const temples = [
         day: '날짜6',
         program: '프로그램6',
         number: 6,
-        price: 60000
+        price: 60000,
+        details: "상세정보6"
     }
 ];

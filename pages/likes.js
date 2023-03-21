@@ -32,7 +32,6 @@ export default function Likes () {
         if (updatedCheckedState.filter(v => v).length >= 4) {
             return
         }
-
         setCheckedState(updatedCheckedState);
 
         // 체크박스에 체크된 데이터 가져오기
@@ -89,8 +88,7 @@ export default function Likes () {
 
     console.log(userinfo.response)
 
-    function SelectCompareCnt(props) {
-        // const comCnt = props.type;
+    function SelectCompareCnt() {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let comCnt = 0;
 
@@ -193,13 +191,13 @@ export default function Likes () {
                 <Row className="tpl">
                     <Col className="likeslist col-10 offset-1">
                         <ul className="temples-list" style={{padding: "0"}}>
-                            {temples.map(({ name, location, day, program, number }, index ) => {   // temples에서 정보 가져오기
+                            {temples.map(({ name, location, day, program, number, price, details }, index ) => {   // temples에서 정보 가져오기
                                 return (
                                     <Row>
                                         <li key={index} className="temples-list-item">
                                             <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                                 <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={name} value={name}
+                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={name} value={[name, program, price, details]}
                                                                 checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                     <img src="/img/temple.png" width="32" height="32" />
                                                 </Col>
