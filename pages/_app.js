@@ -18,9 +18,9 @@ function MyApp({ Component, pageProps }) {
 
     return (
         <React.Fragment>
-            <Layout>
+            {/*<Layout>*/}
                 <Component {...pageProps} />
-            </Layout>
+            {/*</Layout>*/}
         </React.Fragment>
     )
 }
