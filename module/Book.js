@@ -18,7 +18,7 @@ class Book {
         }catch (e) {
             console.log(e)
         } finally {
-            await mariadb.closeConn()
+            await mariadb.closeConn(conn)
         }
         return cnt;
     }

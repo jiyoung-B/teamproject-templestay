@@ -25,7 +25,7 @@ async function selectTemple(id) {  // 템플 정보 출력
     } catch (e) {
         console.log(e);
     } finally {
-        await mariadb.closeConn();
+        await mariadb.closeConn(conn)
     }
     return {temple:templeData,templePic:templePicData, templeProPic :templeProPicData}
 }
