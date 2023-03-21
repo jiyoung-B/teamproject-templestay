@@ -14,6 +14,14 @@ export default function Likes () {
         new Array(temples.length).fill(false)
     );
 
+    const [userinfo, setUserInfo] = useState({
+        name: [],
+        program: [],
+        price: [],
+        details: [],
+        response: [],
+    });
+
     let handleOnChange = (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
         let updatedCheckedState = checkedState.map((item, index) =>
@@ -26,6 +34,32 @@ export default function Likes () {
         }
 
         setCheckedState(updatedCheckedState);
+
+        // 체크박스에 체크된 데이터 가져오기
+        const { value, checked } = e.target;
+        const { name, program, price, details } = userinfo;
+
+        // Case 1 : The user checks the box
+        if (checked) {
+            setUserInfo({
+                name: [...name, value],
+                program: [...program],
+                price: [...price],
+                details: [...details],
+                response: [...name, ...program, ...price, ...details, value],
+            });
+        }
+
+        // Case 2  : The user unchecks the box
+        else {
+            setUserInfo({
+                name: name.filter((e) => e !== value),
+                program: program.filter((e) => e !== value),
+                price: price.filter((e) => e !== value),
+                details: details.filter((e) => e !== value),
+                response: [...name.filter((e) => e !== value), ...program.filter((e) => e !== value), ...price.filter((e) => e !== value), ...details.filter((e) => e !== value)],
+            });
+        }
     };
 
     const [show, setShow] = useState(false);
@@ -53,6 +87,79 @@ export default function Likes () {
         location.href = '/book';
     };
 
+    console.log(userinfo.response)
+
+    function SelectCompareCnt(props) {
+        // const comCnt = props.type;
+        let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        let comCnt = 0;
+
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                comCnt++;
+            }
+        });
+
+        if (comCnt === 2) {
+            return (
+                <table style={{textAlign: "center", border: "1px solid #331904"}}>
+                    <tr style={{height: "40px"}}>
+                        <th>{String(userinfo.response[0]).split(',')[0]}</th>
+                        <th>{String(userinfo.response[1]).split(',')[0]}</th>
+                    </tr>
+                    <tr style={{height: "500px"}}><td colSpan="3">지도</td></tr>
+                    <tr style={{height: "40px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[1]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[1]}</td>
+                    </tr>
+                    <tr style={{height: "40px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[2]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[2]}</td>
+                    </tr>
+                    <tr style={{height: "400px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[3]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[3]}</td>
+                    </tr>
+                    <tr className="gobkbtn">
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                    </tr>
+                </table>
+            );
+        } else if(comCnt === 3) {
+            return (
+                <table style={{textAlign: "center", border: "1px solid #331904"}}>
+                    <tr style={{height: "40px"}}>
+                        <th>{String(userinfo.response[0]).split(',')[0]}</th>
+                        <th>{String(userinfo.response[1]).split(',')[0]}</th>
+                        <th>{String(userinfo.response[2]).split(',')[0]}</th>
+                    </tr>
+                    <tr style={{height: "500px"}}><td colSpan="3">지도</td></tr>
+                    <tr style={{height: "40px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[1]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[1]}</td>
+                        <td>{String(userinfo.response[2]).split(',')[1]}</td>
+                    </tr>
+                    <tr style={{height: "40px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[2]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[2]}</td>
+                        <td>{String(userinfo.response[2]).split(',')[2]}</td>
+                    </tr>
+                    <tr style={{height: "400px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[3]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[3]}</td>
+                        <td>{String(userinfo.response[2]).split(',')[3]}</td>
+                    </tr>
+                    <tr className="gobkbtn">
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                    </tr>
+                </table>
+            );
+        }
+    }
+
     return (
         <main>
             <MyinfoCommon />
@@ -72,22 +179,7 @@ export default function Likes () {
                                     <Modal.Title>템플 스테이 비교</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body className="comtab">
-                                    {temples.map(({ name, location, day, program, price }, index ) => {   // temples에서 정보 가져오기
-                                        return (
-                                            <table style={{textAlign: "center", border: "1px solid #331904"}} key={index}>
-                                                <tr>
-                                                    <th>{name}</th>
-                                                </tr>
-                                                <tr style={{height: "500px"}}><td>지도</td></tr>
-                                                <tr style={{height: "40px"}}><td>{program}</td></tr>
-                                                <tr style={{height: "40px"}}><td>{price}</td></tr>
-                                                <tr style={{height: "400px"}}>상세정보 비교</tr>
-                                                <tr className="gobkbtn">
-                                                    <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
-                                                </tr>
-                                            </table>
-                                        )
-                                    } )}
+                                    <SelectCompareCnt />
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button variant="secondary" onClick={handleClose} style={{backgroundColor: "#331904"}}>
@@ -103,7 +195,7 @@ export default function Likes () {
                         <ul className="temples-list" style={{padding: "0"}}>
                             {temples.map(({ name, location, day, program, number }, index ) => {   // temples에서 정보 가져오기
                                 return (
-                                    <div>
+                                    <Row>
                                         <li key={index} className="temples-list-item">
                                             <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                                 <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
@@ -118,7 +210,7 @@ export default function Likes () {
                                             <Col className="col-3">{program}</Col>
                                             <Col className="col-1">{number}</Col>
                                         </li>
-                                    </div>
+                                    </Row>
                                 )
                             } )}
                         </ul>
