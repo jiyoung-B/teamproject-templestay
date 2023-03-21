@@ -1,37 +1,36 @@
-const mariadb = require('../module/MariaDB');
+const mariadb = require('./MariaDB');
 
 let membersql = {
-    insertsql : ' insert into member (name, userid, passwd) values (?,?,?) ',
-    loginsql : ' select count(userid) cnt, name, userid from member ' +
-        ' where userid = ? and passwd = ? ',
-    selectOne: ' select mno, name, userid ' +
+    insertsql : ' insert into member (passwd,name,email) ' +
+        ' values (?,?,?) ',
+    isEmailsql : ' select count(mno) cnt from member ' +
+        ' where email= ? ',
+    loginsql : ' select count(mno) cnt, email from member ' +
+        ' where email= ? and passwd = ? ',
+    selectOne: ' select mno, name, email, ' +
         ` date_format(regdate, "%Y-%m-%d %H:%i:%s") regdate ` +
-        ' from member where userid = ? '
+        ' from member where email = ? '
 }
 
-
 class Member {
-    constructor(name, userid, passwd ) {
-        this.name = name;
-        this.userid = userid;
+
+    constructor( passwd, name, email) {
         this.passwd = passwd;
+        this.name = name;
+        this.email = email;
     }
 
     // 회원정보 저장
     async insert() {
-        console.log('insert문 실행');
         let conn = null;
-        let params = [this.name, this.userid, this.passwd ];
+        let params = [ this.passwd, this.name, this.email];
         let result = -1;
 
         try {
             conn = await mariadb.makeConn();
-            console.log('insert문 - db 연결중')
             result = await conn.query(membersql.insertsql, params);
-            console.log('result - ', result);
             await conn.commit();
             if (result.affectedRows > 0) result = result.affectedRows;
-            console.log('insert문 저장완료?')
         } catch (ex) {
             console.log(ex);
         } finally {
@@ -40,9 +39,25 @@ class Member {
         return result;
     }
 
-    async login(uid, pwd) {  // 로그인 처리
+    async isEmail(email) {  // 로그인 처리
         let conn = null;
-        let params = [uid, pwd];
+        let params = [email];
+        let result = -1;
+
+        try {
+            conn = await mariadb.makeConn();
+            result = await conn.query(membersql.isEmailsql, params);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await mariadb.closeConn();
+        }
+        return result;
+    }
+
+    async login(email, pwd) {  // 로그인 처리
+        let conn = null;
+        let params = [email, pwd];
         let result = -1;
 
         try {
@@ -57,9 +72,9 @@ class Member {
         return result;
     }
 
-    async selectOne(uid) {  // 아이디로 검색된 회원의 모든 정보 조회
+    async selectOne(email) {  // 아이디로 검색된 회원의 모든 정보 조회
         let conn = null;
-        let params = [uid];
+        let params = [email];
         let result = -1;
 
         try {
