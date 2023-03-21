@@ -15,7 +15,7 @@ const milliFomatter = (millisecond) => {
     const date = tomorrow.getDate().toString().padStart(2, "0"); // 일도 문자열로 변환하고 2자리로 맞춰줍니다.
     const formattedDate = `${year}-${month}-${date}`; // 년, 월, 일을 하이픈으로 이어서 문자열로 만듭니다.
 
-    return formattedDate
+    return formattedDate }
 
 
 const process_submit = async (url, data) => {
