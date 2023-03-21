@@ -35,7 +35,7 @@ export default function preBook ({preBookInfo}) {
         // preBook테이블에 데이터를 삭제하는 과정
         let del = await fetch('api/preBookDelete'+param)
 
-        if(await cnt*del > 0 ) location.href = '/'
+        location.href = '/'
     };
 
     const cancelBook = async () => {
@@ -43,7 +43,7 @@ export default function preBook ({preBookInfo}) {
         let del = await fetch('api/preBookDelete'+param)
         console.log(del)
 
-        if(await del > 0 ) location.href = '/'
+        location.href = '/'
     };
     return(
         <div className={'container mt-5'} >
