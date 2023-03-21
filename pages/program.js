@@ -120,10 +120,12 @@ export default function Program ({proData}) {
     const handleReserve = async () => {
         setReservInfo((prevReservInfo) => {
             const newReservInfo = {...prevReservInfo}
-            proData[2].map((clas,index) => {
-                let sumPrice = selectedOptions[index] * clas.PRICE
+            console.log(newReservInfo)
 
-                newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[index] === undefined) ? null : selectedOptions[index], isNaN(sumPrice) ? 0 : sumPrice]
+            // people 객체에 입력값 전달 및 단위별 합계액 전달 부분. ex) 성인 : [수, 합계액]
+            proData[2].map((clas) => {
+                let sumPrice = selectedOptions[clas.PR_CLASS] * clas.PRICE
+                newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[clas.PR_CLASS] === undefined) ? null : selectedOptions[clas.PR_CLASS], isNaN(sumPrice) ? 0 : sumPrice]
             })
 
             let strDate = dateFomatter(startDate)
@@ -133,12 +135,16 @@ export default function Program ({proData}) {
 
             newReservInfo.reservInfo.dates = [strDate,dateFomatter(endDate)]
 
+            // sum 계산 단위별 합계액 합산하여, 총액을 구한다.
             let sum = 0;
             for (let key in newReservInfo.reservInfo.people) {
                 sum += newReservInfo.reservInfo.people[key][1];
             }
 
+            // sum에 합계를 전달함.
             newReservInfo.reservInfo.sum = sum
+
+            // api를 통해 db로 전달. 행이 추가되면 true를 리턴하고, url을 preBook 페이지로 변경 보낸다.
             if(process_reservation('/api/preBook',newReservInfo)) {
                 location.href = `/preBook?userid=${newReservInfo.userId}`;
             }
