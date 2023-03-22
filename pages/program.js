@@ -180,7 +180,7 @@ export default function Program ({proData}) {
                                 <Carousel.Item key={shortid.generate()}>
                                     <img
                                         className="d-block w-100"
-                                        src={pic}
+                                        src={(pic.length < 40) ? 'https://www.templestay.com/images/templeinfo-00.jpg' : pic}
                                         alt="First slide"
                                         height="800px"
                                         onError={handleImgError}
@@ -414,7 +414,7 @@ export default function Program ({proData}) {
 
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
                                         <Card.Img variant="top" src={(program.P_PICLINK.length < 40) ? 'https://www.templestay.com/images/templeinfo-00.jpg' : program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
-                                        <Card.Body key={shortid.generate()}>
+                                        <Card.Body className={'bg-light'} key={shortid.generate()}>
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>
                                                 {program.P_NAME}
                                             </Card.Title>
