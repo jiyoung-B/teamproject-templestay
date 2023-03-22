@@ -37,6 +37,9 @@ export default function Program ({proData}) {
     const unit = 28
     let PID = proData[6]
 
+    // 예약하기 버튼 비활성화 state
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // 내일의 날짜를 구하기
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
 
@@ -120,6 +123,10 @@ export default function Program ({proData}) {
 
     // 예약 버튼을 눌렀을 때 작동
     const handleReserve = async () => {
+
+        // 클릭시 버튼 비활성화
+        setIsSubmitting(true)
+
         setReservInfo((prevReservInfo) => {
             const newReservInfo = {...prevReservInfo}
 
@@ -342,7 +349,10 @@ export default function Program ({proData}) {
                 </Container>
                 <Container>
                     <div>
-                        <Button onClick={handleReserve}>예약하기</Button>
+                        <Button
+                            onClick={handleReserve}
+                            disabled={isSubmitting}
+                        >예약하기</Button>
                     </div>
                 </Container>
 
