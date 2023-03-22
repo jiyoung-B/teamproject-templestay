@@ -50,8 +50,9 @@ export default function Program ({proData}) {
 
     // 모달 on/off 해주는 함수
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
 
 
     //날짜가 선택되면 state를 변경해주는 함수
@@ -65,6 +66,14 @@ export default function Program ({proData}) {
     // 모달 on/off
     const [show2, setShow2] = useState(false);
     const handleClose2 = () => setShow2(false);
+    const handleSubmit2 = () => {
+        setTotal(() => {
+            let sum = Number(selectedOptions["성인"])+Number(selectedOptions["중고생"])+Number(selectedOptions["초등생"])+Number(selectedOptions["미취학"])
+
+            return sum
+        } )
+        setShow2(false);
+    }
     const handleShow2 = () => setShow2(true);
 
     // 선택 인원 관리 함수
@@ -75,7 +84,13 @@ export default function Program ({proData}) {
     // 하지만 살펴보니 성인이 없고 오직 중고생만 있는 경우가 있었다.
     // 이 경우엔 배열의 첫번째 요소가 반드시 성인이라고 보장할 수 없다.
     const [selectedOptions, setSelectedOptions] = useState({"성인": 0,"중고생":0,"초등생":0,"미취학":0});
+    console.log(selectedOptions["성인"])
 
+
+
+    // 총원을 계산 하는 state
+    const [total,setTotal] = useState(0)
+    console.log(total)
         // 예약정보에 키 추가.
         // 일단 객체로 만들었을때 값이 잘 들어오는 것을 일단 확인하였다.
         // 이제 선택지의 개수를 다르게 해보며 값을 확인한다.
@@ -87,7 +102,9 @@ export default function Program ({proData}) {
         const selectedValue = e.target.value;
         setSelectedOptions((prevSelectedOptions) => {
             const newSelectedOptions = {...prevSelectedOptions};
-            newSelectedOptions[clas] = selectedValue;
+
+            isNaN(selectedValue) ? newSelectedOptions[clas] = 0 : newSelectedOptions[clas] = selectedValue;
+
             return newSelectedOptions;
         });
     }
@@ -96,6 +113,7 @@ export default function Program ({proData}) {
     // 예약 객체를 state로 관리 하였다.
     // 이유는 만약 사용자가 선택을 바꿀 경우 내용이 바뀌어야 하기 때문이다.
     const [reservInfo, setReservInfo] = useState({userId:'test', reservInfo :{pid:PID, people: {"성인":[0,0],"중고생":[0,0],"초등생":[0,0],"미취학":[0,0]}, dates:[]}})
+
 
 
     // handelReserve안에서 작동하는 함수 /api/preBook 에 post 요청을 한다.
@@ -135,6 +153,8 @@ export default function Program ({proData}) {
                 let sumPrice = selectedOptions[clas.PR_CLASS] * clas.PRICE
                 newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[clas.PR_CLASS] === undefined) ? null : selectedOptions[clas.PR_CLASS], isNaN(sumPrice) ? 0 : sumPrice]
             })
+            setTotal(Number(newReservInfo.reservInfo.people["성인"][0])+Number(newReservInfo.reservInfo.people["중고생"][0])+Number(newReservInfo.reservInfo.people["초등생"][0])+Number(newReservInfo.reservInfo.people["미취학"][0]))
+
             // 현재 일정을 선택하지 않으면, 다음날이 시작 날짜로 지정되고 있다.
             // 일정을 선택하지 않으면 화면에 일정 표시가 되지 않는다.
             // 선택하지 않으면 일정을 선택하세요! 라는 경고 문구가 등장하게 해야 한다.
@@ -156,9 +176,12 @@ export default function Program ({proData}) {
             // sum에 합계를 전달함.
             newReservInfo.reservInfo.sum = sum
 
+
             // api를 통해 db로 전달. 행이 추가되면 true를 리턴하고, url을 preBook 페이지로 변경 보낸다.
-            if(process_reservation(newReservInfo)) {
-               location.href = `/preBook?userid=${newReservInfo.userId}`;
+            if(total === 0) {
+                setIsSubmitting(false)
+            } else if (process_reservation(newReservInfo)) {
+                location.href = `/preBook?userid=${newReservInfo.userId}`;
             }
 
             return newReservInfo
@@ -291,7 +314,7 @@ export default function Program ({proData}) {
                                     <Button variant="secondary" onClick={handleClose2} style={{backgroundColor: "#331904"}}>
                                         닫기
                                     </Button>
-                                    <Button variant="primary" onClick={handleClose2}>
+                                    <Button variant="primary" onClick={handleSubmit2}>
                                         선택
                                     </Button>
                                 </Modal.Footer>
@@ -311,7 +334,8 @@ export default function Program ({proData}) {
                         </Col>
                         <Col>
                             <Row>
-                                <Col><p className={'text-start pt-2 m-0'}>(2박) 2인</p></Col>
+                                <Col><p className={'text-start ps-4 pt-2 m-0 fw-1 fw-semibold'}>총 인원 {
+                                    (total === 0) ? <span className={'fw-normal text-danger ps-3'}>인원을 선택하세요</span> : <span className={'fw-normal text-success ps-5'}>{total}</span>}</p></Col>
                             </Row>
                         </Col>
                     </Row>
