@@ -21,58 +21,12 @@ export async function getServerSideProps(ctx) {
         let param = `?lid=${lid}&str=${str}&end=${end}`
         console.log(lid,str,end)
 
-        // 결과 선언부
-        // 중간 결과
-        // region : R , AND : N, DATE : D, DATES :DS
-        let RNDSInfo;
-        let RNDInfo;
-        let Rinfo;
-        let DATESInfo;
-        let DATEInfo;
-        let defInfo;
-        
-        // 결과
-        let searchInfo;
-        // 경우의 수
-        if(lid) { // 지역 검색
-                if(str) {
-                        if(end) { // 지역 & 기간검색
+        // URL
+        let url = `http://localhost:3000/api/${param}`
+        const res = await axios.get(url)
+        let result = res.data
+        let searchInfo = result
 
-
-
-
-                        } else { // 지역 & 당일검색
-
-
-
-
-                        }
-                } else { // 지역 검색
-
-                        let url = `http://localhost:3000/api/${param}`
-
-                        const res = await axios.get(url)
-                        defInfo = res.data
-                        searchInfo = defInfo
-                }
-        } else { // 기간 검색
-                if(str) {
-                        if(end) { // 기간 출력
-
-
-
-                        } else { // 당일 출력
-
-
-
-                        }
-                } else { // 기본값 출력
-
-
-
-
-                }
-        }
         return {props:{searchInfo}}
 }
 
