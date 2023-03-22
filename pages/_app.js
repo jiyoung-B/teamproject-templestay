@@ -12,15 +12,11 @@ import Layout from "./layout/Layout";
 function MyApp({ Component, pageProps }) {
     const getLayout = Component.getLayout ?? ((page) => page);
 
-    useEffect(() => {
-        import("bootstrap/dist/js/bootstrap");
-    }, []);
-
     return (
         <React.Fragment>
-            {/*<Layout>*/}
+            <Layout>
                 <Component {...pageProps} />
-            {/*</Layout>*/}
+            </Layout>
         </React.Fragment>
     )
 }
