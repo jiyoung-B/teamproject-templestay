@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
 import shortid from "shortid";
-import {handleImgError} from "../components/Util";
+import {handleImgError} from "../module/Util";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,
 // 빈 화면이 표시 될 수 있다.
@@ -76,6 +76,8 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
 
     return(
         <div id="templeWrapper">
+            <div className='container' id='templeContainer'>
+
             <div id="carouselWrapper" style={{marginTop:`${unit*2}px`}}>
                 <div id="carouseContainer">
                     <Carousel>
@@ -175,9 +177,3 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
         </div>
     )
 }
-temple.getLayout = (page) => (
-    <Layout meta={{title: '사찰 페이지'}}>
-        <Nav />
-        {page}
-    </Layout>
-)
