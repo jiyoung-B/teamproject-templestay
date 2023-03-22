@@ -10,6 +10,7 @@ import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
+import {session} from "next-auth/client";
 //shortid.generate()
 
 
@@ -117,6 +118,8 @@ export default function Program ({proData}) {
         if(await cnt.cnt >0) result = true
         return result;
     }
+    console.log(session())
+    console.log('세션', session())
 
     // 예약 버튼을 눌렀을 때 작동
     const handleReserve = async () => {

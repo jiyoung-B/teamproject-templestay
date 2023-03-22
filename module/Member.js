@@ -5,8 +5,10 @@ let membersql = {
         ' values (?,?,?) ',
     isEmailsql : ' select count(mno) cnt from member ' +
         ' where email= ? ',
-    loginsql : ' select count(mno) cnt, email from member ' +
-        ' where email= ? and passwd = ? ',
+    // loginsql : ' select count(mno) cnt, email from member where email= ? and passwd = ?',
+    loginsql : ' select email, passwd, name from member where email= ?',
+    // loginsql : ' select count(mno) cnt, name, email from member ' +
+    //     ' where email= ? and passwd = ? ',
     selectOne: ' select mno, name, email, ' +
         ` date_format(regdate, "%Y-%m-%d %H:%i:%s") regdate ` +
         ' from member where email = ? '
@@ -59,10 +61,13 @@ class Member {
         let conn = null;
         let params = [email, pwd];
         let result = -1;
+        console.log('로그인 api진입')
 
         try {
             conn = await mariadb.makeConn();
+            console.log('커넥션~', conn)
             result = await conn.query(membersql.loginsql, params);
+            console.log('츄라이~', result)
         } catch (e) {
             console.log(e);
         } finally {
