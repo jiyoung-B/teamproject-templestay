@@ -11,23 +11,72 @@ import shortid from 'shortid'
 import * as PropTypes from "prop-types";
 
 export async function getServerSideProps(ctx) {
-        let {lid = '서울'} = ctx.query
+        let {lid = '서울',str,end} = ctx.query
+        // 전처리
+        if(lid === undefined || lid === null) lid = false;
+        if(str === undefined || str === null) str = false;
+        if(end === undefined || end === null) end = false;
+
+        // param 선언
+        let param = `?lid=${lid}&str=${str}&end=${end}`
+        console.log(lid,str,end)
+
+        // 결과 선언부
+        // 중간 결과
+        // region : R , AND : N, DATE : D, DATES :DS
+        let RNDSInfo;
+        let RNDInfo;
+        let Rinfo;
+        let DATESInfo;
+        let DATEInfo;
+        let defInfo;
+        
+        // 결과
+        let searchInfo;
+        // 경우의 수
+        if(lid) { // 지역 검색
+                if(str) {
+                        if(end) { // 지역 & 기간검색
 
 
 
-        let param = `?lid=${lid}`
-        let url = `http://localhost:3000/api/${param}`
 
-        const res = await axios.get(url)
-        let indexInfo = res.data
+                        } else { // 지역 & 당일검색
 
 
 
-        return {props:{indexInfo}}
 
+                        }
+                } else { // 지역 검색
+
+                        let url = `http://localhost:3000/api/${param}`
+
+                        const res = await axios.get(url)
+                        defInfo = res.data
+                        searchInfo = defInfo
+                }
+        } else { // 기간 검색
+                if(str) {
+                        if(end) { // 기간 출력
+
+
+
+                        } else { // 당일 출력
+
+
+
+                        }
+                } else { // 기본값 출력
+
+
+
+
+                }
+        }
+        return {props:{searchInfo}}
 }
 
-export default function Home({indexInfo}) {
+export default function Home({searchInfo}) {
 
         let [addr,setAddr] =useState()
 
@@ -56,21 +105,16 @@ export default function Home({indexInfo}) {
                                             center: new kakao.maps.LatLng(36.5632751279698, 127.917213230085), // 지도의 중심좌표
                                             level: 12 // 지도의 확대 레벨
                                     };
-
                                 // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
                                 let map = new kakao.maps.Map(mapContainer, mapOption);
 
                                 let geocoder = new kakao.maps.services.Geocoder();
-
                                 // 주소로 좌표를 검색합니다
                                 geocoder.addressSearch(addr, function(result, status) {
 
-
                                         // 정상적으로 검색이 완료됐으면
                                         if (status === kakao.maps.services.Status.OK) {
-
                                                 let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
                                                 // 결과값으로 받은 위치를 마커로 표시합니다
                                                 let marker = new kakao.maps.Marker({
                                                         map: map,
@@ -116,7 +160,7 @@ export default function Home({indexInfo}) {
                         </Row>
                         <Row className="likeslist tpl align-top" style={{paddingTop:'130px',zIndex:"9999", backgroundColor:'white'}}>
                                 <Col>
-                                        { (indexInfo.length > 0 ) ? (      indexInfo.map((program) => (
+                                        { (searchInfo.length > 0 ) ? (      searchInfo.map((program) => (
 
                                                 <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
                                                         <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '150px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
