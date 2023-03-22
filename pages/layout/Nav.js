@@ -101,17 +101,14 @@ const Nav = () => {
 
     return (
         <>
-        <div className='border-bottom border-2 border-primary bg-white' id='navWrapper'>
+        <div className='border-bottom border-2 border-primary bg-white'
+             style={{position: "relative", top: 0, width: "100%"}} id='navWrapper'>
             <Container fluid='xxl'>
                 <Row className='title'>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
-                        <Link href='/'>
-                            <a>
-                            <NavLink>
-                                Temfo,
-                            </NavLink>
-                            </a>
-                        </Link>
+                        <NavLink href='/'>
+                            Temfo,
+                        </NavLink>
                     </Col>
                     <Col md={{ span: 5 }} style={{textAlign: "right"}}>
                         <Link href='/region'>
