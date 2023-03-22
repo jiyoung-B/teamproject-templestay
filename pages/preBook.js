@@ -13,6 +13,7 @@ export async function getServerSideProps(ctx) {
     const res = await axios.get(url)
     let preBookInfo = res.data[0][0]
 
+
     return {props:{preBookInfo}}
 }
 

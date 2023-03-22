@@ -1,4 +1,5 @@
 import PreBook from "../../module/PreBook";
+import {UTFFomatter} from "../../module/Utils";
 
 export default async (req, res) => {
     let {userid}  = req.query
@@ -6,11 +7,12 @@ export default async (req, res) => {
     try {
         let result = await new PreBook().selectPreBook(userid).then(result => result)
 
+        // 전처리 부분
+        // 해단 단위에 맞는 가격을 매칭한다. 이것으로
         let adultPrice = 0;
         let middlePrice = 0;
         let youngPrice = 0;
         let preSchoolPrice = 0;
-
         for (let i = 0; i < 4; i++) {
             if(result[1][i] === undefined) {
                 continue;
@@ -24,6 +26,10 @@ export default async (req, res) => {
                 preSchoolPrice = result[1][i].PRICE
             }
         }
+
+
+        result[0][0].B_STRDATE = UTFFomatter(result[0][0].B_STRDATE)
+        result[0][0].B_ENDDATE = UTFFomatter(result[0][0].B_ENDDATE)
 
         result[0][0].ADULT = [result[0][0].ADULT, adultPrice]
         result[0][0].MIDDLE = [result[0][0].MIDDLE, middlePrice]
