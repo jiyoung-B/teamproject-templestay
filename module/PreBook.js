@@ -2,7 +2,7 @@ import mariadb from './MariaDB'
 
 const selectPlusInfo = ` select P_NAME,T_NAME, P_CLASS from PROGRAM2 WHERE PID = ? `
 const insertPreBookSql = ` insert into PREBOOK (userid,PID,P_NAME,T_NAME,P_CLASS,B_STRDATE,B_ENDDATE,ADULT,MIDDLE,YOUNG,PRESCHOOL) values (?,?,?,?,?,?,?,?,?,?,?) `
-const selectPreBookSql = ` select * from PREBOOK where userid = ?`
+const selectPreBookSql = ` select * from PREBOOK where userid = ? order by PRB_NO desc `
 const selectPreBookPriceSql = ` select PID, PR_CLASS, PRICE from PROGRAMPRICE2 where PID = ? `
 const deletePreBook = ' delete from PREBOOK WHERE userid = ? '
 
