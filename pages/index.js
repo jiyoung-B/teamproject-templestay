@@ -13,9 +13,9 @@ import * as PropTypes from "prop-types";
 export async function getServerSideProps(ctx) {
         let {lid = '서울',str,end} = ctx.query
         // 전처리
-        if(lid === undefined || lid === null) lid = false;
-        if(str === undefined || str === null) str = false;
-        if(end === undefined || end === null) end = false;
+        if(lid === undefined || lid === null) lid = 0;
+        if(str === undefined || str === null) str = 0;
+        if(end === undefined || end === null) end = 0;
 
         // param 선언
         let param = `?lid=${lid}&str=${str}&end=${end}`
