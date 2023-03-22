@@ -7,7 +7,7 @@ import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
-import {handleInput, check_captcha, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
+import {handleInput, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
 import {error} from "next/dist/build/output/log";
 import {getSession, signIn, useSession} from "next-auth/client";
 import axios from "axios";
@@ -30,12 +30,13 @@ const Nav = () => {
             setPasswdError('');
         }
         // 암호화시
-        //let hshpwd2 = await hashPassword(passwd2); // 암호를 해시화 함
-        //const data = { passwd: await hshpwd2, name: name, email: email2};
+        let hshpwd2 = await hashPassword(passwd2); // 암호를 해시화 함
+
+        const data = {passwd: await hshpwd2, name: name, email: email2};
 
         // 비암호화
-        const data = { passwd: passwd2, name: name, email: email2};
-        console.log(data);
+        //const data = { passwd: passwd2, name: name, email: email2};
+        console.log('데이타~~!!', data);
         if (await process_submit('/api/member/join', data) > 0) {
 
             alert('회원가입을 축하합니다');
@@ -54,14 +55,15 @@ const Nav = () => {
     const [email, setEmail] = useState('');
     const [passwd, setPasswd] = useState('');
 
+    //const data = {userid: userid, name: name, passwd:await hshpwd };
     const handlelogin = async () => {
 
 
-            const data = {email: email, passwd: await passwd};
+            const data = {email: email, passwd: passwd};
 
             const {error} = await signIn('email-passwd-credentials', {
                 email, passwd,
-                redirect: false
+                redirect: true
             });
 
             console.log('pg login -', await error);

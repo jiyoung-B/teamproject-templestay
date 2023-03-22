@@ -4,12 +4,23 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import React from "react";
-import IntroHead from "../layout/IntroHead";
-import Layout from "../layout/Layout";
 import Card from 'react-bootstrap/Card';
-import {Button, NavLink} from "react-bootstrap";
+import {Button, CardGroup, NavLink} from "react-bootstrap";
+import axios from "axios";
 
-const Intro = () => {
+export async function getServerSideProps(ctx) {
+    console.log('씨티엑스 ??', ctx);
+
+    let url = `http://localhost:3000/api/editorpick?id=1`
+
+    const res = await axios.get(url)
+    const edPicks = await res.data[0];
+    console.log('edPicks? [0]??', edPicks);
+
+    return {props:{edPicks}}
+}
+
+const Intro = ({edPicks}) => {
 
     return (
         <>
@@ -49,53 +60,35 @@ const Intro = () => {
                     </Col>
                 </Row>
 
-
+                <div style={{width: "300px", minWidth: "300px"}}>에디터픽</div>
 
                 <Row style={{marginTop:'160px'}}>
                     <Col className="offset-1 editorpick">
                         <Row className="pt-5">
                             <h1 className="fw-bold text-secondary ps-4 mt-3" id="programTitle" >에디터픽</h1>
-                            <Col className="offset-3">
-                                <Row>
-                                    <div className="row align-items-center mt-10" >
-                                        <div className="col">
-                                                <a href='/temple/?'>
-                                                    <Card>
-                                                    <Card.Img variant="top" src="/img/sampleImg_2.png" />
-                                                    <Card.Body>
+                            <Col className="offset-2" style={{maxHeight : "500px"}}>
+                                <div className="row align-items-center mt-10" style={{ display: "flex", overflowX: "scroll", scrollSnapType: "x mandatory" }}>
+                                        {edPicks.map(ep => (
+                                        <div key={ep.PID} className="col" style={{width: "300px", Height: "300px"}}>
+                                            <NavLink href={`/program?pid=${ep.PID}`}>
+                                                <CardGroup style={{width: "300px", height: "300px"}}>
+                                                    <Card className="h-100">
+                                                    <Card.Img variant="top" src={ep.P_PICLINK} style={{width: "300px", minHeight: "200px"}}/>
+                                                    <Card.Body style={{width: "300px", height: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
                                                         <Card.Text>
-                                                            프로그램명
+                                                           <h6> #{ep.T_NAME}</h6>
+                                                        </Card.Text>
+                                                        <Card.Text className="pr-3">
+                                                            {ep.P_NAME}
                                                         </Card.Text>
                                                     </Card.Body>
                                                 </Card>
-                                                </a>
+                                                </CardGroup>
+                                           </NavLink>
                                             </div>
-                                        <div className="col">
-                                            <a href='/temple/?'>
-                                                <Card>
-                                                    <Card.Img variant="top" src="/img/sampleImg_2.png" />
-                                                    <Card.Body>
-                                                        <Card.Text>
-                                                            프로그램명
-                                                        </Card.Text>
-                                                    </Card.Body>
-                                                </Card>
-                                            </a>
-                                        </div>
-                                        <div className="col">
-                                            <a href='/temple/?'>
-                                                <Card>
-                                                    <Card.Img variant="top" src="/img/sampleImg_2.png" />
-                                                    <Card.Body>
-                                                        <Card.Text>
-                                                            프로그램명
-                                                        </Card.Text>
-                                                    </Card.Body>
-                                                </Card>
-                                            </a>
-                                        </div>
+                                        ))}
                                     </div>
-                                </Row>
+
                             </Col>
                         </Row>
                     </Col>
@@ -104,10 +97,9 @@ const Intro = () => {
                 <div className={'d-flex align-items-center justify-content-center'} style={{marginTop:'150px',marginBottom:'100px'}}>
                     <Button size="lg" ><Link href={'/'}><p className={'fs-2 px-2 mb-0'}>지금, 여기</p></Link></Button>
                 </div>
-
             </Container>
 
         </>
     )
-}
+};
 export default Intro
