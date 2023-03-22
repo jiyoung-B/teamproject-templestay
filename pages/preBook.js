@@ -2,6 +2,7 @@ import axios from "axios";
 import {Button, Table} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import {useState} from "react";
 
 export async function getServerSideProps(ctx) {
 
@@ -21,7 +22,13 @@ export async function getServerSideProps(ctx) {
 
 export default function preBook ({preBookInfo}) {
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+
     const handleBook = async () => {
+
+        // 클릭시 버튼 비활성화
+        setIsSubmitting(true);
 
         // Book테이블에 데이터를 삽입하는 과정
         preBookInfo.TOTAL = preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1];
@@ -65,7 +72,11 @@ export default function preBook ({preBookInfo}) {
             </Table>
             <Row>
                 <Col className={'d-flex justify-content-end'}><Button variant="danger" onClick={cancelBook}>취소하기</Button></Col>
-                <Col><Button variant="success" onClick={handleBook}>예약하기</Button></Col>
+                <Col><Button
+                    variant="success"
+                    onClick={handleBook}
+                    disabled={isSubmitting}
+                >예약하기</Button></Col>
             </Row>
         </div>
 
