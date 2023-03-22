@@ -3,12 +3,57 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Link from "next/link";
-import {Button, Form} from "react-bootstrap";
-import React, {useState} from "react";
+import {Button, Form, Table} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
 import { temples } from "./utils/temples";
 import MyinfoCommon from "./layout/MyinfoCommon";
 
 export default function Likes () {
+
+    // 지도 부분
+    useEffect(() => {
+        const script = document.createElement('script');
+
+        script.async = true;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=89da95ceb6fd3e9c3e590a9f8786d5e8&libraries=services&autoload=false`;
+
+        document.head.appendChild(script);
+
+        const onLoadKakaoMap = () => {
+            kakao.maps.load(() => {
+                let mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                    mapOption = {
+                        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                        level: 3 // 지도의 확대 레벨
+                    };
+
+                // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+                let map = new kakao.maps.Map(mapContainer, mapOption);
+
+                // let geocoder = new kakao.maps.services.Geocoder();
+                //
+                // // 주소로 좌표를 검색합니다
+                // geocoder.addressSearch(temple[0].ADDR, function(result, status) {
+                //
+                //     // 정상적으로 검색이 완료됐으면
+                //     if (status === kakao.maps.services.Status.OK) {
+                //
+                //         let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                //
+                //         // 결과값으로 받은 위치를 마커로 표시합니다
+                //         let marker = new kakao.maps.Marker({
+                //             map: map,
+                //             position: coords
+                //         });
+                //
+                //         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                //         map.setCenter(coords);
+                //     }
+                // });
+            });
+        };
+        script.addEventListener('load', onLoadKakaoMap);
+    }, []);
 
     const [checkedState, setCheckedState] = useState(
         new Array(temples.length).fill(false)
@@ -86,8 +131,6 @@ export default function Likes () {
         location.href = '/book';
     };
 
-    console.log(userinfo.response)
-
     function SelectCompareCnt() {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let comCnt = 0;
@@ -100,12 +143,16 @@ export default function Likes () {
 
         if (comCnt === 2) {
             return (
-                <table style={{textAlign: "center", border: "1px solid #331904"}}>
+                <Table style={{textAlign: "center", border: "1px solid #331904"}}>
                     <tr style={{height: "40px"}}>
                         <th>{String(userinfo.response[0]).split(',')[0]}</th>
                         <th>{String(userinfo.response[1]).split(',')[0]}</th>
                     </tr>
-                    <tr style={{height: "500px"}}><td colSpan="3">지도</td></tr>
+                    <tr style={{height: "500px"}}>
+                        <td colSpan="2" style={{height: "500px"}}>
+                            <div id="map" key={"map"} style={{height: "100%", width: "100%"}}></div>
+                        </td>
+                    </tr>
                     <tr style={{height: "40px"}}>
                         <td>{String(userinfo.response[0]).split(',')[1]}</td>
                         <td>{String(userinfo.response[1]).split(',')[1]}</td>
@@ -122,7 +169,7 @@ export default function Likes () {
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
                     </tr>
-                </table>
+                </Table>
             );
         } else if(comCnt === 3) {
             return (
@@ -132,7 +179,11 @@ export default function Likes () {
                         <th>{String(userinfo.response[1]).split(',')[0]}</th>
                         <th>{String(userinfo.response[2]).split(',')[0]}</th>
                     </tr>
-                    <tr style={{height: "500px"}}><td colSpan="3">지도</td></tr>
+                    <tr style={{height: "500px"}}>
+                        <td colSpan="3" style={{height: "500px"}}>
+                            <div id="map" key={"map"} style={{height: "100%", width: "100%"}}></div>
+                        </td>
+                    </tr>
                     <tr style={{height: "40px"}}>
                         <td>{String(userinfo.response[0]).split(',')[1]}</td>
                         <td>{String(userinfo.response[1]).split(',')[1]}</td>
@@ -165,11 +216,11 @@ export default function Likes () {
                 <Row className="lnm">
                     <Col className="likesmenu1 col-6">좋아요</Col>
                     <Col className="bar1 col-1">|</Col>
-                    <Col className="infomenu1 col-5"><Link href='/myinfo'>내정보</Link></Col>
+                    <Col className="infomenu1 col-5"><Link href='/myinfo'>예약정보</Link></Col>
                 </Row>
                 <Row className="likesncom">
-                    <Col className="temples col-9 offset-1" style={{fontSize: "25px"}}>좋아요를 누른 사찰</Col>
-                    <Col>
+                    <Col className="temples col-5 offset-1" style={{fontSize: "25px"}}>좋아요를 누른 사찰</Col>
+                    <Col className="col-5">
                         <>
                             <Button variant="primary" className="combtn" onClick={handleShow}>비교하기</Button>
                             <Modal size="xl" show={show} onHide={handleClose}>
