@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps, session }) {
 
     return (
         <React.Fragment>
-            <Layout {...pageProps} session={session}>
+            <Layout {...pageProps}>
                 <Component {...pageProps} />
             </Layout>
         </React.Fragment>

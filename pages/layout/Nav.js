@@ -3,7 +3,7 @@ import { HiOutlineMapPin } from 'react-icons/hi2';
 import { BsCalendar } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
 import Link from 'next/link';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
@@ -11,34 +11,35 @@ import {handleInput, hashPassword, process_submit, comparePasswd} from "../../mo
 import {error} from "next/dist/build/output/log";
 import {getSession, signIn, signOut, useSession} from "next-auth/client";
 import axios from "axios";
+import {useRouter} from "next/router";
 
 
 
-export async function getServerSideProps(ctx) {
+// export async function getServerSideProps(ctx) {
+//
+//     // 세션 객체 가져오기
+//     const sess = await getSession(ctx);
+//     if(!sess) { // 로그인하지 않은 경우 로그인으로 이동
+//         return {
+//             redirect: {permanent: false, destination: '/'},
+//             props: {}
+//         }
+//     }
+//     // let userid = ctx.query.userid;
+//     // let userid = 'abc123';
+//     let email = sess.user.email; // 로그인한 사용자 아이디
+//
+//     let url = `http://localhost:3000/api/member/myinfo?email=${email}`;
+//
+//     const res = await axios.get(url);
+//     const member = await res.data[0];
+//     console.log('네브멤버api : ', await member);
+//
+//     return {props : {member: member, session: sess}}
+// }
+//
 
-    // 세션 객체 가져오기
-    const sess = await getSession(ctx);
-    if(!sess) { // 로그인하지 않은 경우 로그인으로 이동
-        return {
-            redirect: {permanent: false, destination: '/'},
-            props: {}
-        }
-    }
-    // let userid = ctx.query.userid;
-    // let userid = 'abc123';
-    let email = sess.user.email; // 로그인한 사용자 아이디
-
-    let url = `http://localhost:3000/api/member/myinfo?email=${email}`;
-
-    const res = await axios.get(url);
-    const member = await res.data[0];
-    console.log('네브멤버api : ', await member);
-
-    return {props : {member: member, session: sess}}
-}
-
-
-const Nav = ({props, menu, children, session, member}) => {
+const Nav = ({props, menu, session}) => {
 
     const [passwd2, setPasswd2,] = useState('');
     const [repasswd, setRepasswd] = useState('');
@@ -48,8 +49,6 @@ const Nav = ({props, menu, children, session, member}) => {
     const [email, setEmail] = useState('');
     const [passwd, setPasswd] = useState('');
 
-    //
-    const [joinEmail, setJoinEmail] = useState('');
     const handleJoin = async () => {
         if (passwd2 !== repasswd){
             setPasswdError('비밀번호가 일치하지 않습니다!');
@@ -59,7 +58,7 @@ const Nav = ({props, menu, children, session, member}) => {
         }
         // 암호화시
         let hashpwd2 = await hashPassword(passwd2); // 암호를 해시화 함
-        console.log('join ', hashpwd2)
+        console.log('join 해쉬드 패스워드 ', hashpwd2)
 
         const data = {passwd: await hashpwd2, name: name, email: email2};
         //const data = {passwd: await hashpwd2, name: name, email: joinEmail};
@@ -81,14 +80,23 @@ const Nav = ({props, menu, children, session, member}) => {
 
 
     };
+    //
+    // // 암호화시
+    // let hashpwd2 = await hashPassword(passwd2); // 암호를 해시화 함
+    // console.log('join ', hashpwd2)
+    //
+    // const data = {passwd: await hashpwd2, name: name, email: email2};
 
     //const data = {userid: userid, name: name, passwd:await hshpwd };
     const handlelogin = async (e) => {
         e.preventDefault();
+
         const data = {email: email, passwd: passwd};
+
         const  {error} = await signIn('email-passwd-credentials', {
             email,
             passwd,
+            // ...data,
             redirect: false
         });
         console.log('signin error : ', await error);
@@ -103,6 +111,16 @@ const Nav = ({props, menu, children, session, member}) => {
 
 
      };
+
+   // const [session, loading] = useSession();
+   //  const router = useRouter();
+   //
+   //  useEffect(() => {
+   //      if (!session && !loading) {
+   //          router.push('/');
+   //      }
+   //  }, [session, loading, router]);
+
     const handleSignOut = async () => {
             await signOut();
             alert('로그아웃 완료')
@@ -189,27 +207,26 @@ const Nav = ({props, menu, children, session, member}) => {
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                             <>
-                              {/* <span>Hi!{session.name}</span>*/}
-                               <span>Hi!{children.props.session.name}</span>
-                               <span>Hi!{children.props.session.email}</span>
+                               <span>Hi!{session.name}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>
                                 <Modal show={showLogin} onHide={handleCloseLogin}>
 
-                                    {session? (<>
+                                    {(session && session.name !== 'guest') ? (<>
                                         <Modal.Header>
                                             <Modal.Title>안녕하세요</Modal.Title>
                                         </Modal.Header>
                                         <Modal.Body>
                                             <Form>
                                                 <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                                    <div>{session.email}님</div>
+                                                    <div>{session.name}님</div>
                                                 </Form.Group>
                                             </Form>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button type="button" variant="primary" onClick={() => signOut()}>
+                                            <Button type="button" variant="primary" onClick={handleSignOut}>
+                                                {/*onClick={() => signOut()}*/}
                                                 로그아웃
                                             </Button>
                                             <Button type="button" variant="secondary" onClick={handleShowJoin}>

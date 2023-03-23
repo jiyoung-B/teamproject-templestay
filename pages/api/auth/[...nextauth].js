@@ -22,10 +22,14 @@ export default NextAuth({
                 const email = credentials.email;
                 let passwd = credentials.passwd;
 
-                console.log('nextauth 패스워드-',passwd)
+                console.log('[authorize] 패스워드해시전', passwd)
+                passwd = hashPassword(passwd)
+
+                console.log('패스워드해시후',await passwd)
 
                 // 인증 확인
                 let params = `?email=${email}&passwd=${passwd}`;
+                //let params = `?email=${email}`;
                 let url = `http://localhost:3000/api/member/login${params}`;
                 const res = await axios.get(url);
                 const result = await res.data;
@@ -33,8 +37,10 @@ export default NextAuth({
                 console.log('nextauth -', (await result).passwd);
 
                 // 인증시 기존 암호와 테이블의 암호끼히 비교
-                let is_ok = comparePasswd(passwd, (await result).passwd);
-                console.log('nextauth -', await is_ok);
+                //const inputPasswd = req.body.passwd;
+                console.log('입력한패스워드', req.body.passwd)
+                let is_ok = comparePasswd(req.body.passwd, (await result).passwd);
+                console.log('nextauth이즈오케이 -', await is_ok);
 
                 // 인증에 성공해야만 로그인 허용
                 //if (email === 'abc123' && passwd === '987xyz') {
@@ -47,7 +53,7 @@ export default NextAuth({
             }
         })
     ],
-    secret: process.env.SECRET,
+     secret: process.env.SECRET,
     pages: { // 인증에 사용자 정의 로그인 페이지 사용
         signIn: '/layout/Nav'
     },
