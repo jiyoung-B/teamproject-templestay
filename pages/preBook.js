@@ -6,9 +6,9 @@ import {useState} from "react";
 
 export async function getServerSideProps(ctx) {
 
-    let {userid} = ctx.query
+    let {email} = ctx.query
 
-    let param = `?userid=${userid}`
+    let param = `?email=${email}`
     let url = `http://localhost:3000/api/preBookCheck${param}`
 
     const res = await axios.get(url)
@@ -33,21 +33,22 @@ export default function preBook ({preBookInfo}) {
         // Book테이블에 데이터를 삽입하는 과정
         preBookInfo.TOTAL = preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1];
         let bookInsert = [preBookInfo]
+
             let cnt = await fetch('/api/bookInsert', {
             method: 'POST', mode: 'cors',
             body: JSON.stringify(bookInsert),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json());
 
-        let param = `?userid=${preBookInfo.userid}`
+        let param = `?email=${preBookInfo.email}`
         // preBook테이블에 데이터를 삭제하는 과정
         let del = await fetch('api/preBookDelete'+param)
 
-        location.href = '/'
+        // location.href = '/'
     };
 
     const cancelBook = async () => {
-        let param = `?userid=${preBookInfo.userid}`
+        let param = `?email=${preBookInfo.email}`
         let del = await fetch('api/preBookDelete'+param)
         console.log(del)
 
@@ -56,7 +57,7 @@ export default function preBook ({preBookInfo}) {
     return(
         <div className={'container mt-5'} >
             <h1>hi! 예약페이지!</h1>
-            <p>{preBookInfo.userid}님의 예약정보!</p>
+            <p>{preBookInfo.email}님의 예약정보!</p>
 
             <Table>
                 <thead>
