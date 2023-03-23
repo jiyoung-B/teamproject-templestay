@@ -9,6 +9,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import shortid from 'shortid'
 import * as PropTypes from "prop-types";
+import Myinfo from "./myinfo";
 
 export async function getServerSideProps(ctx) {
         let {lid = '서울',str,end} = ctx.query
@@ -19,7 +20,6 @@ export async function getServerSideProps(ctx) {
 
         // param 선언
         let param = `?lid=${lid}&str=${str}&end=${end}`
-        console.log(lid,str,end)
 
         // URL
         let url = `http://localhost:3000/api/${param}`
@@ -142,7 +142,7 @@ export default function Home({searchInfo}) {
                                           }
                                 </Col>
                                 <Col>
-                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"9999"}}></div>
+                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"1"}}></div>
                                 </Col>
                         </Row>
 
