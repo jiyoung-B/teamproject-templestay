@@ -151,6 +151,8 @@ export default function Program ({proData,session}) {
         // 클릭시 버튼 비활성화
         setIsSubmitting(true)
 
+
+
         async function bookOne () {
             inputData.push({email: 'test'})
             inputData.push({PID:PID})
@@ -160,7 +162,6 @@ export default function Program ({proData,session}) {
             inputData.push({middle:Number(middle)})
             inputData.push({young:Number(young)})
             inputData.push({preschool:Number(preschool)})
-
 
             return inputData
         }
@@ -184,7 +185,13 @@ export default function Program ({proData,session}) {
                 location.href = `/preBook?email=${email}`
             }
         }
-        bookOne().then(process_reservation).then(({result, inputData}) => redirect(result,inputData))
+
+        if(Number(adult)+Number(middle)+Number(young)+Number(preschool) <= 0) {
+            setIsSubmitting(false)
+            alert('인원을 선택하세요!')
+        } else{
+            bookOne().then(process_reservation).then(({result, inputData}) => redirect(result,inputData))
+        }
 
     }
 
