@@ -19,12 +19,11 @@ export async function getServerSideProps(ctx) {
     const sess = await getSession(ctx);
     if(!sess) { // 로그인하지 않은 경우 로그인으로 이동
         return {
-            redirect: {permanent: false, destination: '/layout/Nav'},
+            redirect: {permanent: false, destination: '/'},
             props: {}
         }
     }
-    // let userid = ctx.query.userid;
-    // let userid = 'abc123';
+
     let email = sess.user.email; // 로그인한 사용자 아이디
 
     let url = `http://localhost:3000/api/member/myinfo?email=${email}`;
@@ -44,6 +43,7 @@ export default function Myinfo ({member, session}) {
     return (
         <main>
             <MyinfoCommon session={session} member={member}/>
+            <h1>{session.user.email}</h1>
             <Container fluid>
                 <Row className="lnm2">
                     <Col className="likesmenu2 col-6"><Link href='/likes'>좋아요</Link></Col>
