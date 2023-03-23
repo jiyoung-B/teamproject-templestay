@@ -7,9 +7,14 @@ export default async (req, res) => {
         const member = new Member().login(email, passwd)
             .then(result => result);
 
+        console.log('api member', await member)
+
         const result = (await member)[0];
-        const data = { cnt: parseInt(await result.cnt),
-            email: await result.email, passwd: await result.passwd }
+        console.log('api login result: ', result);
+        const data = { name: await result.name, email: await result.email,
+            passwd: await result.passwd }
+        console.log('api login : ', data);
+        console.log('api pwd : ', await result.passwd);
 
 
         res.status(200).json(data);

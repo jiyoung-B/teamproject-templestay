@@ -23,8 +23,8 @@ export default function Join() {
 
 
     const handlejoin = async () => {
-        let hshpwd = await hashPassword(passwd) // 암호ㅎ를 해시화 함
-        const data = {userid: userid, name: name, passwd:await hshpwd };
+        let hashpwd = await hashPassword(passwd) // 암호ㅎ를 해시화 함
+        const data = {userid: userid, name: name, passwd:await hashpwd };
         if (await process_submit('/api/member/join', data) > 0) {
             location.href = '/member/login'
         }

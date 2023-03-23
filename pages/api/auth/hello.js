@@ -1,28 +1,7 @@
 import bcrypt from 'bcryptjs';
+import {hashPassword, comparePasswd} from "../../../module/Utils";
 
 const saltRounds = 10;   // salt키 생성 횟수 지정
-
-// 암호 입력시 해시함수에 의해 해시코드로 변환된 암호 생성
-const hashPassword = async (passwd) => {
-    try {
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hash = await bcrypt.hash(passwd, salt);
-
-        return hash;
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-// 암호 비교 함수 - 암호와 해시화된 암호를 비교
-const comparePasswd = async (passwd, hashpwd) => {
-    try {
-        const result = await bcrypt.compare(passwd, hashpwd);
-        return result;
-    } catch (err) {
-        console.log(err);
-    }
-}
 
 
 export default async (req, res) => {

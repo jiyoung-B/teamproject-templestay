@@ -7,22 +7,51 @@ import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
-import {handleInput, check_captcha, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
+import {handleInput, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
 import {error} from "next/dist/build/output/log";
-import {getSession, signIn, useSession} from "next-auth/client";
+import {getSession, signIn, signOut, useSession} from "next-auth/client";
 import axios from "axios";
 
-const Nav = () => {
 
+
+export async function getServerSideProps(ctx) {
+
+    // 세션 객체 가져오기
+    const sess = await getSession(ctx);
+    if(!sess) { // 로그인하지 않은 경우 로그인으로 이동
+        return {
+            redirect: {permanent: false, destination: '/'},
+            props: {}
+        }
+    }
+    // let userid = ctx.query.userid;
+    // let userid = 'abc123';
+    let email = sess.user.email; // 로그인한 사용자 아이디
+
+    let url = `http://localhost:3000/api/member/myinfo?email=${email}`;
+
+    const res = await axios.get(url);
+    const member = await res.data[0];
+    console.log('네브멤버 : ', await member);
+
+    return {props : {member: member, session: sess}}
+}
+
+
+const Nav = ({menu, children, session, member}) => {
+    console.log('nav 세션- ', session);
+    console.log('네브 멤버- ', member);
     const [passwd2, setPasswd2,] = useState('');
     const [repasswd, setRepasswd] = useState('');
     const [name, setName] = useState('');
     const [email2, setEmail2] = useState('');
     const [passwdError, setPasswdError] = useState('');
+    const [email, setEmail] = useState('');
+    const [passwd, setPasswd] = useState('');
 
-
+    //
+    const [joinEmail, setJoinEmail] = useState('');
     const handleJoin = async () => {
-
         if (passwd2 !== repasswd){
             setPasswdError('비밀번호가 일치하지 않습니다!');
             return ;
@@ -30,12 +59,15 @@ const Nav = () => {
             setPasswdError('');
         }
         // 암호화시
-        //let hshpwd2 = await hashPassword(passwd2); // 암호를 해시화 함
-        //const data = { passwd: await hshpwd2, name: name, email: email2};
+        let hashpwd2 = await hashPassword(passwd2); // 암호를 해시화 함
+        console.log('join ', hashpwd2)
+
+        const data = {passwd: await hashpwd2, name: name, email: email2};
+        //const data = {passwd: await hashpwd2, name: name, email: joinEmail};
 
         // 비암호화
-        const data = { passwd: passwd2, name: name, email: email2};
-        console.log(data);
+        //const data = { passwd: passwd2, name: name, email: email2};
+        console.log('데이타~~!!', data);
         if (await process_submit('/api/member/join', data) > 0) {
 
             alert('회원가입을 축하합니다');
@@ -51,28 +83,33 @@ const Nav = () => {
 
     };
 
-    const [email, setEmail] = useState('');
-    const [passwd, setPasswd] = useState('');
-
+    //const data = {userid: userid, name: name, passwd:await hshpwd };
     const handlelogin = async () => {
+        const data = {email: email, passwd: passwd};
+        const  {error} = await signIn('email-passwd-credentials', {
+            email,
+            passwd,
+            redirect: false
+        });
+        console.log('signin error : ', await error);
+        if (error) { // 에러 발생시 - 인증 실패시
+            alert('로그인 실패');
+            console.log(error);
 
+        } else {
+            alert('로그인');
+            location.href = '/myinfo';
+        }
 
-            const data = {email: email, passwd: await passwd};
-
-            const {error} = await signIn('email-passwd-credentials', {
-                email, passwd,
-                redirect: false
-            });
-
-            console.log('pg login -', await error);
-            if (error) { // 에러 발생시 - 인증 실패시
-                alert('로그인에 실패했습니다');
-            } else {
-                alert('로그인 되었습니다');
-                location.href = '/';
-            }
 
      };
+    const handleSignOut = async () => {
+            await signOut();
+            alert('로그아웃 완료')
+            location.href = '/'
+
+    }
+
 
 
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
@@ -151,6 +188,7 @@ const Nav = () => {
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                             <>
+                               <span>Hi!{member.name}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>
@@ -162,13 +200,15 @@ const Nav = () => {
                                         <Form>
                                             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                                                 <Form.Control className="mb-3"
-                                                              type="text"
+                                                              type="email"
+                                                              value={email}
                                                               placeholder="이메일"
                                                               autoFocus
                                                               onChange={e => handleInput(setEmail, e)}
                                                 />
                                                 <Form.Control className="mb-3"
                                                               type="password"
+                                                              value={passwd}
                                                               placeholder="비밀번호"
                                                               autoFocus
                                                               onChange={e => handleInput(setPasswd, e)}
@@ -177,6 +217,11 @@ const Nav = () => {
                                         </Form>
                                     </Modal.Body>
                                     <Modal.Footer>
+                                        {session?(<Button type="button" variant="primary" onClick={handleSignOut}>
+                                            로그아웃
+                                        </Button>):(<Button type="button" variant="primary" onClick={handlelogin}>
+                                            로그인
+                                        </Button>)}
                                         <Button type="button" variant="primary" onClick={handlelogin}>
                                             로그인
                                         </Button>
