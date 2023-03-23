@@ -79,7 +79,7 @@ export default function Likes ({member, session}) {
         }
         setCheckedState(updatedCheckedState);
 
-        // 체크박스에 체크된 데이터 가져오기
+        // 체크박스에 체크된 데이터 가져오기!
         const { value, checked } = e.target;
         const { name, program, price, details, lat, lng } = userinfo;
 
