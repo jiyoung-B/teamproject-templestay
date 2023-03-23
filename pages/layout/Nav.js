@@ -32,15 +32,14 @@ export async function getServerSideProps(ctx) {
 
     const res = await axios.get(url);
     const member = await res.data[0];
-    console.log('네브멤버 : ', await member);
+    console.log('네브멤버api : ', await member);
 
     return {props : {member: member, session: sess}}
 }
 
 
-const Nav = ({menu, children, session, member}) => {
-    console.log('nav 세션- ', session);
-    console.log('네브 멤버- ', member);
+const Nav = ({props, menu, children, session, member}) => {
+
     const [passwd2, setPasswd2,] = useState('');
     const [repasswd, setRepasswd] = useState('');
     const [name, setName] = useState('');
@@ -84,7 +83,7 @@ const Nav = ({menu, children, session, member}) => {
     };
 
     //const data = {userid: userid, name: name, passwd:await hshpwd };
-    const handlelogin = async () => {
+    const handlelogin = async (e) => {
         e.preventDefault();
         const data = {email: email, passwd: passwd};
         const  {error} = await signIn('email-passwd-credentials', {
@@ -190,7 +189,9 @@ const Nav = ({menu, children, session, member}) => {
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                             <>
-                               <span>Hi!{session.name}</span>
+                              {/* <span>Hi!{session.name}</span>*/}
+                               <span>Hi!{children.props.session.name}</span>
+                               <span>Hi!{children.props.session.email}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>
@@ -208,7 +209,7 @@ const Nav = ({menu, children, session, member}) => {
                                             </Form>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <Button type="button" variant="primary" onClick={handleSignOut}>
+                                            <Button type="button" variant="primary" onClick={() => signOut()}>
                                                 로그아웃
                                             </Button>
                                             <Button type="button" variant="secondary" onClick={handleShowJoin}>

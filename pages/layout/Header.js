@@ -5,16 +5,23 @@ import React, {useEffect, useRef, useState} from "react";
 import IntroHead from "./IntroHead";
 import {getSession} from "next-auth/client";
 import axios from "axios";
+import * as pageProps from "next-auth/client";
 
 
 
 
 
-const Header = ({ children, pathname, menu, member, session }) => {
-    const user = session.user;
+const Header = ({ props, children, pathname, menu, member, session }) => {
+    // const user = session.user;
     //const user = children.props.session.user;
-    console.log('헤더'+user);
-    console.log('헤더멤버'+member);
+
+    console.log('헤더칠드런'+children.props.session);
+
+    let sess =children.props.session;
+    console.log('헤더칠드런세션세스'+sess)
+
+
+
     const router = useRouter();
     const currentPath = router.pathname;
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -60,10 +67,12 @@ const Header = ({ children, pathname, menu, member, session }) => {
                 <div ref={ref}>
                     <div style={{ height: showIntro ? "auto" : 0, opacity: showIntro ? 1 : 0 }}>
                         <ToIntro />
+                        <div>{sess.user}</div>
+                        <div>{sess.email}</div>
                     </div>
                 </div>
                 <div className={showIntro ? "" : "fixed-top"}>
-                    <Nav menu={menu} member={member} session={session} sess={user.name} children={children}/>
+                    <Nav menu={menu} member={member} session={session} sess={sess} children={children}/>
                 </div>
             </div>)}
             </>
