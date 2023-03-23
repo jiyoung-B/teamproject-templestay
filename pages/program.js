@@ -22,7 +22,6 @@ export async function getServerSideProps(ctx) {
     let url = `http://localhost:3000/api/program${param}`
 
     const res = await axios.get(url)
-
     let proData = await res.data;
 
     proData.push(pid)
@@ -30,9 +29,6 @@ export async function getServerSideProps(ctx) {
     return {props:{proData}}
 }
 
-// const tomorrow = new Date().setDate(new Date().getDate() + 1);
-// let check = milliFomatter(tomorrow) // 확인 결과 tomorrow는 변환했을 때 내일을 가르킨다.
-// console.log(check)
 
 export default function Program ({proData}) {
     const unit = 28
@@ -53,8 +49,6 @@ export default function Program ({proData}) {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-
-
 
     //날짜가 선택되면 state를 변경해주는 함수
     const onChange = (dates) => {
@@ -77,28 +71,11 @@ export default function Program ({proData}) {
     }
     const handleShow2 = () => setShow2(true);
 
-    // 선택 인원 관리 함수
-    // 선택 가능 옵션의 종류는 동적으로 결정된다.
-    // 이 스테이트에는 선택한 순서대로 저장된다.
-    // 좀 이상한 것 같다.
-    // 그동안 나는 설사 등장하지 않는 경우가 있더라도, 성인, 중고생, 초등생, 미취학 순으로 반드시 존재한다고 생각했고, 어떤 경우에도 성인은 포함된다고 생각했다.
-    // 하지만 살펴보니 성인이 없고 오직 중고생만 있는 경우가 있었다.
-    // 이 경우엔 배열의 첫번째 요소가 반드시 성인이라고 보장할 수 없다.
     const [selectedOptions, setSelectedOptions] = useState({"성인": 0,"중고생":0,"초등생":0,"미취학":0});
-    console.log(selectedOptions["성인"])
-
-
 
     // 총원을 계산 하는 state
     const [total,setTotal] = useState(0)
-    console.log(total)
-        // 예약정보에 키 추가.
-        // 일단 객체로 만들었을때 값이 잘 들어오는 것을 일단 확인하였다.
-        // 이제 선택지의 개수를 다르게 해보며 값을 확인한다.
-        // 테스트 리스트를 뽑는다.
-        // 4개 - 19326
-        // 3개 - 16622
-        // 중학생만 있는 곳을 찾을 수가 없다. 일단 넘어가 본다.
+
     const handleSelectChange = (e, clas) => {
         const selectedValue = e.target.value;
         setSelectedOptions((prevSelectedOptions) => {
@@ -110,12 +87,7 @@ export default function Program ({proData}) {
         });
     }
 
-    // reservInfo의 기본값에 PID를 넣었다.
-    // 예약 객체를 state로 관리 하였다.
-    // 이유는 만약 사용자가 선택을 바꿀 경우 내용이 바뀌어야 하기 때문이다.
     const [reservInfo, setReservInfo] = useState({userId:'test', reservInfo :{pid:PID, people: {"성인":[0,0],"중고생":[0,0],"초등생":[0,0],"미취학":[0,0]}, dates:[]}})
-
-
 
     // handelReserve안에서 작동하는 함수 /api/preBook 에 post 요청을 한다.
     const process_reservation = async (data) => {
@@ -144,7 +116,6 @@ export default function Program ({proData}) {
 
     // 예약 버튼을 눌렀을 때 작동
     const handleReserve = async () => {
-
         // 클릭시 버튼 비활성화
         setIsSubmitting(true)
 
@@ -178,7 +149,6 @@ export default function Program ({proData}) {
 
             // sum에 합계를 전달함.
             newReservInfo.reservInfo.sum = sum
-
 
             // api를 통해 db로 전달. 행이 추가되면 true를 리턴하고, url을 preBook 페이지로 변경 보낸다.
             if(total === 0) {

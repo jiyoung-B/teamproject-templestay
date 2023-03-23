@@ -36,6 +36,7 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
 
         script.async = true;
         script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=89da95ceb6fd3e9c3e590a9f8786d5e8&libraries=services&autoload=false`;
+        script.id = `mapScript`
 
         document.head.appendChild(script);
 
@@ -68,11 +69,16 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
 
                         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                         map.setCenter(coords);
+
+                        // script 태그 삭제
+                        const scriptTag = document.getElementById('mapScript');
+                        scriptTag.remove();
                     }
                 });
             });
         };
         script.addEventListener('load', onLoadKakaoMap);
+
     }, []);
 
     return(

@@ -12,11 +12,10 @@ import * as PropTypes from "prop-types";
 import Myinfo from "./myinfo";
 
 export async function getServerSideProps(ctx) {
-        let {lid = '서울',str,end} = ctx.query
-        // 전처리
-        if(lid === undefined || lid === null) lid = 0;
-        if(str === undefined || str === null) str = 0;
-        if(end === undefined || end === null) end = 0;
+        let {lid ,str,end} = ctx.query
+        if(lid === undefined) lid = null;
+        if(str === undefined) str = null;
+        if(end === undefined) end = null;
 
         // param 선언
         let param = `?lid=${lid}&str=${str}&end=${end}`
@@ -26,6 +25,7 @@ export async function getServerSideProps(ctx) {
         const res = await axios.get(url)
         let result = res.data
         let searchInfo = result
+
 
         return {props:{searchInfo}}
 }
@@ -49,7 +49,7 @@ export default function Home({searchInfo}) {
 
                 script.async = true;
                 script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=89da95ceb6fd3e9c3e590a9f8786d5e8&libraries=services&autoload=false`;
-
+                script.id = 'mapScript'
                 document.head.appendChild(script);
 
                 const onLoadKakaoMap = () => {
@@ -77,6 +77,10 @@ export default function Home({searchInfo}) {
 
                                                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                                                 map.setCenter(coords);
+
+                                                // script 태그 삭제
+                                                const scriptTag = document.getElementById('mapScript');
+                                                scriptTag.remove();
                                         }
                                 });
 
@@ -142,7 +146,7 @@ export default function Home({searchInfo}) {
                                           }
                                 </Col>
                                 <Col>
-                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"1"}}></div>
+                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"0"}}></div>
                                 </Col>
                         </Row>
 
