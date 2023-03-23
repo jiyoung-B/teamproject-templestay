@@ -13,12 +13,13 @@ import App from "next/app";
 
 function MyApp({ Component, pageProps, session }) {
     pageProps.session = session;
-    console.log('myapp',pageProps);
+    console.log('myapp페이지프롭스', pageProps);
+    console.log('myapp페이지프롭스멤버멤버', pageProps.member);
     const getLayout = Component.getLayout ?? ((page) => page);
 
     return (
         <React.Fragment>
-            <Layout {...pageProps}>
+            <Layout {...pageProps} session={session}>
                 <Component {...pageProps} />
             </Layout>
         </React.Fragment>

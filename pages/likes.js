@@ -30,7 +30,7 @@ export async function getServerSideProps(ctx) {
     const sess = await getSession(ctx);
     if(!sess) { // 로그인하지 않은 경우 로그인으로 이동
         return {
-            redirect: {permanent: false, destination: '/layout/Nav'},
+            redirect: {permanent: false, destination: '/'},
             props: {}
         }
     }
