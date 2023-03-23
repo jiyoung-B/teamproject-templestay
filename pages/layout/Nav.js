@@ -188,7 +188,7 @@ const Nav = ({menu, children, session, member}) => {
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                             <>
-                               <span>Hi!{member.name}</span>
+                               <span>Hi!{session.name}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>
