@@ -27,10 +27,12 @@ export async function getServerSideProps(ctx) {
 
 }
 
-export default function Home({indexInfo}) {
+export default function Home({indexInfo,session}) {
+        console.log('홈홈'+session);
     return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
+                        <h1>당신의 이메일: {session.user.email}</h1>
                         <Row style={{height: '100px'}}></Row>
                         <Row className="likeslist tpl align-top">
                                 <Col>

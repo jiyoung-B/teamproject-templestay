@@ -9,29 +9,31 @@ import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
 import {handleInput, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
 import {error} from "next/dist/build/output/log";
-import {getSession, signIn, useSession} from "next-auth/client";
+import {getSession, signIn, signOut, useSession} from "next-auth/client";
 import axios from "axios";
 
-
 export async function getServerSideProps(ctx) {
-    const session = await getSession(ctx);
-    if(session) {
-        return {
-            redirect : {
-                permanent : false,
-                    destination: "/",
-            },
-            props :{},
-        };
+
+    // 세션 객체 가져오기
+    const sess = await getSession(ctx);
+    let email = sess?.user?.email;
+    let url = email ? `http://localhost:3000/api/member/myinfo?email=${email}`:'';
+
+    if(url){
+    const res = await axios.get(url);
+    const member = await res.data[0];
+    console.log('pg myinfo Nav : ', await member);
+
+    return {props : {member: member, session: sess}}
+    } else {
+        return {props : {session: null}};
     }
-    return {props: {} };
 }
 
 
-const Nav = () => {
-    const [session, loading] = useSession();
-    console.log('login - ', session?.user?.userid);
 
+const Nav = ({menu, member, session}) => {
+    console.log('nav - ', session);
     const [passwd2, setPasswd2,] = useState('');
     const [repasswd, setRepasswd] = useState('');
     const [name, setName] = useState('');
@@ -40,9 +42,9 @@ const Nav = () => {
     const [email, setEmail] = useState('');
     const [passwd, setPasswd] = useState('');
 
-
+    //
+    const [joinEmail, setJoinEmail] = useState('');
     const handleJoin = async () => {
-
         if (passwd2 !== repasswd){
             setPasswdError('비밀번호가 일치하지 않습니다!');
             return ;
@@ -54,6 +56,7 @@ const Nav = () => {
         console.log('join ', hashpwd2)
 
         const data = {passwd: await hashpwd2, name: name, email: email2};
+        //const data = {passwd: await hashpwd2, name: name, email: joinEmail};
 
         // 비암호화
         //const data = { passwd: passwd2, name: name, email: email2};
@@ -171,6 +174,7 @@ const Nav = () => {
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                             <>
+                               <span>Hi!{session.user.email}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>

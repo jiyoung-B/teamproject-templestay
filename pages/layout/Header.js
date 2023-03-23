@@ -3,12 +3,16 @@ import Nav from "./Nav";
 import {useRouter} from "next/router";
 import React, {useEffect, useRef, useState} from "react";
 import IntroHead from "./IntroHead";
+import {getSession} from "next-auth/client";
 
 
 
 
 
-const Header = ({ pathname }) => {
+const Header = ({ children, pathname, menu, session }) => {
+    const user = session.user;
+    //const user = children.props.session.user;
+    console.log('헤더'+user);
     const router = useRouter();
     const currentPath = router.pathname;
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -57,12 +61,22 @@ const Header = ({ pathname }) => {
                     </div>
                 </div>
                 <div className={showIntro ? "" : "fixed-top"}>
-                    <Nav />
+                    <Nav menu={menu} session={session} sess={user.name}/>
                 </div>
             </div>)}
             </>
         );
 
+}
+
+export async function getServerSideProps(ctx) {
+
+    // 세션 객체 가져오기
+    const sess = await getSession(ctx);
+    console.log('header1 -', sess);
+
+
+    return {props : {sess}}
 }
 
 export default Header
