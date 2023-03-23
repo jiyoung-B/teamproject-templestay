@@ -39,7 +39,7 @@ export default function Program ({proData,session}) {
     // 세션은 존재한다.
     // console.log('세션이 있는가?',session)
 
-    let sessEmail = session.user.email
+    let sessEmail = session.email
 
 
 
@@ -148,13 +148,9 @@ export default function Program ({proData,session}) {
     let inputData = []
     // 예약 버튼을 눌렀을 때 작동
     const handleReserve = async () => {
-        // 클릭시 버튼 비활성화
-        setIsSubmitting(true)
-
-
 
         async function bookOne () {
-            inputData.push({email: 'test'})
+            inputData.push({email: sessEmail})
             inputData.push({PID:PID})
             inputData.push({strDate:B_strDate})
             inputData.push({endDate:B_endDate})
@@ -186,12 +182,21 @@ export default function Program ({proData,session}) {
             }
         }
 
-        if(Number(adult)+Number(middle)+Number(young)+Number(preschool) <= 0) {
-            setIsSubmitting(false)
-            alert('인원을 선택하세요!')
-        } else{
-            bookOne().then(process_reservation).then(({result, inputData}) => redirect(result,inputData))
+
+        // 세션이 넘어오면서 문자열 'null'로 바뀌어 버린다.
+        if(sessEmail !== 'null') {
+            // 클릭시 버튼 비활성화
+            setIsSubmitting(true)
+            if(Number(adult)+Number(middle)+Number(young)+Number(preschool) <= 0) {
+                setIsSubmitting(false)
+                alert('인원을 선택하세요!')
+            } else{
+                bookOne().then(process_reservation).then(({result, inputData}) => redirect(result,inputData))
+            }
+        } else {
+            alert('로그인해 주세요!')
         }
+
 
     }
 
