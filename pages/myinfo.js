@@ -43,7 +43,10 @@ export default function Myinfo ({member, session}) {
     return (
         <main>
             <MyinfoCommon session={session} member={member}/>
-            <h1>{session.user.email}</h1>
+         <h1>{session.name}</h1>
+         <h1>{session.email}</h1>
+          {/*  <span>Hi!{children.props}</span>
+            <span>Hi!{children.props}</span>*/}
             <Container fluid>
                 <Row className="lnm2">
                     <Col className="likesmenu2 col-6"><Link href='/likes'>좋아요</Link></Col>
@@ -61,7 +64,7 @@ export default function Myinfo ({member, session}) {
                                 <th>예약자 이름</th>
                                 <td>{member.name}</td>
                                 <th>예약자 전화번호</th>
-                                <td>{session.user.email}</td>
+                                {/*<td>{session.email}</td>*/}
                             </tr>
                             <tr>
                                 <th>절</th>

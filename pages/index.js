@@ -94,7 +94,7 @@ export default function Home({searchInfo, session}) {
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
-                        <h1>당신의 이메일: {session.user.email}</h1>
+                       {/* <h1>당신의 이메일: {session.user.email}</h1>*/}
                         <Row  style={{height: '100px'}} className={'fixed-top'}>
                                 <Col>
                                         <Link href={"/?lid=인천"}>인천</Link>
@@ -175,7 +175,7 @@ export default function Home({searchInfo, session}) {
                                           }
                                 </Col>
                                 <Col>
-                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"9999"}}></div>
+                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"1"}}></div>
                                 </Col>
                         </Row>
 
