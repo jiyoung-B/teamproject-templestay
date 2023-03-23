@@ -163,14 +163,14 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                         <Row>
                             {
                                 distinctProPic.map((program)=>(
-                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
+                                <Col md={3} style={{ marginTop:`${unit}px`, flexBasis: '420px' }} key={shortid.generate()}>
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
                                         <Card.Img variant="top" src={(program.P_PICLINK.length < 40) ? 'https://www.templestay.com/images/templeinfo-00.jpg' : program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
                                         <Card.Body className={'bg-light'} key={shortid.generate()}>
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>{program.P_NAME}
                                             </Card.Title>
                                             <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
-                                            <span> {(pid === program.PID) ? <HiBadgeCheck className={'fs-1 text-success'}/> : ''}</span>
+                                            <span key={shortid.generate()} > {(pid === program.PID) ? <HiBadgeCheck className={'fs-1 text-success'} key={shortid.generate()}/> : ''}</span>
                                         </Card.Body>
                                     </Card>
                                 </Col>
