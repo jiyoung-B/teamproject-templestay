@@ -10,11 +10,13 @@ import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
-import {session} from "next-auth/client";
+import {getSession, session} from "next-auth/client";
 //shortid.generate()
 
 
 export async function getServerSideProps(ctx) {
+    const sess = await getSession(ctx);
+    let email = sess.user.email;
 
     let {pid} = ctx.query
 

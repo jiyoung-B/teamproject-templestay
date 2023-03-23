@@ -32,8 +32,8 @@ export async function getServerSideProps(ctx) {
         return {props:{searchInfo}}
 }
 
-export default function Home({searchInfo}) {
-
+export default function Home({searchInfo, session}) {
+        console.log('홈홈'+session);
         let [addr,setAddr] =useState()
 
         const handleMouseOver = (e) => {
@@ -94,7 +94,8 @@ export default function Home({searchInfo}) {
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
-                        <Row className={''}>
+                        <h1>당신의 이메일: {session.user.email}</h1>
+                        <Row  style={{height: '100px'}} className={'fixed-top'}>
                                 <Col>
                                         <Link href={"/?lid=인천"}>인천</Link>
                                         <Link href={"/?lid=서울"}>서울</Link>

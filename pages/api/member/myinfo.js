@@ -1,10 +1,10 @@
 import Member from "../../../module/Member";
 
 export default async (req, res) => {
-    const {userid} = req.query;
+    const {email} = req.query;
 
     try {
-        const member = new Member().selectOne(userid).then(result => result);
+        const member = new Member().selectOne(email).then(result => result);
 
         console.log('api myinfo : ', await member);
 
