@@ -21,7 +21,7 @@ export async function getServerSideProps(ctx) {
 
     const res = await axios.get(url);
     const member = await res.data[0];
-    console.log('pg myinfo : ', await member);
+    console.log('auth pg myinfo : ', await member);
 
     return {props : {member: member, session: sess}}
 }

@@ -10,15 +10,18 @@ export async function getServerSideProps(context) {
     };
 }
 
-const Layout =({children, meta, pathname}) => {
+const Layout =({children, meta, pathname, session}) => {
+    console.log('레이아웃'+session);
+
     const title = meta?.title;
+    //console.log('레이아웃'+children);
     useEffect(() => {
         document.title = title ?? 'Temfo';
     })
 
     return(
         <>
-            <Header pathname={pathname} />
+            <Header pathname={pathname} children={children} session={session} menu={children.props.email} />
             <div className="container" id="wrapper">
                 <main>{children}</main>
             </div>
