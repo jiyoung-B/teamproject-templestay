@@ -1,6 +1,7 @@
 import axios from "axios";
 import bcrypt from "bcryptjs";
 
+// <<<<<<< HEAD
 // 이하 날짜를 변환 하는 함수
 
 // UTF 형식으로 저장되면 DB의 날짜와 서버에 표시되는 날짜가 차이나는 경우가 있다. 이것을 해결하는 함수이다.
@@ -44,6 +45,9 @@ const handleImgError = (e) => {
 };
 
 // 이하는 로그인 시 사용하는 함수
+// =======
+
+// >>>>>>> 65afc36 (회원가입/로그인 - NextAuth)
 const handleInput = (setInput, e) => {
     setInput(e.target.value);
 };
@@ -83,4 +87,8 @@ const comparePasswd = async (passwd, hashpwd) => {
 }
 
 module.exports = { handleInput, process_submit,
+// <<<<<<< HEAD
     hashPassword, comparePasswd, UTFFomatter, milliFomatter, dateFomatter, handleImgError};
+// =======
+//     hashPassword, comparePasswd };
+// >>>>>>> 65afc36 (회원가입/로그인 - NextAuth)
