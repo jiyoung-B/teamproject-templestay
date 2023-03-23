@@ -12,12 +12,15 @@ import * as PropTypes from "prop-types";
 import Myinfo from "./myinfo";
 import {FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
+import {getSession} from "next-auth/client";
 
 export async function getServerSideProps(ctx) {
         let {lid ,str = '2023-03-30',end} = ctx.query
         if(lid === undefined) lid = null;
         if(str === undefined) str = null;
         if(end === undefined) end = null;
+        let sess = await getSession(ctx);
+        console.log('index 세션 -',sess);
 
         // param 선언
         let param = `?lid=${lid}&str=${str}&end=${end}`
@@ -95,7 +98,7 @@ export default function Home({searchInfo, session}) {
         <div className="bg-white" id="wrapper">
                 <Container fluid>
                         <h1>당신의 이메일: {session.user.email}</h1>
-                        <Row  style={{height: '100px'}} className={'fixed-top'}>
+                        <Row  style={{height: '100px',zIndex:'0'}} className={'fixed-top'}>
                                 <Col>
                                         <Link href={"/?lid=인천"}>인천</Link>
                                         <Link href={"/?lid=서울"}>서울</Link>
