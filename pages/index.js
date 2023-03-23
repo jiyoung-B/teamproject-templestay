@@ -175,7 +175,7 @@ export default function Home({searchInfo, session}) {
                                           }
                                 </Col>
                                 <Col>
-                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"0"}}></div>
+                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"9999"}}></div>
                                 </Col>
                         </Row>
 
