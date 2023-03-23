@@ -85,6 +85,7 @@ const Nav = ({menu, children, session, member}) => {
 
     //const data = {userid: userid, name: name, passwd:await hshpwd };
     const handlelogin = async () => {
+        e.preventDefault();
         const data = {email: email, passwd: passwd};
         const  {error} = await signIn('email-passwd-credentials', {
             email,
@@ -137,6 +138,7 @@ const Nav = ({menu, children, session, member}) => {
 
 
     return (
+
         <>
         <div className='border-bottom border-2 border-primary bg-white'
              style={{position: "relative", top: 0, width: "100%"}} id='navWrapper'>
@@ -188,48 +190,71 @@ const Nav = ({menu, children, session, member}) => {
                     </Col>
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                             <>
-                               <span>Hi!{member.name}</span>
+                               <span>Hi!{session.name}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>
                                 <Modal show={showLogin} onHide={handleCloseLogin}>
-                                    <Modal.Header>
-                                        <Modal.Title>로그인</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Form>
-                                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                                <Form.Control className="mb-3"
-                                                              type="email"
-                                                              value={email}
-                                                              placeholder="이메일"
-                                                              autoFocus
-                                                              onChange={e => handleInput(setEmail, e)}
-                                                />
-                                                <Form.Control className="mb-3"
-                                                              type="password"
-                                                              value={passwd}
-                                                              placeholder="비밀번호"
-                                                              autoFocus
-                                                              onChange={e => handleInput(setPasswd, e)}
-                                                />
-                                            </Form.Group>
-                                        </Form>
-                                    </Modal.Body>
-                                    <Modal.Footer>
-                                        {session?(<Button type="button" variant="primary" onClick={handleSignOut}>
-                                            로그아웃
-                                        </Button>):(<Button type="button" variant="primary" onClick={handlelogin}>
-                                            로그인
-                                        </Button>)}
-                                        <Button type="button" variant="primary" onClick={handlelogin}>
-                                            로그인
-                                        </Button>
-                                        <Button type="button" variant="secondary" onClick={handleShowJoin}>
-                                            회원가입
-                                        </Button>
-                                    </Modal.Footer>
+
+                                    {session? (<>
+                                        <Modal.Header>
+                                            <Modal.Title>안녕하세요</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <Form>
+                                                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                                    <div>{session.email}님</div>
+                                                </Form.Group>
+                                            </Form>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button type="button" variant="primary" onClick={handleSignOut}>
+                                                로그아웃
+                                            </Button>
+                                            <Button type="button" variant="secondary" onClick={handleShowJoin}>
+                                                회원가입
+                                            </Button>
+                                        </Modal.Footer>
+                                    </>) : (<>
+                                        <Modal.Header>
+                                            <Modal.Title>로그인</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <Form>
+                                                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                                                    <Form.Control className="mb-3"
+                                                                  type="email"
+                                                                  value={email}
+                                                                  placeholder="이메일"
+                                                                  autoFocus
+                                                                  onChange={e => handleInput(setEmail, e)}
+                                                    />
+                                                    <Form.Control className="mb-3"
+                                                                  type="password"
+                                                                  value={passwd}
+                                                                  placeholder="비밀번호"
+                                                                  autoFocus
+                                                                  onChange={e => handleInput(setPasswd, e)}
+                                                    />
+                                                </Form.Group>
+                                            </Form>
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button type="button" variant="primary" onClick={handlelogin}>
+                                                로그인
+                                            </Button>
+                                            <Button type="button" variant="secondary" onClick={handleShowJoin}>
+                                                회원가입
+                                            </Button>
+                                        </Modal.Footer>
+                                    </>)}
+
+
                                 </Modal>
+
+
+
+
                                 <Modal show={showJoin} onHide={handleCloseJoin}>
                                     <Modal.Header>
                                         <Modal.Title>회원가입</Modal.Title>
