@@ -12,7 +12,7 @@ export default NextAuth({
             id: "email-passwd-credentials",
             name: "email-passwd-credentials",
             credentials: {
-                name: { label: "이름", type: "name" },
+                name: { label: "이름", type: "text" },
                 email: { label: "이메일", type: "email" },
                 passwd: { label: "비밀번호", type: "password" }
             }, // 로그인 폼 정의
@@ -39,12 +39,15 @@ export default NextAuth({
                 // 인증에 성공해야만 로그인 허용
                 //if (email === 'abc123' && passwd === '987xyz') {
                 if (await is_ok) {
-                    console.log('auth login2222 - ', credentials);
+                    console.log('크리덴셜네임추가 전 - ', credentials);
+                    credentials.name = (await result).name;
+                    console.log('크리덴셜네임추가 후- ', credentials);
                     return credentials;
                 }
             }
         })
     ],
+    secret: process.env.SECRET,
     pages: { // 인증에 사용자 정의 로그인 페이지 사용
         signIn: '/layout/Nav'
     },
