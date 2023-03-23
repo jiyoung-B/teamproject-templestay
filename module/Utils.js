@@ -1,4 +1,3 @@
-import axios from "axios";
 import bcrypt from "bcryptjs";
 
 // 이하 날짜를 변환 하는 함수
@@ -64,7 +63,7 @@ const hashPassword = async (passwd) => {
     try {
         const salt = await bcrypt.genSalt(saltRounds);
         const hash = await bcrypt.hash(passwd, salt);
-        console.log('hashpwd - ', hash, passwd, salt);
+        console.log('hashpwd - ', hash);
 
         return hash;
     } catch (err) {
@@ -74,9 +73,10 @@ const hashPassword = async (passwd) => {
 
 // 암호 비교 함수 - 암호와 해시화된 암호를 비교
 const comparePasswd = async (passwd, hashpwd) => {
+    console.log('컴페어입력패스워드', await passwd)
+    console.log('컴페어입력해쉬pwd패스워드', await hashpwd)
     try {
-        const result = await bcrypt.compare(passwd, hashpwd);
-        return result;
+        return await bcrypt.compare(passwd, hashpwd);
     } catch (err) {
         console.log(err);
     }

@@ -5,8 +5,9 @@ let membersql = {
         ' values (?,?,?) ',
     isEmailsql : ' select count(mno) cnt from member ' +
         ' where email= ? ',
-    // loginsql : ' select count(mno) cnt, email from member where email= ? and passwd = ?',
-    loginsql : ' select email, passwd, name from member where email= ?',
+    // loginsql : ' select count(mno) cnt, email, passwd, name from member where email= ? and passwd = ?',
+     loginsql : ' select count(mno) cnt, email, passwd, name from member where email= ?',
+    //loginsql : ' select email, passwd, name from member where email= ?',
     // loginsql : ' select count(mno) cnt, name, email from member ' +
     //     ' where email= ? and passwd = ? ',
     selectOne: ' select mno, name, email, ' +
@@ -57,11 +58,15 @@ class Member {
         return result;
     }
 
-    async login(email, pwd) {  // 로그인 처리
+    async login(email, passwd) {  // 로그인 처리
         let conn = null;
-        let params = [email, pwd];
+        let params = [email, passwd];
         let result = -1;
         console.log('로그인 api진입')
+        console.log('[파람스]', params)
+        console.log('[파람스이메일]', email)
+        console.log('[파람스pwd]', await passwd)
+
 
         try {
             conn = await mariadb.makeConn();
