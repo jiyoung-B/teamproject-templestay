@@ -1,9 +1,9 @@
 import PreBook from "../../module/PreBook";
 
 export default async (req, res) => {
-    let {userid}  = req.query
+    let {email}  = req.query
     try {
-        let del = await new PreBook().Delete(userid).then(result => result)
+        let del = await new PreBook().Delete(email).then(result => result)
 
         res.status(200).json(del);
     } catch (err) {

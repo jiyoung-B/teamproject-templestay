@@ -15,8 +15,9 @@ import {getSession, session} from "next-auth/client";
 
 
 export async function getServerSideProps(ctx) {
+    // null을 반환한다.
     const sess = await getSession(ctx);
-    let email = sess.user.email;
+
 
     let {pid} = ctx.query
 
@@ -32,11 +33,13 @@ export async function getServerSideProps(ctx) {
 }
 
 
-export default function Program ({proData}) {
+export default function Program ({proData,session}) {
     const unit = 28
     let PID = proData[6]
+    // 세션은 존재한다.
+    // console.log('세션이 있는가?',session)
 
-
+    let sessEmail = session.user.email
 
 
 
@@ -118,84 +121,71 @@ export default function Program ({proData}) {
         setSelectedOptions((prevSelectedOptions) => {
             const newSelectedOptions = {...prevSelectedOptions};
 
+            // 만약 선택박스 맨 위 '성인' 부분을 선택했을 때, 0으로 변경해주는 부분
             isNaN(selectedValue) ? newSelectedOptions[clas] = 0 : newSelectedOptions[clas] = selectedValue;
 
             return newSelectedOptions;
         });
     }
 
-    const [reservInfo, setReservInfo] = useState({userId:'test', reservInfo :{pid:PID, people: {"성인":[0,0],"중고생":[0,0],"초등생":[0,0],"미취학":[0,0]}, dates:[]}})
 
-    // handelReserve안에서 작동하는 함수 /api/preBook 에 post 요청을 한다.
-    const process_reservation = async (data) => {
 
-        // json 형식으로 전처리
-        let preReservationDate = [
-            {userId:data.userId},{PID:data.reservInfo.pid},{strDate:data.reservInfo.dates[0]},
-            {endDate: (data.reservInfo.dates[1] === null) ? data.reservInfo.dates[0] : data.reservInfo.dates[1]},
-            {adult: (data.reservInfo.people["성인"][0] === null) ? 0 : Number(data.reservInfo.people["성인"][0])},
-            {middle: (data.reservInfo.people["중고생"][0] === null) ? 0 : Number(data.reservInfo.people["중고생"][0])},
-            {young:(data.reservInfo.people["초등생"][0] === null) ? 0 : Number(data.reservInfo.people["초등생"][0])},
-            {preschool:(data.reservInfo.people["미취학"][0] === null) ? 0 : Number(data.reservInfo.people["미취학"][0])}
-        ]
+    // 전 처리 부분
+    // strDate, endDate 결정
+    let B_strDate = milliFomatter(startDate)
+    let B_endDate = dateFomatter(endDate)
 
-        const cnt = fetch('/api/preBook', {
-            method: 'POST', mode: 'cors',
-            body: JSON.stringify(preReservationDate),
-            headers: {'Content-Type': 'application/json'}
-        }).then(res => res.json());
-        let result = false;
-        if(await cnt.cnt >0) result = true
-        return result;
+    if (B_endDate === null) {
+        B_endDate = B_strDate
     }
-    console.log(session())
-    console.log('세션', session())
 
+    // adult, middle,young,prescholl 선택 인원 추가.
+    let adult = selectedOptions["성인"]
+    let middle = selectedOptions["중고생"]
+    let young = selectedOptions["초등생"]
+    let preschool = selectedOptions["미취학"]
+
+    let inputData = []
     // 예약 버튼을 눌렀을 때 작동
     const handleReserve = async () => {
         // 클릭시 버튼 비활성화
         setIsSubmitting(true)
 
-        setReservInfo((prevReservInfo) => {
-            const newReservInfo = {...prevReservInfo}
+        async function bookOne () {
+            inputData.push({email: 'test'})
+            inputData.push({PID:PID})
+            inputData.push({strDate:B_strDate})
+            inputData.push({endDate:B_endDate})
+            inputData.push({adult:Number(adult)})
+            inputData.push({middle:Number(middle)})
+            inputData.push({young:Number(young)})
+            inputData.push({preschool:Number(preschool)})
 
-            // people 객체에 입력값 전달 및 단위별 합계액 전달 부분. ex) 성인 : [수, 합계액]
-            proData[2].map((clas) => {
-                let sumPrice = selectedOptions[clas.PR_CLASS] * clas.PRICE
-                newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[clas.PR_CLASS] === undefined) ? null : selectedOptions[clas.PR_CLASS], isNaN(sumPrice) ? 0 : sumPrice]
-            })
-            setTotal(Number(newReservInfo.reservInfo.people["성인"][0])+Number(newReservInfo.reservInfo.people["중고생"][0])+Number(newReservInfo.reservInfo.people["초등생"][0])+Number(newReservInfo.reservInfo.people["미취학"][0]))
 
-            // 현재 일정을 선택하지 않으면, 다음날이 시작 날짜로 지정되고 있다.
-            // 일정을 선택하지 않으면 화면에 일정 표시가 되지 않는다.
-            // 선택하지 않으면 일정을 선택하세요! 라는 경고 문구가 등장하게 해야 한다.
-            let B_strDate = milliFomatter(startDate)
-            let B_endDate = dateFomatter(endDate)
+            return inputData
+        }
 
-            if (B_endDate === null) {
-                B_endDate = B_strDate
+        const process_reservation = async (inputData) => {
+
+            const cnt = await fetch('/api/preBook', {
+                method: 'POST', mode: 'cors',
+                body: JSON.stringify(inputData),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json());
+            let result = false;
+            if(await cnt.cnt >0) result = true
+
+            return {result,inputData};
+        }
+
+        async function redirect (result,inputData) {
+            let email = inputData[0].email
+            if(result) {
+                location.href = `/preBook?email=${email}`
             }
+        }
+        bookOne().then(process_reservation).then(({result, inputData}) => redirect(result,inputData))
 
-            newReservInfo.reservInfo.dates = [B_strDate,B_endDate]
-
-            // sum 계산 단위별 합계액 합산하여, 총액을 구한다.
-            let sum = 0;
-            for (let key in newReservInfo.reservInfo.people) {
-                sum += newReservInfo.reservInfo.people[key][1];
-            }
-
-            // sum에 합계를 전달함.
-            newReservInfo.reservInfo.sum = sum
-
-            // api를 통해 db로 전달. 행이 추가되면 true를 리턴하고, url을 preBook 페이지로 변경 보낸다.
-            if(total === 0) {
-                setIsSubmitting(false)
-            } else if (process_reservation(newReservInfo)) {
-                location.href = `/preBook?userid=${newReservInfo.userId}`;
-            }
-
-            return newReservInfo
-        })
     }
 
     return(
