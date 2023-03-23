@@ -34,6 +34,11 @@
 .likesncom {
     padding-top: 10px;
 }
+.likesncom > div:nth-child(2) {
+    display: flex;
+    justify-content: right;
+    align-items: flex-start;
+}
 
 .tpl {
     margin-bottom: 3%;
@@ -57,6 +62,8 @@
 .combtn {
     border: 1px solid #331904 !important;
     background-color: #331904 !important;
+    display: flex !important;
+    justify-content: right !important;
 }
 .combtn:active {
     border: 1px solid #984C0C !important;

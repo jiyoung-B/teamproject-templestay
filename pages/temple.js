@@ -5,7 +5,8 @@ import {useEffect} from "react";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
 import shortid from "shortid";
-import {handleImgError} from "../module/Util";
+import {handleImgError} from "../module/Utils";
+import {HiBadgeCheck} from "react-icons/hi";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,
 // 빈 화면이 표시 될 수 있다.
@@ -156,13 +157,14 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                         <Row>
                             {
                                 distinctProPic.map((program)=>(
-                                <Col md={4} className={pid === program.PID ? 'border border-2 border-danger' : ''} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
+                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
-                                        <Card.Img variant="top" src={program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
-                                        <Card.Body key={shortid.generate()}>
+                                        <Card.Img variant="top" src={(program.P_PICLINK.length < 40) ? 'https://www.templestay.com/images/templeinfo-00.jpg' : program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
+                                        <Card.Body className={'bg-light'} key={shortid.generate()}>
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>{program.P_NAME}
                                             </Card.Title>
                                             <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
+                                            <span> {(pid === program.PID) ? <HiBadgeCheck className={'fs-1 text-success'}/> : ''}</span>
                                         </Card.Body>
                                     </Card>
                                 </Col>
