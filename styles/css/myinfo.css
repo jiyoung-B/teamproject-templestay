@@ -49,8 +49,19 @@
     margin-bottom: 3%;
 }
 .bkinfo > div:nth-child(1) {
-    border: 2px solid #984C0C;
-    border-radius: 12px;
     min-height: 150px;
     text-align: left;
+}
+
+.bkdtb {   /* 예약 테이블 */
+    border: 1px solid #331904 !important;
+    color: #331904 !important;
+}
+
+.bkdtb th {
+    width: 15% !important;
+    text-align: center;
+}
+.bkdtb td {
+    width: 30% !important;
 }
