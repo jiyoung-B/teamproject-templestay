@@ -44,8 +44,8 @@ export async function getServerSideProps(ctx) {
 }
 
 const MyinfoCommon = ({member, session}) => {
-    console.log('myinfo - ', session);
-    console.log('myinfo멤버 - ', member);
+    console.log('마이커먼 인포 - ', session);
+    console.log('마이커먼인포 멤버 - ', member);
 
         return(
         <div>

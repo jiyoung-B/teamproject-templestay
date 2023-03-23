@@ -9,7 +9,7 @@ import {getSession} from "next-auth/client";
 
 
 
-const Header = ({ children, pathname, menu, session }) => {
+const Header = ({ children, pathname, menu, member, session }) => {
     const user = session.user;
     //const user = children.props.session.user;
     console.log('헤더'+user);
@@ -61,7 +61,7 @@ const Header = ({ children, pathname, menu, session }) => {
                     </div>
                 </div>
                 <div className={showIntro ? "" : "fixed-top"}>
-                    <Nav menu={menu} session={session} sess={user.name}/>
+                    <Nav menu={menu} member={member} session={session} sess={user.name} children={children}/>
                 </div>
             </div>)}
             </>
