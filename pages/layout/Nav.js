@@ -16,24 +16,21 @@ export async function getServerSideProps(ctx) {
 
     // 세션 객체 가져오기
     const sess = await getSession(ctx);
-    let email = sess?.user?.email;
-    let url = email ? `http://localhost:3000/api/member/myinfo?email=${email}`:'';
+    let email = sess.user.email; // 로그인한 사용자 아이디
+    let url = `http://localhost:3000/api/member/myinfo?email=${email}`;
 
-    if(url){
     const res = await axios.get(url);
     const member = await res.data[0];
-    console.log('pg myinfo Nav : ', await member);
+    console.log('nav info : ', await member);
 
     return {props : {member: member, session: sess}}
-    } else {
-        return {props : {session: null}};
-    }
 }
 
 
 
-const Nav = ({menu, member, session}) => {
-    console.log('nav - ', session);
+const Nav = ({menu, member, children, session}) => {
+    console.log('nav session- ', session);
+    console.log('nav member- ', member);
     const [passwd2, setPasswd2,] = useState('');
     const [repasswd, setRepasswd] = useState('');
     const [name, setName] = useState('');
@@ -96,6 +93,13 @@ const Nav = ({menu, member, session}) => {
 
 
      };
+    const handleSignOut = async () => {
+            await signOut();
+            alert('로그아웃 완료')
+            location.href = '/'
+
+    }
+
 
 
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
@@ -175,6 +179,7 @@ const Nav = ({menu, member, session}) => {
                     <Col md={{ span: 1 }} style={{textAlign: "center"}}>
                             <>
                                <span>Hi!{session.user.email}</span>
+                               {/*<span>Hi!{member.name}</span>*/}
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>
@@ -203,9 +208,11 @@ const Nav = ({menu, member, session}) => {
                                         </Form>
                                     </Modal.Body>
                                     <Modal.Footer>
-                                        <Button type="button" variant="primary" onClick={handlelogin}>
+                                        {session?(<Button type="button" variant="primary" onClick={handleSignOut}>
+                                            로그아웃
+                                        </Button>):(<Button type="button" variant="primary" onClick={handlelogin}>
                                             로그인
-                                        </Button>
+                                        </Button>)}
                                         <Button type="button" variant="secondary" onClick={handleShowJoin}>
                                             회원가입
                                         </Button>
