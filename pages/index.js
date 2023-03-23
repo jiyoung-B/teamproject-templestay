@@ -126,37 +126,37 @@ export default function Home({searchInfo, session}) {
                                                 <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
                                                         <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
                                                                 <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
-                                                                        <div style={{width:'100%',borderRadius: '50%',overflow:'hidden'}}>
+                                                                        <div style={{width:'100%',borderRadius: '50%',overflow:'hidden'}} key={shortid.generate()}>
                                                                                 <img src={program.P_PICLINK} alt="프로그램 이미지" className={"rounded"} style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
                                                                         </div>
                                                                 </Col>
                                                                 <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
-                                                                        <Row style={{height:'140px'}}>
-                                                                                <Col>
-                                                                                        <Row>
+                                                                        <Row style={{height:'140px'}} key={shortid.generate()}>
+                                                                                <Col key={shortid.generate()}>
+                                                                                        <Row key={shortid.generate()}>
                                                                                                 <p className={"mb-0 pb-3 text-secondary text-center fw-bold fs-5"} key={shortid.generate()}>{program.P_NAME.substring(0, program.P_NAME.indexOf("[")) + program.P_NAME.substring(program.P_NAME.indexOf("]") + 1)}</p>
                                                                                         </Row>
-                                                                                        <Row className={"pb-2"}>
-                                                                                                <Col md={6}>
+                                                                                        <Row className={"pb-2"} key={shortid.generate()}>
+                                                                                                <Col md={6} key={shortid.generate()}>
                                                                                                         <p className={"mb-0 fw-semibold text-primary text-center fs-6"} key={shortid.generate()}>{program.T_NAME}</p>
                                                                                                 </Col>
-                                                                                                <Col md={6}>
+                                                                                                <Col md={6} key={shortid.generate()}>
                                                                                                         <p className={"mb-0 text-start"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
                                                                                                 </Col>
                                                                                         </Row>
-                                                                                        <Row>
+                                                                                        <Row key={shortid.generate()}>
                                                                                                 <p className={"mb-0 text-center ADDR"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.ADDR}</p>
                                                                                         </Row>
                                                                                 </Col>
                                                                         </Row>
-                                                                        <Row>
-                                                                                <Col>{ (program.E_PICKTF === 1) ?
-                                                                                    <p className={'text-start ps-5'}>
+                                                                        <Row key={shortid.generate()}>
+                                                                                <Col key={shortid.generate()}>{ (program.E_PICKTF === 1) ?
+                                                                                    <p className={'text-start ps-5'} key={shortid.generate()}>
                                                                                                 <AiFillLike
-                                                                                                    className={"text-success fs-3"}/></p> : <p></p> }
+                                                                                                    className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                                 </Col>
-                                                                                <Col>
-                                                                                        <p className={'text-end pe-5'}><FcLikePlaceholder className={"text-danger fs-3"} /></p>
+                                                                                <Col key={shortid.generate()}>
+                                                                                        <p className={'text-end pe-5'}><FcLikePlaceholder className={"text-danger fs-3"} key={shortid.generate()} /></p>
                                                                                 </Col>
                                                                         </Row>
 
@@ -175,7 +175,7 @@ export default function Home({searchInfo, session}) {
                                           }
                                 </Col>
                                 <Col>
-                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"9999"}}></div>
+                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"1"}}></div>
                                 </Col>
                         </Row>
 

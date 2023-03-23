@@ -24,6 +24,10 @@ export default function preBook ({preBookInfo}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    console.log('여기선 몇번?1')
+
+    preBookInfo.TOTAL = preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1];
+    let email = preBookInfo.email
 
     const handleBook = async () => {
 
@@ -31,7 +35,7 @@ export default function preBook ({preBookInfo}) {
         setIsSubmitting(true);
 
         // Book테이블에 데이터를 삽입하는 과정
-        preBookInfo.TOTAL = preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1];
+
         let bookInsert = [preBookInfo]
 
             let cnt = await fetch('/api/bookInsert', {
@@ -39,12 +43,15 @@ export default function preBook ({preBookInfo}) {
             body: JSON.stringify(bookInsert),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json());
+       if(cnt > 0) {
+           // preBook테이블에 데이터를 삭제하는 과정
+           let param = `?email=${email}`
+           let del = await fetch('api/preBookDelete'+param)
 
-        let param = `?email=${preBookInfo.email}`
-        // preBook테이블에 데이터를 삭제하는 과정
-        let del = await fetch('api/preBookDelete'+param)
+           location.href = '/'
+       }
 
-        // location.href = '/'
+
     };
 
     const cancelBook = async () => {
