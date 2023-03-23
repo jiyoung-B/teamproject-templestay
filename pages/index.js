@@ -10,9 +10,11 @@ import axios from "axios";
 import shortid from 'shortid'
 import * as PropTypes from "prop-types";
 import Myinfo from "./myinfo";
+import {FcLikePlaceholder} from "react-icons/fc";
+import {AiFillLike} from "react-icons/ai";
 
 export async function getServerSideProps(ctx) {
-        let {lid ,str,end} = ctx.query
+        let {lid ,str = '2023-03-30',end} = ctx.query
         if(lid === undefined) lid = null;
         if(str === undefined) str = null;
         if(end === undefined) end = null;
@@ -92,7 +94,7 @@ export default function Home({searchInfo}) {
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
-                        <Row className={'fixed-top'}>
+                        <Row className={''}>
                                 <Col>
                                         <Link href={"/?lid=인천"}>인천</Link>
                                         <Link href={"/?lid=서울"}>서울</Link>
@@ -116,23 +118,49 @@ export default function Home({searchInfo}) {
                                 </Col>
 
                         </Row>
-                        <Row className="likeslist tpl align-top" style={{paddingTop:'130px',zIndex:"9999", backgroundColor:'white'}}>
+                        <Row className="likeslist tpl align-top">
                                 <Col>
                                         { (searchInfo.length > 0 ) ? (      searchInfo.map((program) => (
 
                                                 <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
-                                                        <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '150px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                                <Col key={shortid.generate()}>
-                                                                        <img src={program.P_PICLINK} alt="프로그램 이미지" className={""} style={{width: '100%', height:'135px',paddingTop:'9px'}} key={shortid.generate()}/>
+                                                        <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
+                                                                <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
+                                                                        <div style={{width:'100%',borderRadius: '50%',overflow:'hidden'}}>
+                                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" className={"rounded"} style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                        </div>
                                                                 </Col>
-                                                                <Col key={shortid.generate()}>
-                                                                        <p className={"text-center fs-6 ADDR"} key={shortid.generate()}>{program.ADDR}</p>
-                                                                </Col>
-                                                                <Col key={shortid.generate()}>
-                                                                        <p className={"text-center  fs-6"} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
-                                                                </Col>
-                                                                <Col key={shortid.generate()}>
-                                                                        <p className={"text-center  fs-6"} key={shortid.generate()}>{program.P_NAME}</p>
+                                                                <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
+                                                                        <Row style={{height:'140px'}}>
+                                                                                <Col>
+                                                                                        <Row>
+                                                                                                <p className={"mb-0 pb-3 text-secondary text-center fw-bold fs-5"} key={shortid.generate()}>{program.P_NAME.substring(0, program.P_NAME.indexOf("[")) + program.P_NAME.substring(program.P_NAME.indexOf("]") + 1)}</p>
+                                                                                        </Row>
+                                                                                        <Row className={"pb-2"}>
+                                                                                                <Col md={6}>
+                                                                                                        <p className={"mb-0 fw-semibold text-primary text-center fs-6"} key={shortid.generate()}>{program.T_NAME}</p>
+                                                                                                </Col>
+                                                                                                <Col md={6}>
+                                                                                                        <p className={"mb-0 text-start"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
+                                                                                                </Col>
+                                                                                        </Row>
+                                                                                        <Row>
+                                                                                                <p className={"mb-0 text-center ADDR"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.ADDR}</p>
+                                                                                        </Row>
+                                                                                </Col>
+                                                                        </Row>
+                                                                        <Row>
+                                                                                <Col>{ (program.E_PICKTF === 1) ?
+                                                                                    <p className={'text-start ps-5'}>
+                                                                                                <AiFillLike
+                                                                                                    className={"text-success fs-3"}/></p> : <p></p> }
+                                                                                </Col>
+                                                                                <Col>
+                                                                                        <p className={'text-end pe-5'}><FcLikePlaceholder className={"text-danger fs-3"} /></p>
+                                                                                </Col>
+                                                                        </Row>
+
+
+
                                                                 </Col>
                                                         </Row>
                                                 </Link>

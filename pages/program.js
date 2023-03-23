@@ -34,16 +34,51 @@ export default function Program ({proData}) {
     const unit = 28
     let PID = proData[6]
 
+
+
+
+
     // 예약하기 버튼 비활성화 state
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // 내일의 날짜를 구하기
+    // 내일의 날짜를 구하기 (선택 가능 날짜.)
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
+
 
     // state 보여주는 부분
     const [startDate, setStartDate] = useState(tomorrow);
     let [endDate, setEndDate] = useState(null);
 
+    // 프로그램 종료 날짜 생성
+    let P_endDate = proData[0][0].P_ENDDATE
+    let transDate = P_endDate.slice(0,10)
+    P_endDate = new Date(transDate)
+
+    // 경과일을 숫자로 입력하면 밀리초로 바꿔주는 함수
+    // function milliTransfer (date) {
+    //     let result;
+    //     try{
+    //         result = Number(date)*24*60*60*1000
+    //     } catch(e) {
+    //         console.log(e)
+    //     }
+    //     return result
+    // }
+
+    // 주의 사항에서 예약 가능 기간을 추출하는 부분. 데이터에는 ~박 으로 나와 있으므로, 하루를 더하여 기간으로 바꾼다.
+    // const str = proData[0][0].P_CAUTION;
+    // const start = str.indexOf('~ ') + 2;
+    // const end = str.indexOf('박', start);
+    // const result = Number(str.substring(start, end));
+    // let date = result +1
+    //
+    // let prevBookEndDate = milliFomatter(milliTransfer(date)+Number(startDate))
+    //
+    // let bookEndDate = endDate
+    // // 종료날짜를 결정하는 부분
+    // if(endDate > prevBookEndDate) {
+    //     bookEndDate = prevBookEndDate
+    // }
 
     // 모달 on/off 해주는 함수
     const [show, setShow] = useState(false);
@@ -220,6 +255,7 @@ export default function Program ({proData}) {
                                             startDate={startDate}
                                             endDate={endDate}
                                             minDate={tomorrow}
+                                            maxDate={P_endDate}
                                             monthsShown={2}
                                             selectsRange
                                             dateFormat="yyyy-mm-dd"
@@ -320,7 +356,7 @@ export default function Program ({proData}) {
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={11}>
-                            <span className={'fs-3 me-3 text-primary'}>참가비용</span> <span className={'ms-5 text-danger'}>{proData[0][0].P_CAUTION}</span>
+                            <span className={'fs-3 me-3 text-primary'}>참가비용</span> {/*<span className={'ms-5 text-danger'}>{proData[0][0].P_CAUTION}</span>*/}
                             <div className={'mt-2'} id={'priceTableContainer'}>
                                 <Table striped bordered hover>
                                     <thead>
@@ -345,7 +381,7 @@ export default function Program ({proData}) {
                     </Row>
                 </Container>
                 <Container>
-                    <div>
+                    <div className={'d-flex justify-content-end'}>
                         <Button
                             onClick={handleReserve}
                             disabled={isSubmitting}
