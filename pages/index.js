@@ -20,7 +20,12 @@ export async function getServerSideProps(ctx) {
         if(str === undefined) str = null;
         if(end === undefined) end = null;
         let sess = await getSession(ctx);
-        console.log('index 세션 -',sess);
+
+        // 세션 여부에 따라 email 값 분기
+        let email;
+        (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
+
+        console.log('index email확인',email);
 
         // param 선언
         let param = `?lid=${lid}&str=${str}&end=${end}`
@@ -97,7 +102,7 @@ export default function Home({searchInfo, session}) {
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
-                        <h1>당신의 이메일: {session.user.email}</h1>
+                        {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
                         <Row  style={{height: '100px',zIndex:'0'}} className={'fixed-top'}>
                                 <Col>
                                         <Link href={"/?lid=인천"}>인천</Link>
