@@ -66,7 +66,9 @@ const Intro = ({edPicks}) => {
                             <h1 className="fw-bold text-secondary ps-4 mt-3" id="programTitle" >에디터픽</h1>
                             <Col className="offset-2" style={{maxHeight : "500px"}}>
                                 <div className="row align-items-center mt-10" style={{ display: "flex", overflowX: "scroll", scrollSnapType: "x mandatory" }}>
+                                    <Carousel cols={3} rows={1} gap={7} loop autoplay={3000}>
                                         {edPicks.map(ep => (
+                                        <Carousel.Item interval={1000} >
                                         <div key={ep.PID} className="col" style={{width: "300px", Height: "300px"}}>
                                             <NavLink href={`/program?pid=${ep.PID}`}>
                                                 <CardGroup style={{width: "300px", height: "300px"}}>
@@ -84,9 +86,10 @@ const Intro = ({edPicks}) => {
                                                 </CardGroup>
                                            </NavLink>
                                             </div>
+                                        </Carousel.Item>
                                         ))}
+                                    </Carousel>
                                     </div>
-
                             </Col>
                         </Row>
                     </Col>
@@ -100,4 +103,5 @@ const Intro = ({edPicks}) => {
         </>
     )
 };
+
 export default Intro
