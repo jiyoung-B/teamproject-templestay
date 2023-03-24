@@ -1,90 +1,58 @@
 export const temples = [
     {
         name: "11사",
-        location: "장소1 - 합정 메세나폴리스",
-        day: "날짜1",
+        location: "서울특별시 마포구 서교동 양화로 45",
         program: "프로그램1",
-        number: 1,
         price: 10000,
-        details: "상세정보1",
-        lat: 37.55093934971679,
-        lng: 126.91376993239895
+        details: "상세정보1"
     },
     {
         name: "22사",
-        location: '장소2 - 남한 최북단',
-        day: '날짜2',
+        location: '강원도 고성군 현내면 송도진리 213',
         program: '프로그램2',
-        number: 2,
         price: 20000,
-        details: "상세정보2",
-        lat: 38.61232872301094,
-        lng: 128.35530930033244
+        details: "상세정보2"
     },
     {
         name: "33사",
-        location: '장소3 - 평창 버스터미널',
-        day: '날짜3',
+        location: '강원도 강릉시 하슬라로 15',
         program: '프로그램3',
-        number: 3,
         price: 30000,
-        details: "상세정보3",
-        lat: 37.36645283866851,
-        lng: 128.3933480829004
+        details: "상세정보3"
     },
     {
         name: "44사",
-        location: '장소4 - 경북대학교 대구캠퍼스',
-        day: '날짜4',
+        location: '대구광역시 북구 대학로 80',
         program: '프로그램4',
-        number: 4,
         price: 40000,
-        details: "상세정보4",
-        lat: 35.89067504759844,
-        lng: 128.6122075051451
+        details: "상세정보4"
     },
     {
         name: "55사",
-        location: '장소5 - 세종시 시청',
-        day: '날짜5',
+        location: '대전광역시 중구 문화로 282',
         program: '프로그램5',
-        number: 5,
         price: 50000,
-        details: "상세정보5",
-        lat: 36.4800722828353,
-        lng: 127.2891283985598
+        details: "상세정보5"
     },
     {
         name: "66사",
-        location: '장소6 - 제주 공항',
-        day: '날짜6',
+        location: '제주특별자치도 제주시 공항로 2',
         program: '프로그램6',
-        number: 6,
         price: 60000,
-        details: "상세정보6",
-        lat: 33.507143500555294,
-        lng: 126.4926782238023
+        details: "상세정보6"
     },
     {
         name: "77사",
-        location: '장소7 - 영등포 타임스퀘어',
-        day: '날짜7',
+        location: '서울특별시 영등포구 영중로 15',
         program: '프로그램7',
-        number: 7,
         price: 70000,
-        details: "상세정보7",
-        lat: 37.51712774863294,
-        lng: 126.90306008319743
+        details: "상세정보7"
     },
     {
         name: "88사",
-        location: '장소8 - 울릉 군청',
-        day: '날짜8',
+        location: '경상북도 울릉군 울릉읍 도동2길 66',
         program: '프로그램8',
-        number: 8,
         price: 80000,
-        details: "상세정보8",
-        lat: 37.4844415929913,
-        lng: 130.905712808465
+        details: "상세정보8"
     }
 ];
