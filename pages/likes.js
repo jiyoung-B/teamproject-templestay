@@ -221,6 +221,7 @@ export default function Likes ({member, session}) {
                     <TbCircleNumber1 lat={marker1lat} lng={marker1lng} text={"Point 1"} size="30" color="#984C0C" />
                     <TbCircleNumber2 lat={marker2lat} lng={marker2lng} text={"Point 2"} size="30" color="#984C0C" />
                 </GoogleMapReact>
+
             );
         }
     }   // 구글맵1 끝
