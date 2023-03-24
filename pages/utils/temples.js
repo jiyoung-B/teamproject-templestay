@@ -64,5 +64,27 @@ export const temples = [
         details: "상세정보6",
         lat: 33.507143500555294,
         lng: 126.4926782238023
+    },
+    {
+        name: "77사",
+        location: '장소7 - 영등포 타임스퀘어',
+        day: '날짜7',
+        program: '프로그램7',
+        number: 7,
+        price: 70000,
+        details: "상세정보7",
+        lat: 37.51712774863294,
+        lng: 126.90306008319743
+    },
+    {
+        name: "88사",
+        location: '장소8 - 울릉 군청',
+        day: '날짜8',
+        program: '프로그램8',
+        number: 8,
+        price: 80000,
+        details: "상세정보8",
+        lat: 37.4844415929913,
+        lng: 130.905712808465
     }
 ];
