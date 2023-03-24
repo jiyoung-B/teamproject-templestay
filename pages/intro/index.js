@@ -60,8 +60,6 @@ const Intro = ({edPicks}) => {
                     </Col>
                 </Row>
 
-                <div style={{width: "300px", minWidth: "300px"}}>에디터픽</div>
-
                 <Row style={{marginTop:'160px'}}>
                     <Col className="offset-1 editorpick">
                         <Row className="pt-5">

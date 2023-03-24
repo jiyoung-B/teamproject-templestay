@@ -15,8 +15,9 @@ import {getSession, session} from "next-auth/client";
 
 
 export async function getServerSideProps(ctx) {
+    // null을 반환한다.
     const sess = await getSession(ctx);
-    let email = sess.user.email;
+
 
     let {pid} = ctx.query
 
@@ -24,7 +25,6 @@ export async function getServerSideProps(ctx) {
     let url = `http://localhost:3000/api/program${param}`
 
     const res = await axios.get(url)
-
     let proData = await res.data;
 
     proData.push(pid)
@@ -32,31 +32,63 @@ export async function getServerSideProps(ctx) {
     return {props:{proData}}
 }
 
-// const tomorrow = new Date().setDate(new Date().getDate() + 1);
-// let check = milliFomatter(tomorrow) // 확인 결과 tomorrow는 변환했을 때 내일을 가르킨다.
-// console.log(check)
 
-export default function Program ({proData}) {
+export default function Program ({proData,session}) {
     const unit = 28
     let PID = proData[6]
+    // 세션은 존재한다.
+    // console.log('세션이 있는가?',session)
+
+    let sessEmail = session.email
+
+
 
     // 예약하기 버튼 비활성화 state
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // 내일의 날짜를 구하기
+    // 내일의 날짜를 구하기 (선택 가능 날짜.)
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
+
 
     // state 보여주는 부분
     const [startDate, setStartDate] = useState(tomorrow);
     let [endDate, setEndDate] = useState(null);
 
+    // 프로그램 종료 날짜 생성
+    let P_endDate = proData[0][0].P_ENDDATE
+    let transDate = P_endDate.slice(0,10)
+    P_endDate = new Date(transDate)
+
+    // 경과일을 숫자로 입력하면 밀리초로 바꿔주는 함수
+    // function milliTransfer (date) {
+    //     let result;
+    //     try{
+    //         result = Number(date)*24*60*60*1000
+    //     } catch(e) {
+    //         console.log(e)
+    //     }
+    //     return result
+    // }
+
+    // 주의 사항에서 예약 가능 기간을 추출하는 부분. 데이터에는 ~박 으로 나와 있으므로, 하루를 더하여 기간으로 바꾼다.
+    // const str = proData[0][0].P_CAUTION;
+    // const start = str.indexOf('~ ') + 2;
+    // const end = str.indexOf('박', start);
+    // const result = Number(str.substring(start, end));
+    // let date = result +1
+    //
+    // let prevBookEndDate = milliFomatter(milliTransfer(date)+Number(startDate))
+    //
+    // let bookEndDate = endDate
+    // // 종료날짜를 결정하는 부분
+    // if(endDate > prevBookEndDate) {
+    //     bookEndDate = prevBookEndDate
+    // }
 
     // 모달 on/off 해주는 함수
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
-
-
 
     //날짜가 선택되면 state를 변경해주는 함수
     const onChange = (dates) => {
@@ -79,118 +111,93 @@ export default function Program ({proData}) {
     }
     const handleShow2 = () => setShow2(true);
 
-    // 선택 인원 관리 함수
-    // 선택 가능 옵션의 종류는 동적으로 결정된다.
-    // 이 스테이트에는 선택한 순서대로 저장된다.
-    // 좀 이상한 것 같다.
-    // 그동안 나는 설사 등장하지 않는 경우가 있더라도, 성인, 중고생, 초등생, 미취학 순으로 반드시 존재한다고 생각했고, 어떤 경우에도 성인은 포함된다고 생각했다.
-    // 하지만 살펴보니 성인이 없고 오직 중고생만 있는 경우가 있었다.
-    // 이 경우엔 배열의 첫번째 요소가 반드시 성인이라고 보장할 수 없다.
     const [selectedOptions, setSelectedOptions] = useState({"성인": 0,"중고생":0,"초등생":0,"미취학":0});
-    console.log(selectedOptions["성인"])
-
-
 
     // 총원을 계산 하는 state
     const [total,setTotal] = useState(0)
-    console.log(total)
-        // 예약정보에 키 추가.
-        // 일단 객체로 만들었을때 값이 잘 들어오는 것을 일단 확인하였다.
-        // 이제 선택지의 개수를 다르게 해보며 값을 확인한다.
-        // 테스트 리스트를 뽑는다.
-        // 4개 - 19326
-        // 3개 - 16622
-        // 중학생만 있는 곳을 찾을 수가 없다. 일단 넘어가 본다.
+
     const handleSelectChange = (e, clas) => {
         const selectedValue = e.target.value;
         setSelectedOptions((prevSelectedOptions) => {
             const newSelectedOptions = {...prevSelectedOptions};
 
+            // 만약 선택박스 맨 위 '성인' 부분을 선택했을 때, 0으로 변경해주는 부분
             isNaN(selectedValue) ? newSelectedOptions[clas] = 0 : newSelectedOptions[clas] = selectedValue;
 
             return newSelectedOptions;
         });
     }
 
-    // reservInfo의 기본값에 PID를 넣었다.
-    // 예약 객체를 state로 관리 하였다.
-    // 이유는 만약 사용자가 선택을 바꿀 경우 내용이 바뀌어야 하기 때문이다.
-    const [reservInfo, setReservInfo] = useState({userId:'test', reservInfo :{pid:PID, people: {"성인":[0,0],"중고생":[0,0],"초등생":[0,0],"미취학":[0,0]}, dates:[]}})
 
 
+    // 전 처리 부분
+    // strDate, endDate 결정
+    let B_strDate = milliFomatter(startDate)
+    let B_endDate = dateFomatter(endDate)
 
-    // handelReserve안에서 작동하는 함수 /api/preBook 에 post 요청을 한다.
-    const process_reservation = async (data) => {
-
-        // json 형식으로 전처리
-        let preReservationDate = [
-            {userId:data.userId},{PID:data.reservInfo.pid},{strDate:data.reservInfo.dates[0]},
-            {endDate: (data.reservInfo.dates[1] === null) ? data.reservInfo.dates[0] : data.reservInfo.dates[1]},
-            {adult: (data.reservInfo.people["성인"][0] === null) ? 0 : Number(data.reservInfo.people["성인"][0])},
-            {middle: (data.reservInfo.people["중고생"][0] === null) ? 0 : Number(data.reservInfo.people["중고생"][0])},
-            {young:(data.reservInfo.people["초등생"][0] === null) ? 0 : Number(data.reservInfo.people["초등생"][0])},
-            {preschool:(data.reservInfo.people["미취학"][0] === null) ? 0 : Number(data.reservInfo.people["미취학"][0])}
-        ]
-
-        const cnt = fetch('/api/preBook', {
-            method: 'POST', mode: 'cors',
-            body: JSON.stringify(preReservationDate),
-            headers: {'Content-Type': 'application/json'}
-        }).then(res => res.json());
-        let result = false;
-        if(await cnt.cnt >0) result = true
-        return result;
+    if (B_endDate === null) {
+        B_endDate = B_strDate
     }
-    console.log(session())
-    console.log('세션', session())
 
+    // adult, middle,young,prescholl 선택 인원 추가.
+    let adult = selectedOptions["성인"]
+    let middle = selectedOptions["중고생"]
+    let young = selectedOptions["초등생"]
+    let preschool = selectedOptions["미취학"]
+
+    let inputData = []
     // 예약 버튼을 눌렀을 때 작동
     const handleReserve = async () => {
 
-        // 클릭시 버튼 비활성화
-        setIsSubmitting(true)
+        async function bookOne () {
+            inputData.push({email: sessEmail})
+            inputData.push({PID:PID})
+            inputData.push({strDate:B_strDate})
+            inputData.push({endDate:B_endDate})
+            inputData.push({adult:Number(adult)})
+            inputData.push({middle:Number(middle)})
+            inputData.push({young:Number(young)})
+            inputData.push({preschool:Number(preschool)})
 
-        setReservInfo((prevReservInfo) => {
-            const newReservInfo = {...prevReservInfo}
+            return inputData
+        }
 
-            // people 객체에 입력값 전달 및 단위별 합계액 전달 부분. ex) 성인 : [수, 합계액]
-            proData[2].map((clas) => {
-                let sumPrice = selectedOptions[clas.PR_CLASS] * clas.PRICE
-                newReservInfo.reservInfo.people[clas.PR_CLASS] = [(selectedOptions[clas.PR_CLASS] === undefined) ? null : selectedOptions[clas.PR_CLASS], isNaN(sumPrice) ? 0 : sumPrice]
-            })
-            setTotal(Number(newReservInfo.reservInfo.people["성인"][0])+Number(newReservInfo.reservInfo.people["중고생"][0])+Number(newReservInfo.reservInfo.people["초등생"][0])+Number(newReservInfo.reservInfo.people["미취학"][0]))
+        const process_reservation = async (inputData) => {
 
-            // 현재 일정을 선택하지 않으면, 다음날이 시작 날짜로 지정되고 있다.
-            // 일정을 선택하지 않으면 화면에 일정 표시가 되지 않는다.
-            // 선택하지 않으면 일정을 선택하세요! 라는 경고 문구가 등장하게 해야 한다.
-            let B_strDate = milliFomatter(startDate)
-            let B_endDate = dateFomatter(endDate)
+            const cnt = await fetch('/api/preBook', {
+                method: 'POST', mode: 'cors',
+                body: JSON.stringify(inputData),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json());
+            let result = false;
+            if(await cnt.cnt >0) result = true
 
-            if (B_endDate === null) {
-                B_endDate = B_strDate
+            return {result,inputData};
+        }
+
+        async function redirect (result,inputData) {
+            let email = inputData[0].email
+            if(result) {
+                location.href = `/preBook?email=${email}`
             }
-
-            newReservInfo.reservInfo.dates = [B_strDate,B_endDate]
-
-            // sum 계산 단위별 합계액 합산하여, 총액을 구한다.
-            let sum = 0;
-            for (let key in newReservInfo.reservInfo.people) {
-                sum += newReservInfo.reservInfo.people[key][1];
-            }
-
-            // sum에 합계를 전달함.
-            newReservInfo.reservInfo.sum = sum
+        }
 
 
-            // api를 통해 db로 전달. 행이 추가되면 true를 리턴하고, url을 preBook 페이지로 변경 보낸다.
-            if(total === 0) {
+        // 세션이 넘어오면서 문자열 'null'로 바뀌어 버린다.
+        if(sessEmail !== 'null') {
+            // 클릭시 버튼 비활성화
+            setIsSubmitting(true)
+            if(Number(adult)+Number(middle)+Number(young)+Number(preschool) <= 0) {
                 setIsSubmitting(false)
-            } else if (process_reservation(newReservInfo)) {
-                location.href = `/preBook?userid=${newReservInfo.userId}`;
+                alert('인원을 선택하세요!')
+            } else{
+                bookOne().then(process_reservation).then(({result, inputData}) => redirect(result,inputData))
             }
+        } else {
+            alert('로그인해 주세요!')
+        }
 
-            return newReservInfo
-        })
+
     }
 
     return(
@@ -252,6 +259,7 @@ export default function Program ({proData}) {
                                             startDate={startDate}
                                             endDate={endDate}
                                             minDate={tomorrow}
+                                            maxDate={P_endDate}
                                             monthsShown={2}
                                             selectsRange
                                             dateFormat="yyyy-mm-dd"
@@ -352,7 +360,7 @@ export default function Program ({proData}) {
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={11}>
-                            <span className={'fs-3 me-3 text-primary'}>참가비용</span> <span className={'ms-5 text-danger'}>{proData[0][0].P_CAUTION}</span>
+                            <span className={'fs-3 me-3 text-primary'}>참가비용</span> {/*<span className={'ms-5 text-danger'}>{proData[0][0].P_CAUTION}</span>*/}
                             <div className={'mt-2'} id={'priceTableContainer'}>
                                 <Table striped bordered hover>
                                     <thead>
@@ -377,7 +385,7 @@ export default function Program ({proData}) {
                     </Row>
                 </Container>
                 <Container>
-                    <div>
+                    <div className={'d-flex justify-content-end'}>
                         <Button
                             onClick={handleReserve}
                             disabled={isSubmitting}

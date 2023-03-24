@@ -1,6 +1,6 @@
-import axios from "axios";
 import bcrypt from "bcryptjs";
 
+// <<<<<<< HEAD
 // 이하 날짜를 변환 하는 함수
 
 // UTF 형식으로 저장되면 DB의 날짜와 서버에 표시되는 날짜가 차이나는 경우가 있다. 이것을 해결하는 함수이다.
@@ -44,6 +44,9 @@ const handleImgError = (e) => {
 };
 
 // 이하는 로그인 시 사용하는 함수
+// =======
+
+// >>>>>>> 65afc36 (회원가입/로그인 - NextAuth)
 const handleInput = (setInput, e) => {
     setInput(e.target.value);
 };
@@ -64,7 +67,7 @@ const hashPassword = async (passwd) => {
     try {
         const salt = await bcrypt.genSalt(saltRounds);
         const hash = await bcrypt.hash(passwd, salt);
-        console.log('hashpwd - ', hash, passwd, salt);
+        console.log('hashpwd - ', hash);
 
         return hash;
     } catch (err) {
@@ -74,13 +77,18 @@ const hashPassword = async (passwd) => {
 
 // 암호 비교 함수 - 암호와 해시화된 암호를 비교
 const comparePasswd = async (passwd, hashpwd) => {
+    console.log('컴페어입력패스워드', await passwd)
+    console.log('컴페어입력해쉬pwd패스워드', await hashpwd)
     try {
-        const result = await bcrypt.compare(passwd, hashpwd);
-        return result;
+        return await bcrypt.compare(passwd, hashpwd);
     } catch (err) {
         console.log(err);
     }
 }
 
 module.exports = { handleInput, process_submit,
+// <<<<<<< HEAD
     hashPassword, comparePasswd, UTFFomatter, milliFomatter, dateFomatter, handleImgError};
+// =======
+//     hashPassword, comparePasswd };
+// >>>>>>> 65afc36 (회원가입/로그인 - NextAuth)

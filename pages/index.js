@@ -9,23 +9,33 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import shortid from 'shortid'
 import * as PropTypes from "prop-types";
+import Myinfo from "./myinfo";
+import {FcLikePlaceholder} from "react-icons/fc";
+import {AiFillLike} from "react-icons/ai";
+import {getSession} from "next-auth/client";
 
 export async function getServerSideProps(ctx) {
-        let {lid = '서울',str,end} = ctx.query
-        // 전처리
-        if(lid === undefined || lid === null) lid = 0;
-        if(str === undefined || str === null) str = 0;
-        if(end === undefined || end === null) end = 0;
+        let {lid ,str = '2023-03-30',end} = ctx.query
+        if(lid === undefined) lid = null;
+        if(str === undefined) str = null;
+        if(end === undefined) end = null;
+        let sess = await getSession(ctx);
+
+        // 세션 여부에 따라 email 값 분기
+        let email;
+        (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
+
+        console.log('index email확인',email);
 
         // param 선언
         let param = `?lid=${lid}&str=${str}&end=${end}`
-        console.log(lid,str,end)
 
         // URL
         let url = `http://localhost:3000/api/${param}`
         const res = await axios.get(url)
         let result = res.data
         let searchInfo = result
+
 
         return {props:{searchInfo}}
 }
@@ -49,7 +59,7 @@ export default function Home({searchInfo, session}) {
 
                 script.async = true;
                 script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=89da95ceb6fd3e9c3e590a9f8786d5e8&libraries=services&autoload=false`;
-
+                script.id = 'mapScript'
                 document.head.appendChild(script);
 
                 const onLoadKakaoMap = () => {
@@ -77,6 +87,10 @@ export default function Home({searchInfo, session}) {
 
                                                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                                                 map.setCenter(coords);
+
+                                                // script 태그 삭제
+                                                const scriptTag = document.getElementById('mapScript');
+                                                scriptTag.remove();
                                         }
                                 });
 
@@ -88,8 +102,8 @@ export default function Home({searchInfo, session}) {
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
-                        <h1>당신의 이메일: {session.user.email}</h1>
-                        <Row  style={{height: '100px'}} className={'fixed-top'}>
+                        {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
+                        <Row  style={{height: '100px',zIndex:'0'}} className={'fixed-top'}>
                                 <Col>
                                         <Link href={"/?lid=인천"}>인천</Link>
                                         <Link href={"/?lid=서울"}>서울</Link>
@@ -113,23 +127,49 @@ export default function Home({searchInfo, session}) {
                                 </Col>
 
                         </Row>
-                        <Row className="likeslist tpl align-top" style={{paddingTop:'130px',zIndex:"9999", backgroundColor:'white'}}>
+                        <Row className="likeslist tpl align-top">
                                 <Col>
                                         { (searchInfo.length > 0 ) ? (      searchInfo.map((program) => (
 
                                                 <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
-                                                        <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '150px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                                <Col key={shortid.generate()}>
-                                                                        <img src={program.P_PICLINK} alt="프로그램 이미지" className={""} style={{width: '100%', height:'135px',paddingTop:'9px'}} key={shortid.generate()}/>
+                                                        <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
+                                                                <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
+                                                                        <div style={{width:'100%',borderRadius: '50%',overflow:'hidden'}} key={shortid.generate()}>
+                                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" className={"rounded"} style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                        </div>
                                                                 </Col>
-                                                                <Col key={shortid.generate()}>
-                                                                        <p className={"text-center fs-6 ADDR"} key={shortid.generate()}>{program.ADDR}</p>
-                                                                </Col>
-                                                                <Col key={shortid.generate()}>
-                                                                        <p className={"text-center  fs-6"} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
-                                                                </Col>
-                                                                <Col key={shortid.generate()}>
-                                                                        <p className={"text-center  fs-6"} key={shortid.generate()}>{program.P_NAME}</p>
+                                                                <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
+                                                                        <Row style={{height:'140px'}} key={shortid.generate()}>
+                                                                                <Col key={shortid.generate()}>
+                                                                                        <Row key={shortid.generate()}>
+                                                                                                <p className={"mb-0 pb-3 text-secondary text-center fw-bold fs-5"} key={shortid.generate()}>{program.P_NAME.substring(0, program.P_NAME.indexOf("[")) + program.P_NAME.substring(program.P_NAME.indexOf("]") + 1)}</p>
+                                                                                        </Row>
+                                                                                        <Row className={"pb-2"} key={shortid.generate()}>
+                                                                                                <Col md={6} key={shortid.generate()}>
+                                                                                                        <p className={"mb-0 fw-semibold text-primary text-center fs-6"} key={shortid.generate()}>{program.T_NAME}</p>
+                                                                                                </Col>
+                                                                                                <Col md={6} key={shortid.generate()}>
+                                                                                                        <p className={"mb-0 text-start"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
+                                                                                                </Col>
+                                                                                        </Row>
+                                                                                        <Row key={shortid.generate()}>
+                                                                                                <p className={"mb-0 text-center ADDR"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.ADDR}</p>
+                                                                                        </Row>
+                                                                                </Col>
+                                                                        </Row>
+                                                                        <Row key={shortid.generate()}>
+                                                                                <Col key={shortid.generate()}>{ (program.E_PICKTF === 1) ?
+                                                                                    <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                <AiFillLike
+                                                                                                    className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
+                                                                                </Col>
+                                                                                <Col key={shortid.generate()}>
+                                                                                        <p className={'text-end pe-5'}><FcLikePlaceholder className={"text-danger fs-3"} key={shortid.generate()} /></p>
+                                                                                </Col>
+                                                                        </Row>
+
+
+
                                                                 </Col>
                                                         </Row>
                                                 </Link>
@@ -143,7 +183,7 @@ export default function Home({searchInfo, session}) {
                                           }
                                 </Col>
                                 <Col>
-                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"9999"}}></div>
+                                        <div id={'map'} style={{ width:'50%', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"1"}}></div>
                                 </Col>
                         </Row>
 
