@@ -229,9 +229,11 @@ const Nav = ({props, menu, session}) => {
                                                 {/*onClick={() => signOut()}*/}
                                                 로그아웃
                                             </Button>
-                                            <Button type="button" variant="secondary" onClick={handleShowJoin}>
-                                                회원가입
+                                            <NavLink href='/myinfo'>
+                                            <Button type="button" variant="secondary">
+                                                내정보
                                             </Button>
+                                                </NavLink>
                                         </Modal.Footer>
                                     </>) : (<>
                                         <Modal.Header>
