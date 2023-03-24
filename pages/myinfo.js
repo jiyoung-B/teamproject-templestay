@@ -38,8 +38,7 @@ export async function getServerSideProps(ctx) {
 
 
 export default function Myinfo ({member, session}) {
-    console.log('마이인포 -'+session);
-    console.log('마이인포멤버 -'+member);
+
     return (
         <main>
             <MyinfoCommon session={session} member={member}/>

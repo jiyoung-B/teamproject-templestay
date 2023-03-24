@@ -13,8 +13,8 @@ import App from "next/app";
 
 function MyApp({ Component, pageProps, session }) {
     pageProps.session = session.user;
-    console.log('myapp페이지프롭스세션', pageProps);
-    console.log('myapp페이지프롭스멤버세션', pageProps.session);
+    console.log('myapp페이지프롭스세션-', pageProps); // member도 있고 session도 있음
+    console.log('myapp페이지프롭스멤버세션', pageProps.session); // 세션만 있음.
     const getLayout = Component.getLayout ?? ((page) => page);
 
     return (
@@ -32,7 +32,7 @@ MyApp.getInitialProps = async (ctx) => {
     const appProps = await App.getInitialProps(ctx);
     let sess =await getSession(ctx);
     appProps.session = await sess;
-    if(!sess) appProps.session = {user:{ name: 'guest', email: 'null', userid: 0 }};
+    if(!sess) appProps.session = {user:{ name: 'guest', email: null, userid: 0 }};
     return {...appProps};
 
 }
