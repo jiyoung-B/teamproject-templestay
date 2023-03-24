@@ -7,6 +7,8 @@ import React from "react";
 import Card from 'react-bootstrap/Card';
 import {Button, CardGroup, NavLink} from "react-bootstrap";
 import axios from "axios";
+import Carousel from 'react-grid-carousel'
+
 
 export async function getServerSideProps(ctx) {
     console.log('씨티엑스 ??', ctx);
@@ -65,8 +67,8 @@ const Intro = ({edPicks}) => {
                         <Row className="pt-5">
                             <h1 className="fw-bold text-secondary ps-4 mt-3" id="programTitle" >에디터픽</h1>
                             <Col className="offset-2" style={{maxHeight : "500px"}}>
-                                <div className="row align-items-center mt-10" style={{ display: "flex", overflowX: "scroll", scrollSnapType: "x mandatory" }}>
-                                    <Carousel cols={3} rows={1} gap={7} loop autoplay={3000}>
+                                <div className="row align-items-center mt-10" style={{ display: "flex", overflow: "hidden", scrollSnapType: "x mandatory" }}>
+                                    <Carousel cols={3} rows={1} gap={7} loop autoplay={2000}>
                                         {edPicks.map(ep => (
                                         <Carousel.Item interval={1000} >
                                         <div key={ep.PID} className="col" style={{width: "300px", Height: "300px"}}>
