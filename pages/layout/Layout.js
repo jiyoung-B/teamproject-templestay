@@ -12,10 +12,7 @@ export async function getServerSideProps(context) {
 
 const Layout =({children, meta, pathname, session}) => {
 
-    console.log('레이아웃 칠드런 프롭스 -', children.props);
-    console.log('레이아웃 칠드런 프롭스세션 -', children.props.session);
     let sess = children.props.session;
-    console.log('레이아웃 세션', session);
 
     const title = meta?.title;
     //console.log('레이아웃'+children);

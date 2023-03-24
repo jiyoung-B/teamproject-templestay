@@ -11,6 +11,7 @@ import {getSession} from "next-auth/client";
 import axios from "axios";
 import GoogleMapReact from "google-map-react";
 import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb";
+
 import Geocode from "react-geocode";
 
 export async function getServerSideProps(ctx) {
@@ -273,6 +274,7 @@ export default function Likes ({member, session}) {
                     <TbCircleNumber1 lat={coordinates?.lat} lng={coordinates2?.lng} text={"Point 1"} size="30" color="#984C0C" />
                     <TbCircleNumber2 lat={coordinates2?.lat} lng={coordinates2?.lng} text={"Point 2"} size="30" color="#984C0C" />
                 </GoogleMapReact>
+
             );
         }
     }   // 구글맵1 끝
