@@ -10,7 +10,7 @@ import axios from "axios";
 import shortid from 'shortid'
 import * as PropTypes from "prop-types";
 import Myinfo from "./myinfo";
-import {FcLikePlaceholder} from "react-icons/fc";
+import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
 
@@ -99,6 +99,24 @@ export default function Home({searchInfo, session}) {
                 script.addEventListener('load', onLoadKakaoMap);
         }, [addr]);
 
+        // let [like, setLike] = useState(false)
+
+        let [likeIdx, setLikeIdx] = useState()
+
+
+        let sess ={like:[]}
+
+        let [likeOnoff, setLikeOnoff] = useState(false)
+
+        const toggleLike = (event) => {
+                sess.like.push(event.target.getAttribute('PID'))
+                console.log(sess.like)
+                setLikeIdx ((prev) => {
+                        return event.target.getAttribute('value')
+                })
+                setLikeOnoff(!likeOnoff)
+
+        };
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
@@ -129,15 +147,15 @@ export default function Home({searchInfo, session}) {
                         </Row>
                         <Row className="likeslist tpl align-top">
                                 <Col>
-                                        { (searchInfo.length > 0 ) ? (      searchInfo.map((program) => (
+                                        { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
 
-                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+
                                                         <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                                <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
-                                                                        <div style={{width:'100%',borderRadius: '50%',overflow:'hidden'}} key={shortid.generate()}>
-                                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" className={"rounded"} style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
-                                                                        </div>
-                                                                </Col>
+                                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+                                                                        <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
+                                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                        </Col>
+                                                                </Link>
                                                                 <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
                                                                         <Row style={{height:'140px'}} key={shortid.generate()}>
                                                                                 <Col key={shortid.generate()}>
@@ -164,15 +182,13 @@ export default function Home({searchInfo, session}) {
                                                                                                     className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                                 </Col>
                                                                                 <Col key={shortid.generate()}>
-                                                                                        <p className={'text-end pe-5'}><FcLikePlaceholder className={"text-danger fs-3"} key={shortid.generate()} /></p>
+                                                                                        <div value={idx} PID={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{((likeIdx == idx) && (likeOnoff === true) || (sess.like == program.PID)   ) ? (<FcLike className={"fs-3"} style={{zIndex:'0',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
                                                                                 </Col>
                                                                         </Row>
 
-
-
                                                                 </Col>
                                                         </Row>
-                                                </Link>
+
 
                                             )
                                         )) : (
