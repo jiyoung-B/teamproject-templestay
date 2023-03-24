@@ -11,7 +11,7 @@ import {getSession} from "next-auth/client";
 import axios from "axios";
 import GoogleMapReact from "google-map-react";
 import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb";
-
+//
 export async function getServerSideProps(ctx) {
 // 세션 객체 가져오기
 //     const sess = await getSession(ctx);
