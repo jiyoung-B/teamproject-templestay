@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Link from "next/link";
 import {Button, Form, Table} from "react-bootstrap";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { temples } from "./utils/temples";
 import MyinfoCommon from "./layout/MyinfoCommon";
 import {getSession} from "next-auth/client";
@@ -396,16 +396,16 @@ export default function Likes ({member, session}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[1]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[1]}</td>
-                    </tr>
-                    <tr style={{height: "40px"}}>
                         <td>{String(userinfo.response[0]).split(',')[2]}</td>
                         <td>{String(userinfo.response[1]).split(',')[2]}</td>
                     </tr>
-                    <tr style={{height: "400px"}}>
+                    <tr style={{height: "40px"}}>
                         <td>{String(userinfo.response[0]).split(',')[3]}</td>
                         <td>{String(userinfo.response[1]).split(',')[3]}</td>
+                    </tr>
+                    <tr style={{height: "400px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[4]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[4]}</td>
                     </tr>
                     <tr className="gobkbtn">
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
@@ -440,19 +440,19 @@ export default function Likes ({member, session}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[1]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[1]}</td>
-                        <td>{String(userinfo.response[2]).split(',')[1]}</td>
-                    </tr>
-                    <tr style={{height: "40px"}}>
                         <td>{String(userinfo.response[0]).split(',')[2]}</td>
                         <td>{String(userinfo.response[1]).split(',')[2]}</td>
                         <td>{String(userinfo.response[2]).split(',')[2]}</td>
                     </tr>
-                    <tr style={{height: "400px"}}>
+                    <tr style={{height: "40px"}}>
                         <td>{String(userinfo.response[0]).split(',')[3]}</td>
                         <td>{String(userinfo.response[1]).split(',')[3]}</td>
                         <td>{String(userinfo.response[2]).split(',')[3]}</td>
+                    </tr>
+                    <tr style={{height: "400px"}}>
+                        <td>{String(userinfo.response[0]).split(',')[4]}</td>
+                        <td>{String(userinfo.response[1]).split(',')[4]}</td>
+                        <td>{String(userinfo.response[2]).split(',')[4]}</td>
                     </tr>
                     <tr className="gobkbtn">
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
