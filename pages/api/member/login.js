@@ -3,6 +3,7 @@ import Member from "../../../module/Member";
 export default async (req, res) => {
     const [email, passwd] = [req.query.email, req.query.passwd];
 
+
     try {
         const member = new Member().login(email, passwd)
             .then(result => result);

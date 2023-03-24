@@ -12,14 +12,14 @@ import {getSession} from "next-auth/client";
 import App from "next/app";
 
 function MyApp({ Component, pageProps, session }) {
-    pageProps.session = session;
-    console.log('myapp페이지프롭스', pageProps);
-    console.log('myapp페이지프롭스멤버멤버', pageProps.member);
+    pageProps.session = session.user;
+    console.log('myapp페이지프롭스세션', pageProps);
+    console.log('myapp페이지프롭스멤버세션', pageProps.session);
     const getLayout = Component.getLayout ?? ((page) => page);
 
     return (
         <React.Fragment>
-            <Layout {...pageProps} session={session}>
+            <Layout {...pageProps}>
                 <Component {...pageProps} />
             </Layout>
         </React.Fragment>

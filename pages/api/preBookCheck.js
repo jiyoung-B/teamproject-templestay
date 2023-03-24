@@ -2,10 +2,10 @@ import PreBook from "../../module/PreBook";
 import {UTFFomatter} from "../../module/Utils";
 
 export default async (req, res) => {
-    let {userid}  = req.query
+    let {email}  = req.query
 
     try {
-        let result = await new PreBook().selectPreBook(userid).then(result => result)
+        let result = await new PreBook().selectPreBook(email).then(result => result)
 
         // 전처리 부분
         // 해단 단위에 맞는 가격을 매칭한다. 이것으로

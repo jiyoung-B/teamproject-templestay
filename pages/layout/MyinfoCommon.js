@@ -13,8 +13,10 @@ const MyinfoCommon = ({member, session}) => {
                 <Row className="fstr">
                     <Col className="col-5 offset-1">
                         <Col className="welcome">환영합니다</Col>
+
                         <Col className="email">{session.name}님😊</Col>
-                        <Col className="email">이메일주소 {session.user.email}</Col>
+                        <Col className="email">이메일주소 {session.email}</Col>
+
                     </Col>
                     <Col style={{textAlign: "right"}} className="buddhist col-5"><img src="/img/buddhist.png" /></Col>
                 </Row>

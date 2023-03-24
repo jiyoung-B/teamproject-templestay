@@ -1,16 +1,16 @@
 import mariadb from './MariaDB'
 
 const selectPlusInfo = ` select P_NAME,T_NAME, P_CLASS from PROGRAM2 WHERE PID = ? `
-const insertPreBookSql = ` insert into PREBOOK (userid,PID,P_NAME,T_NAME,P_CLASS,B_STRDATE,B_ENDDATE,ADULT,MIDDLE,YOUNG,PRESCHOOL) values (?,?,?,?,?,?,?,?,?,?,?) `
-const selectPreBookSql = ` select * from PREBOOK where userid = ? order by PRB_NO desc `
+const insertPreBookSql = ` insert into PREBOOK (email,PID,P_NAME,T_NAME,P_CLASS,B_STRDATE,B_ENDDATE,ADULT,MIDDLE,YOUNG,PRESCHOOL) values (?,?,?,?,?,?,?,?,?,?,?)`
+const selectPreBookSql = ` select * from PREBOOK where email = ? order by PRB_NO desc `
 const selectPreBookPriceSql = ` select PID, PR_CLASS, PRICE from PROGRAMPRICE2 where PID = ? `
-const deletePreBook = ' delete from PREBOOK WHERE userid = ? '
+const deletePreBook = ' delete from PREBOOK WHERE email = ? '
 
 
 
 class PreBook {
 
-    async insertPreBook (userId, PID, strDate, endDate,  adult,  middle,  young,  preschool) {
+    async insertPreBook (email, PID, strDate, endDate,  adult,  middle,  young,  preschool) {
 
         let conn = null;
         let result = -1;
@@ -22,7 +22,7 @@ class PreBook {
             let T_NAME = plusInfo[0].T_NAME
             let P_CLASS = plusInfo[0].P_CLASS
 
-            let insertParam = [userId, PID, P_NAME, T_NAME, P_CLASS, strDate, endDate,  adult,  middle,  young,  preschool]
+            let insertParam = [email, PID, P_NAME, T_NAME, P_CLASS, strDate, endDate,  adult,  middle,  young,  preschool]
 
             result = await conn.query(insertPreBookSql,insertParam)
             await conn.commit()
@@ -36,9 +36,9 @@ class PreBook {
         return result
     }
 
-    async selectPreBook (userid) {
+    async selectPreBook (email) {
         let conn;
-        let param = [userid]
+        let param = [email]
         let result =[];
         try{
             conn = await mariadb.makeConn();
@@ -59,14 +59,14 @@ class PreBook {
         return result
     }
 
-    async Delete (userid) {
+    async Delete (email) {
         let conn;
 
         let param=[];
         let result;
         try{
             conn = await mariadb.makeConn()
-            param = [userid]
+            param = [email]
             result = await conn.query(deletePreBook,param)
             if(result.affectedRows > 0) result = result.affectedRows
         } catch (e) {

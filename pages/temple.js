@@ -36,6 +36,7 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
 
         script.async = true;
         script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=89da95ceb6fd3e9c3e590a9f8786d5e8&libraries=services&autoload=false`;
+        script.id = `mapScript`
 
         document.head.appendChild(script);
 
@@ -68,11 +69,16 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
 
                         // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                         map.setCenter(coords);
+
+                        // script 태그 삭제
+                        const scriptTag = document.getElementById('mapScript');
+                        scriptTag.remove();
                     }
                 });
             });
         };
         script.addEventListener('load', onLoadKakaoMap);
+
     }, []);
 
     return(
@@ -157,14 +163,14 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
                         <Row>
                             {
                                 distinctProPic.map((program)=>(
-                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
+                                <Col md={3} style={{ marginTop:`${unit}px`, flexBasis: '420px' }} key={shortid.generate()}>
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
                                         <Card.Img variant="top" src={(program.P_PICLINK.length < 40) ? 'https://www.templestay.com/images/templeinfo-00.jpg' : program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
                                         <Card.Body className={'bg-light'} key={shortid.generate()}>
                                             <Card.Title style={{height:`70px`}} key={shortid.generate()}>{program.P_NAME}
                                             </Card.Title>
                                             <Button variant="primary" key={shortid.generate()}><NavLink href={`/program?pid=${program.PID}`} key={shortid.generate()}>예약하러 가기</NavLink></Button>
-                                            <span> {(pid === program.PID) ? <HiBadgeCheck className={'fs-1 text-success'}/> : ''}</span>
+                                            <span key={shortid.generate()} > {(pid === program.PID) ? <HiBadgeCheck className={'fs-1 text-success'} key={shortid.generate()}/> : ''}</span>
                                         </Card.Body>
                                     </Card>
                                 </Col>
