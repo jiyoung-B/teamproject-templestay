@@ -199,8 +199,8 @@ export default function Likes ({member, session}) {
             this.state = {
                 defaultProps: {
                     center: this.props.center || {
-                        lat: this.props.lat || 37.48587156795423,
-                        lng: this.props.lng || 126.89736789924702
+                        lat: this.props.lat || medianLat,
+                        lng: this.props.lng || medianLng
                     },
                     zoom: this.props.zoom || 16,
                     styles: this.props.styles || [],
@@ -238,23 +238,10 @@ export default function Likes ({member, session}) {
         constructor(props) {
             super(props);
 
-            function getMedian(array) {
-                if (array.length === 0) return NaN; // 빈 배열은 에러 반환(NaN은 숫자가 아니라는 의미임)
-                let center = parseInt(array.length / 2); // 요소 개수의 절반값 구하기
-
-                if (array.length % 2 === 1) { // 요소 개수가 홀수면
-                    return array[center]; // 홀수 개수인 배열에서는 중간 요소를 그대로 반환
-                } else {
-                    return (array[center - 1] + array[center]) / 2.0; // 짝수 개 요소는, 중간 두 수의 평균 반환
-                }
-            }
-
             this.state = {
                 defaultProps: {
                     center: this.props.center || {
-                        // lat: this.props.lat || getMedian(latArr.sort()),
                         lat: this.props.lat || latG,
-                        // lng: this.props.lng || getMedian(lngArr.sort())
                         lng: this.props.lng || lngG
                     },
                     zoom: this.props.zoom || 16,
@@ -268,7 +255,7 @@ export default function Likes ({member, session}) {
             return (
                 <GoogleMapReact
                     bootstrapURLKeys={{
-                        key: this.props.apiKey ? this.props.apiKey : "you need an API key!"
+                        key: this.props.apiKey ? this.props.apiKey : "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU"
                     }}
                     defaultCenter={this.state.defaultProps.center}
                     defaultZoom={this.state.defaultProps.zoom}
@@ -283,13 +270,8 @@ export default function Likes ({member, session}) {
         }
     }   // 구글맵2 끝
 
-    // GoogleMap1에서 두 좌표간 거리 구하는 함수
-    function getDistanceFromLatLonInKm() {
-        let lat1 = marker1lat
-        let lng1 = marker1lng;
-        let lat2 = marker2lat;
-        let lng2 = marker2lng;
-
+    // GoogleMap에서 두 좌표간 거리 구하는 함수
+    function getDistanceFromLatLonInKm(lat1, lng1, lat2, lng2) {
         function deg2rad(deg) {
             return deg * (Math.PI/180)
         }
@@ -301,58 +283,33 @@ export default function Likes ({member, session}) {
         let d = r * c; // Distance in km
         return Math.round(d*1000);
     }
-    console.log('거리1 :', getDistanceFromLatLonInKm())
+    let Distance = getDistanceFromLatLonInKm(marker1lat, marker1lng, marker2lat, marker2lng)
 
     // GoogleMap2에서 두 좌표간 거리 구하는 함수
     let maxLat = Math.max(...latArr)
     let minLat = Math.min(...latArr)
     let maxLng = Math.max(...lngArr)
     let minLng = Math.min(...lngArr)
-    console.log(`maxLat : ${maxLat}, minLat : ${minLat}`)
-    console.log(`maxLng : ${maxLng}, minLng : ${minLng}`)
 
-    function getDistanceFromLatLonInKm2() {
-        let lat1 = maxLat
-        let lng1 = maxLng;
-        let lat2 = minLat;
-        let lng2 = minLng;
+    let Distance2 = getDistanceFromLatLonInKm(maxLat, maxLng, minLat, minLng)
 
-        function deg2rad(deg) {
-            return deg * (Math.PI/180)
-        }
-        let r = 6371; //지구의 반지름(km)
-        let dLat = deg2rad(lat2-lat1);
-        let dLon = deg2rad(lng2-lng1);
-        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        let d = r * c; // Distance in km
-        return Math.round(d*1000);
-    }
-    console.log('거리2 :', getDistanceFromLatLonInKm2())
 
     // GoogleMap1에서 거리에 따른 줌 설정 함수
-    let changeZoom = () => {
-        if (getDistanceFromLatLonInKm() > 300000) {
+    let changeZoom = (dt) => {
+        if (dt > 320000) {
             return 7
-        } else if ((300000 >= getDistanceFromLatLonInKm()) && (getDistanceFromLatLonInKm() > 200000)) {
+        } else if ((320000 >= dt) && (dt > 180000)) {
             return 8
-        } else if ((200000 >= getDistanceFromLatLonInKm()) && (getDistanceFromLatLonInKm() > 100000)) {
+        } else if ((180000 >= dt) && (dt > 80000)) {
             return 9
-        } else return 10
+        } else if ((80000 >= dt) && (dt > 50000)) {
+            return 10
+        } else if ((50000 >= dt) && (dt > 25000)) {
+            return 11
+        } else if ((25000 >= dt) && (dt > 10000)) {
+            return 12
+        } else return 14
     }
-    console.log('changeZoom1 :', changeZoom())
-
-    // GoogleMap2에서 거리에 따른 줌 설정 함수
-    let changeZoom2 = () => {
-        if (getDistanceFromLatLonInKm2() > 300000) {
-            return 7
-        } else if ((300000 >= getDistanceFromLatLonInKm2()) && (getDistanceFromLatLonInKm2() > 200000)) {
-            return 8
-        } else if ((200000 >= getDistanceFromLatLonInKm2()) && (getDistanceFromLatLonInKm2() > 100000)) {
-            return 9
-        } else return 10
-    }
-    console.log('changeZoom2 :', changeZoom2())
 
     function SelectCompareCnt() {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -378,13 +335,13 @@ export default function Likes ({member, session}) {
                         <td>{String(userinfo.response[0]).split(',')[0]}</td>
                         <td>{String(userinfo.response[1]).split(',')[0]}</td>
                     </tr>
-                    <tr style={{height: "800px"}}>
+                    <tr style={{height: "750px"}}>
                         <td colSpan="2" id="map" style={{height: "100%", width: "100%"}}>
                             <GoogleMap1
                                 apiKey={googleMapsApiKey}
                                 center={[medianLat, medianLng]}
                                 styles={modalMapStyles}
-                                zoom={changeZoom()}>
+                                zoom={changeZoom(Distance)}>
                             </GoogleMap1>
                         </td>
                     </tr>
@@ -423,13 +380,12 @@ export default function Likes ({member, session}) {
                         <td>{String(userinfo.response[1]).split(',')[0]}</td>
                         <td>{String(userinfo.response[2]).split(',')[0]}</td>
                     </tr>
-                    <tr style={{height: "800px"}}>
+                    <tr style={{height: "750px"}}>
                         <td colSpan="3" id="map" style={{height: "100%", width: "100%"}}>
                             <GoogleMap2
                                 apiKey={googleMapsApiKey}
-                                // center={[37.48587156795423, 126.89736789924702]}
                                 styles={modalMapStyles}
-                                zoom={changeZoom2()}>
+                                zoom={changeZoom(Distance2)}>
                                 <TbCircleNumber1 lat={marker1lat} lng={marker1lng} text={"Point 1"} size="30" color="#984C0C" />
                                 <TbCircleNumber2 lat={marker2lat} lng={marker2lng} text={"Point 2"} size="30" color="#984C0C" />
                                 <TbCircleNumber3 lat={marker3lat} lng={marker3lng} text={"Point 3"} size="30" color="#984C0C" />
@@ -462,12 +418,10 @@ export default function Likes ({member, session}) {
         }
     }
 
-    console.log(medianLng, medianLat)
-    console.log(Number(String(userinfo.response[0]).split(',')[4]))
-
     return (
         <main>
             <Container fluid>
+                <MyinfoCommon member={member} session={session} />
                 <Row className="lnm">
                     <Col className="likesmenu1 col-6">좋아요</Col>
                     <Col className="bar1 col-1">|</Col>
