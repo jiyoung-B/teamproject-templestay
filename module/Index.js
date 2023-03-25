@@ -19,7 +19,11 @@ let selectDateSql = ` select p.P_NAME,p.PID,t.T_NAME,ADDR,P_CLASS, date_format(P
                                  INNER JOIN PROGRAMPIC2 pp on p.P_NAME = pp.P_NAME
                         WHERE (t.REGION = ?) and (p.P_STRDATE < ? AND p.P_ENDDATE > ?) `;
 
+
+
+
 class Index {
+
 
     async editorPic () {
         let conn;
