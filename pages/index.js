@@ -59,8 +59,8 @@ export default function Home({searchInfo,likeData, email, session}) {
 
 
 
-        let [likeOnoff, setLikeOnoff] = useState(false)
-        console.log('라이크온오프 상태!',likeOnoff)
+        const [likeOnoffArr, setLikeOnoffArr] = useState(Array(searchInfo.length).fill(false));
+
 
 
         // 마우스 오버에 따라 지도 변경
@@ -119,70 +119,16 @@ export default function Home({searchInfo,likeData, email, session}) {
                 script.addEventListener('load', onLoadKakaoMap);
         }, [addr]);
 
-        // let [like, setLike] = useState(false)
 
-        let [likeIdx, setLikeIdx] = useState()
-
-
-        const like = (e) => {
-                let btnPidValue = e.target.getAttribute('pid')
-                let btnPid = [{email: email}, {btnPid: btnPidValue }]
-
-                const process_Like = async (btnPid) => {
-
-                        const cnt = await fetch('/api/plusLike', {
-                                method: 'POST', mode: 'cors',
-                                body: JSON.stringify(btnPid),
-                                headers: {'Content-Type': 'application/json'}
-                        }).then(res => res.json());
-                        let result = false;
-                        if(await cnt  === true) result = true
-
-
-                        return {result};
-                }
-                process_Like(btnPid).then(result => result).then(result => setLikeOnoff(result))
-        }
-
-
-        const unLike = (e) => {
-                let btnPidValue = e.target.getAttribute('pid')
-                let btnPid = [{btnPid: btnPidValue }]
-
-
-
-                const process_unLike = async (btnPid) => {
-
-                        const cnt = await fetch('/api/unlike', {
-                                method: 'POST', mode: 'cors',
-                                body: JSON.stringify(btnPid),
-                                headers: {'Content-Type': 'application/json'}
-                        }).then(res => res.json());
-                        let result = false;
-                        if(await cnt  === true) result = true
-
-
-                        return {result};
-                }
-
-                process_unLike(btnPid).then(result => result).then((result) => setLikeOnoff(!result))
-
-
-
-        };
         const toggleLike = (e) => {
                 let btnPidValue = e.target.getAttribute('pid')
-
+                let index = e.target.getAttribute('value');
                 let likeInfo = [{email: email}, {btnPid: btnPidValue }]
                 let unlikeInfo = [{btnPid: btnPidValue }]
 
 
-
-
-                console.log('onoff 시작값',likeOnoff)
-                if(likeOnoff === true)
+                if(likeOnoffArr[index] === true)
                 {
-
 
                         const process_unLike = async (unlikeInfo) => {
 
@@ -200,11 +146,16 @@ export default function Home({searchInfo,likeData, email, session}) {
                                 return {result};
                         }
 
+                        process_unLike(unlikeInfo).then(result => result).then(({result}) =>{
+                                if( result === true) {
+                                        const newLikeOnoffArr = [...likeOnoffArr];
+                                        newLikeOnoffArr[index] = !newLikeOnoffArr[index]
+                                        setLikeOnoffArr(newLikeOnoffArr);
+                                }
+                        })
 
-                        process_unLike(unlikeInfo).then(result => result).then(({result}) => setLikeOnoff(!result))
-                        console.log('onoff 종료값',likeOnoff)
                 }
-                else if(likeOnoff === false)
+                else if(likeOnoffArr[index] === false)
                 {
                         const process_Like = async (likeInfo) => {
 
@@ -216,13 +167,16 @@ export default function Home({searchInfo,likeData, email, session}) {
                                 let result = false;
                                 if(await cnt  === true) result = true
 
-
                                 return {result};
                         }
-                        process_Like(likeInfo).then(result => result).then(({result}) => setLikeOnoff(result))
-
+                        process_Like(likeInfo).then(result => result).then(({result}) => {
+                                if( result === true) {
+                                        const newLikeOnoffArr = [...likeOnoffArr];
+                                        newLikeOnoffArr[index] = !newLikeOnoffArr[index]
+                                        setLikeOnoffArr(newLikeOnoffArr)
+                                }
+                        })
                 }
-
                 }
 
 
@@ -267,11 +221,8 @@ export default function Home({searchInfo,likeData, email, session}) {
                                                                                                     className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                                 </Col>
                                                                                 <Col key={shortid.generate()}>
-                                                                                        <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoff) ? ('TRUE'):('FALSE')} </div>
+                                                                                        <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoffArr[idx]) ? ('TRUE'):('FALSE')} </div>
                                                                                 </Col>
-                                                                                <Col><Button className={'btn-success'}  pid={program.PID} onClick={like}>좋아요!</Button></Col>
-                                                                                <Col><Button className={'btn-danger'}  pid={program.PID} onClick={unLike}>취소!</Button></Col>
-
                                                                         </Row>
 
                                                                 </Col>
