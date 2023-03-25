@@ -10,9 +10,10 @@ import axios from "axios";
 import shortid from 'shortid'
 import * as PropTypes from "prop-types";
 import Myinfo from "./myinfo";
-import {FcLikePlaceholder} from "react-icons/fc";
+import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
+import {Button} from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
         let {lid ,str = '2023-03-30',end} = ctx.query
@@ -25,25 +26,44 @@ export async function getServerSideProps(ctx) {
         let email;
         (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
 
-        console.log('index email확인',email);
+        // 개발용 이메일 'test@test.com'
+        email = 'test@test.com'
 
         // param 선언
-        let param = `?lid=${lid}&str=${str}&end=${end}`
+        let searchParam = `?lid=${lid}&str=${str}&end=${end}&email=${email}`
+
+        let likeParam = `?email=${email}`
 
         // URL
-        let url = `http://localhost:3000/api/${param}`
+        let url = `http://localhost:3000/api/${searchParam}`
         const res = await axios.get(url)
         let result = res.data
+
+        // likeData
+        let likeUrl = `http://localhost:3000/api/like/${likeParam}`
+        const likeRes = await axios.get(likeUrl)
+
+        let likeData = likeRes.data
+        console.log('index page- likeData',likeData)
+
+
         let searchInfo = result
 
 
-        return {props:{searchInfo}}
+        return {props:{searchInfo, likeData, email}}
 }
 
-export default function Home({searchInfo, session}) {
+export default function Home({searchInfo,likeData, email, session}) {
         console.log('홈홈'+session);
         let [addr,setAddr] =useState()
 
+
+
+        const [likeOnoffArr, setLikeOnoffArr] = useState(Array(searchInfo.length).fill(false));
+
+
+
+        // 마우스 오버에 따라 지도 변경
         const handleMouseOver = (e) => {
                 const addrElement = e.target.querySelector('.ADDR');
                 if (addrElement) {
@@ -99,21 +119,82 @@ export default function Home({searchInfo, session}) {
                 script.addEventListener('load', onLoadKakaoMap);
         }, [addr]);
 
+
+        const toggleLike = (e) => {
+                let btnPidValue = e.target.getAttribute('pid')
+                let index = e.target.getAttribute('value');
+                let likeInfo = [{email: email}, {btnPid: btnPidValue }]
+                let unlikeInfo = [{btnPid: btnPidValue }]
+
+
+                if(likeOnoffArr[index] === true)
+                {
+
+                        const process_unLike = async (unlikeInfo) => {
+
+
+                                const cnt = await fetch('/api/unlike', {
+                                        method: 'POST', mode: 'cors',
+                                        body: JSON.stringify(unlikeInfo),
+                                        headers: {'Content-Type': 'application/json'}
+                                }).then(res => res.json());
+                                let result = false;
+                                if(await cnt  === true) result = true
+                                console.log(result)
+
+
+                                return {result};
+                        }
+
+                        process_unLike(unlikeInfo).then(result => result).then(({result}) =>{
+                                if( result === true) {
+                                        const newLikeOnoffArr = [...likeOnoffArr];
+                                        newLikeOnoffArr[index] = !newLikeOnoffArr[index]
+                                        setLikeOnoffArr(newLikeOnoffArr);
+                                }
+                        })
+
+                }
+                else if(likeOnoffArr[index] === false)
+                {
+                        const process_Like = async (likeInfo) => {
+
+                                const cnt = await fetch('/api/plusLike', {
+                                        method: 'POST', mode: 'cors',
+                                        body: JSON.stringify(likeInfo),
+                                        headers: {'Content-Type': 'application/json'}
+                                }).then(res => res.json());
+                                let result = false;
+                                if(await cnt  === true) result = true
+
+                                return {result};
+                        }
+                        process_Like(likeInfo).then(result => result).then(({result}) => {
+                                if( result === true) {
+                                        const newLikeOnoffArr = [...likeOnoffArr];
+                                        newLikeOnoffArr[index] = !newLikeOnoffArr[index]
+                                        setLikeOnoffArr(newLikeOnoffArr)
+                                }
+                        })
+                }
+                }
+
+
         return (
         <div className="bg-white mt-3" id="wrapper">
                 <Container fluid>
                         {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
                         <Row className="likeslist tpl align-top">
                                 <Col>
-                                        { (searchInfo.length > 0 ) ? (      searchInfo.map((program) => (
+                                        { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
 
-                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+
                                                         <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                                <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
-                                                                        <div style={{width:'100%',borderRadius: '50%',overflow:'hidden'}} key={shortid.generate()}>
-                                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" className={"rounded"} style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
-                                                                        </div>
-                                                                </Col>
+                                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+                                                                        <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
+                                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                        </Col>
+                                                                </Link>
                                                                 <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
                                                                         <Row style={{height:'140px'}} key={shortid.generate()}>
                                                                                 <Col key={shortid.generate()}>
@@ -140,15 +221,13 @@ export default function Home({searchInfo, session}) {
                                                                                                     className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                                 </Col>
                                                                                 <Col key={shortid.generate()}>
-                                                                                        <p className={'text-end pe-5'}><FcLikePlaceholder className={"text-danger fs-3"} key={shortid.generate()} /></p>
+                                                                                        <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoffArr[idx]) ? ('TRUE'):('FALSE')} </div>
                                                                                 </Col>
                                                                         </Row>
 
-
-
                                                                 </Col>
                                                         </Row>
-                                                </Link>
+
 
                                             )
                                         )) : (
