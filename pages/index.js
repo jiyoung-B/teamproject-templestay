@@ -202,8 +202,9 @@ export default function Home({searchInfo,likeData, email, session}) {
 
 
         return (
-        <div className="bg-white" id="wrapper">
-                <Container fluid style = {{marginTop:'30px'}}>
+        <div className="bg-white mt-3" id="wrapper">
+                <Container fluid>
+
                         {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
                         <Row className="likeslist tpl align-top">
                                 <Col>
