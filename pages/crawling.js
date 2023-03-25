@@ -18,7 +18,7 @@ export default function Crawling () {
                 <Col>
                     <Button
                     variant="warning"
-                    onClick={startCrawling}
+                    // onClick={startCrawling}
                 >크롤링 시작!</Button>
                 </Col>
 
