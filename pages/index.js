@@ -100,33 +100,9 @@ export default function Home({searchInfo, session}) {
         }, [addr]);
 
         return (
-        <div className="bg-white" id="wrapper">
+        <div className="bg-white mt-3" id="wrapper">
                 <Container fluid>
                         {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
-                        <Row  style={{height: '100px',zIndex:'0'}} className={'fixed-top'}>
-                                <Col>
-                                        <Link href={"/?lid=인천"}>인천</Link>
-                                        <Link href={"/?lid=서울"}>서울</Link>
-                                        <Link href={"/?lid=강원"}>강원</Link>
-                                        <Link href={"/?lid=충남"}>충남</Link>
-                                        <Link href={"/?lid=경기"}>경기</Link>
-                                </Col>
-                                <Col>
-                                        <Link href={"/?lid=충북"}>충북</Link>
-                                        <Link href={"/?lid=세종"}>세종</Link>
-                                        <Link href={"/?lid=경북"}>경북</Link>
-                                        <Link href={"/?lid=전북"}>전북</Link>
-                                        <Link href={"/?lid=대구"}>대구</Link>
-                                </Col>
-                                <Col>
-                                        <Link href={"/?lid=인천"}>광주</Link>
-                                        <Link href={"/?lid=광주"}>전남</Link>
-                                        <Link href={"/?lid=경남"}>경남</Link>
-                                        <Link href={"/?lid=부산"}>부산</Link>
-                                        <Link href={"/?lid=제주"}>제주</Link>
-                                </Col>
-
-                        </Row>
                         <Row className="likeslist tpl align-top">
                                 <Col>
                                         { (searchInfo.length > 0 ) ? (      searchInfo.map((program) => (

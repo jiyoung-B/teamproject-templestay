@@ -14,6 +14,24 @@
     margin: -1% 0 0 0 !important;
     border: 1px solid white !important;
 }
+.dropbtn {
+    background-color: white !important;
+    color: #331904 !important;
+    font-weight: bold;
+    /*margin: -1% 0 0 0 !important;*/
+    border-bottom: 1px solid white !important;
+}
+.dropbtn:hover {
+    background-color: white;
+    color: #331904;
+    border: 1px solid white;
+}
+.dropbtn:active {
+    background-color: white;
+    color: #331904;
+    border: 1px solid white;
+}
+
 .calbtn:hover {
     background-color: white;
     color: #331904;

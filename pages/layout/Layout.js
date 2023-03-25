@@ -22,7 +22,7 @@ const Layout =({children, meta, pathname, session}) => {
 
     return(
         <>
-            <Header pathname={pathname} session={session} />
+            <Header pathname={pathname} session={session} className="mb-2" />
             <div className="container" id="wrapper">
                 <main>{children}</main>
             </div>
