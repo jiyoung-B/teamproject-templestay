@@ -5,6 +5,8 @@ const selectLikeSql = `select email, PID from LIKES where email = ? `
 
 const unlikeSql = ` delete from LIKES where PID = ? `
 
+const likeSql = ` insert into LIKES (email,PID) values(?,?) `
+
 
 class Like {
 
@@ -54,6 +56,29 @@ class Like {
 
         return unlikeChk
     }
+
+
+    async insert(email,pid) {
+
+
+        let conn;
+        let likeChk
+        let param = [email, pid]
+
+        try {
+            conn = await mariadb.makeConn()
+            likeChk = await conn.query(likeSql,param);
+            if (likeChk.affectedRows > 0) likeChk = true
+
+        } catch(e) {
+
+        } finally {
+            await mariadb.closeConn(conn)
+        }
+
+        return likeChk
+    }
+
 
 
 }
