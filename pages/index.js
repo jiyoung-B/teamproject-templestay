@@ -25,25 +25,38 @@ export async function getServerSideProps(ctx) {
         let email;
         (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
 
-        console.log('index email확인',email);
+        // 개발용 이메일 'test@test.com'
+        email = 'test@test.com'
 
         // param 선언
-        let param = `?lid=${lid}&str=${str}&end=${end}`
+        let searchParam = `?lid=${lid}&str=${str}&end=${end}&email=${email}`
+
+        let likeParam = `?email=${email}`
 
         // URL
-        let url = `http://localhost:3000/api/${param}`
+        let url = `http://localhost:3000/api/${searchParam}`
         const res = await axios.get(url)
         let result = res.data
+
+        // likeData
+        let likeUrl = `http://localhost:3000/api/like/${likeParam}`
+        const likeRes = await axios.get(likeUrl)
+
+        let likeData = likeRes.data
+        console.log('index page- likeData',likeData)
+
+
         let searchInfo = result
 
 
-        return {props:{searchInfo}}
+        return {props:{searchInfo, likeData}}
 }
 
-export default function Home({searchInfo, session}) {
+export default function Home({searchInfo,likeData, session}) {
         console.log('홈홈'+session);
         let [addr,setAddr] =useState()
 
+        // 마우스 오버에 따라 지도 변경
         const handleMouseOver = (e) => {
                 const addrElement = e.target.querySelector('.ADDR');
                 if (addrElement) {
@@ -104,13 +117,9 @@ export default function Home({searchInfo, session}) {
         let [likeIdx, setLikeIdx] = useState()
 
 
-        let sess ={like:[]}
-
         let [likeOnoff, setLikeOnoff] = useState(false)
 
         const toggleLike = (event) => {
-                sess.like.push(event.target.getAttribute('PID'))
-                console.log(sess.like)
                 setLikeIdx ((prev) => {
                         return event.target.getAttribute('value')
                 })
@@ -121,30 +130,6 @@ export default function Home({searchInfo, session}) {
         <div className="bg-white" id="wrapper">
                 <Container fluid>
                         {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
-                        <Row  style={{height: '100px',zIndex:'0'}} className={'fixed-top'}>
-                                <Col>
-                                        <Link href={"/?lid=인천"}>인천</Link>
-                                        <Link href={"/?lid=서울"}>서울</Link>
-                                        <Link href={"/?lid=강원"}>강원</Link>
-                                        <Link href={"/?lid=충남"}>충남</Link>
-                                        <Link href={"/?lid=경기"}>경기</Link>
-                                </Col>
-                                <Col>
-                                        <Link href={"/?lid=충북"}>충북</Link>
-                                        <Link href={"/?lid=세종"}>세종</Link>
-                                        <Link href={"/?lid=경북"}>경북</Link>
-                                        <Link href={"/?lid=전북"}>전북</Link>
-                                        <Link href={"/?lid=대구"}>대구</Link>
-                                </Col>
-                                <Col>
-                                        <Link href={"/?lid=인천"}>광주</Link>
-                                        <Link href={"/?lid=광주"}>전남</Link>
-                                        <Link href={"/?lid=경남"}>경남</Link>
-                                        <Link href={"/?lid=부산"}>부산</Link>
-                                        <Link href={"/?lid=제주"}>제주</Link>
-                                </Col>
-
-                        </Row>
                         <Row className="likeslist tpl align-top">
                                 <Col>
                                         { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
@@ -182,7 +167,7 @@ export default function Home({searchInfo, session}) {
                                                                                                     className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                                 </Col>
                                                                                 <Col key={shortid.generate()}>
-                                                                                        <div value={idx} PID={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{((likeIdx == idx) && (likeOnoff === true) || (sess.like == program.PID)   ) ? (<FcLike className={"fs-3"} style={{zIndex:'0',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                        <div value={idx} PID={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeData.PID.includes(program.PID)) ? (<FcLike className={"fs-3"} style={{zIndex:'0',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
                                                                                 </Col>
                                                                         </Row>
 

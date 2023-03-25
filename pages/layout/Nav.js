@@ -137,7 +137,12 @@ const Nav = ({props, menu, session}) => {
     const [showJoin, setShowJoin] = useState(false);
     const [startDate, setStartDate] = useState(tomorrow);
     const [endDate, setEndDate] = useState(null);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false)
+        location.href = '/?lid=서울'
+
+
+    };
     const handleShow = () => setShow(true);
     const handleCloseLogin = () => setShowLogin(false);
     const handleShowLogin = () => setShowLogin(true);
