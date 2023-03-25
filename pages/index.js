@@ -13,6 +13,7 @@ import Myinfo from "./myinfo";
 import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
+import {Button} from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
         let {lid ,str = '2023-03-30',end} = ctx.query
@@ -126,6 +127,31 @@ export default function Home({searchInfo,likeData, session}) {
                 setLikeOnoff(!likeOnoff)
 
         };
+        const unLike = (e) => {
+                let btnPidValue = e.target.getAttribute('pid')
+                let btnPid = [{btnPid: btnPidValue }]
+
+
+
+                const process_unLike = async (btnPid) => {
+
+                        const cnt = await fetch('/api/unlike', {
+                                method: 'POST', mode: 'cors',
+                                body: JSON.stringify(btnPid),
+                                headers: {'Content-Type': 'application/json'}
+                        }).then(res => res.json());
+                        let result = false;
+                        if(await cnt  === true) result = true
+
+
+                        return {result};
+                }
+
+                process_unLike(btnPid).then(result => result).then((result) => console.log('page index - 삭제한 값이 true?',result))
+
+
+
+        };
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
@@ -167,8 +193,11 @@ export default function Home({searchInfo,likeData, session}) {
                                                                                                     className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                                 </Col>
                                                                                 <Col key={shortid.generate()}>
-                                                                                        <div value={idx} PID={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeData.PID.includes(program.PID)) ? (<FcLike className={"fs-3"} style={{zIndex:'0',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                        <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeData.PID.includes(program.PID)) ? (<FcLike className={"fs-3"} style={{zIndex:'0',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
                                                                                 </Col>
+                                                                                <Col><Button className={'btn-success'}  pid={program.PID}>좋아요!</Button></Col>
+                                                                                <Col><Button className={'btn-danger'}  pid={program.PID} onClick={unLike}>취소!</Button></Col>
+
                                                                         </Row>
 
                                                                 </Col>
