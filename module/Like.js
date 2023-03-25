@@ -39,13 +39,13 @@ class Like {
 
 
         let conn;
-        let unlikeChk
+        let unlikeChk = false
         let param = [pid]
 
         try {
             conn = await mariadb.makeConn()
-            unlikeChk = await conn.query(unlikeSql,param);
-            if (unlikeChk.affectedRows > 0) unlikeChk = true
+            let result = await conn.query(unlikeSql,param);
+            if (result.affectedRows > 0) unlikeChk = true
 
 
         } catch(e) {
@@ -62,13 +62,14 @@ class Like {
 
 
         let conn;
-        let likeChk
+        let likeChk = false
         let param = [email, pid]
 
         try {
             conn = await mariadb.makeConn()
-            likeChk = await conn.query(likeSql,param);
-            if (likeChk.affectedRows > 0) likeChk = true
+            let result = await conn.query(likeSql,param);
+            if (result.affectedRows > 0) likeChk = true
+
 
         } catch(e) {
 
