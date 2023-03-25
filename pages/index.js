@@ -57,6 +57,12 @@ export default function Home({searchInfo,likeData, email, session}) {
         console.log('홈홈'+session);
         let [addr,setAddr] =useState()
 
+
+
+        let [likeOnoff, setLikeOnoff] = useState(false)
+        console.log('라이크온오프 상태!',likeOnoff)
+
+
         // 마우스 오버에 따라 지도 변경
         const handleMouseOver = (e) => {
                 const addrElement = e.target.querySelector('.ADDR');
@@ -118,17 +124,6 @@ export default function Home({searchInfo,likeData, email, session}) {
         let [likeIdx, setLikeIdx] = useState()
 
 
-        let [likeOnoff, setLikeOnoff] = useState(false)
-
-
-        const toggleLike = (event) => {
-                setLikeIdx ((prev) => {
-                        return event.target.getAttribute('value')
-                })
-                setLikeOnoff(!likeOnoff)
-
-        };
-
         const like = (e) => {
                 let btnPidValue = e.target.getAttribute('pid')
                 let btnPid = [{email: email}, {btnPid: btnPidValue }]
@@ -146,7 +141,7 @@ export default function Home({searchInfo,likeData, email, session}) {
 
                         return {result};
                 }
-                process_Like(btnPid).then(result => result).then(result => console.log('좋아요 추가?',result))
+                process_Like(btnPid).then(result => result).then(result => setLikeOnoff(result))
         }
 
 
@@ -170,11 +165,67 @@ export default function Home({searchInfo,likeData, email, session}) {
                         return {result};
                 }
 
-                process_unLike(btnPid).then(result => result)
+                process_unLike(btnPid).then(result => result).then((result) => setLikeOnoff(!result))
 
 
 
         };
+        const toggleLike = (e) => {
+                let btnPidValue = e.target.getAttribute('pid')
+
+                let likeInfo = [{email: email}, {btnPid: btnPidValue }]
+                let unlikeInfo = [{btnPid: btnPidValue }]
+
+
+
+
+                console.log('onoff 시작값',likeOnoff)
+                if(likeOnoff === true)
+                {
+
+
+                        const process_unLike = async (unlikeInfo) => {
+
+
+                                const cnt = await fetch('/api/unlike', {
+                                        method: 'POST', mode: 'cors',
+                                        body: JSON.stringify(unlikeInfo),
+                                        headers: {'Content-Type': 'application/json'}
+                                }).then(res => res.json());
+                                let result = false;
+                                if(await cnt  === true) result = true
+                                console.log(result)
+
+
+                                return {result};
+                        }
+
+
+                        process_unLike(unlikeInfo).then(result => result).then(({result}) => setLikeOnoff(!result))
+                        console.log('onoff 종료값',likeOnoff)
+                }
+                else if(likeOnoff === false)
+                {
+                        const process_Like = async (likeInfo) => {
+
+                                const cnt = await fetch('/api/plusLike', {
+                                        method: 'POST', mode: 'cors',
+                                        body: JSON.stringify(likeInfo),
+                                        headers: {'Content-Type': 'application/json'}
+                                }).then(res => res.json());
+                                let result = false;
+                                if(await cnt  === true) result = true
+
+
+                                return {result};
+                        }
+                        process_Like(likeInfo).then(result => result).then(({result}) => setLikeOnoff(result))
+
+                }
+
+                }
+
+
         return (
         <div className="bg-white" id="wrapper">
                 <Container fluid>
@@ -216,7 +267,7 @@ export default function Home({searchInfo,likeData, email, session}) {
                                                                                                     className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                                 </Col>
                                                                                 <Col key={shortid.generate()}>
-                                                                                        <div value={idx} pid={program.PID}      onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeData.PID.includes(program.PID)) ? (<FcLike className={"fs-3"} style={{zIndex:'0',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                        <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'1',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoff) ? ('TRUE'):('FALSE')} </div>
                                                                                 </Col>
                                                                                 <Col><Button className={'btn-success'}  pid={program.PID} onClick={like}>좋아요!</Button></Col>
                                                                                 <Col><Button className={'btn-danger'}  pid={program.PID} onClick={unLike}>취소!</Button></Col>

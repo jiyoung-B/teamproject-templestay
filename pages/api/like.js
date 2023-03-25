@@ -36,13 +36,6 @@ export default async (req,res) => {
             res.status(500).json(e)
         }
 
-
-
-
-    } if(email === 'null') {
-
-
-
     }
 
 }

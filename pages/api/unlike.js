@@ -5,11 +5,12 @@ import Like from "../../module/Like";
 export default async (req,res) => {
     const [btnPid] = req.body
     let unlikePid= btnPid.btnPid
-
+    console.log('unlikePid',unlikePid)
         let unlikeChk
 
         try {
             unlikeChk = await new Like().delete(unlikePid).then(result => result)
+            console.log('unlikeChk',unlikeChk)
 
 
             res.status(200).json(unlikeChk)
