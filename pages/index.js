@@ -16,7 +16,7 @@ import {getSession} from "next-auth/client";
 import {Button} from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
-        let {lid ,str = '2023-03-30',end} = ctx.query
+        let {lid ,str,end} = ctx.query
         if(lid === undefined) lid = null;
         if(str === undefined) str = null;
         if(end === undefined) end = null;
