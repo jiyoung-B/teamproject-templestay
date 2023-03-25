@@ -16,7 +16,11 @@ import {getSession, session} from "next-auth/client";
 
 export async function getServerSideProps(ctx) {
     // null을 반환한다.
-    const sess = await getSession(ctx);
+    let sess = await getSession(ctx);
+
+    // 세션 여부에 따라 email 값 분기
+    let email;
+    (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
 
 
     let {pid} = ctx.query
@@ -29,18 +33,13 @@ export async function getServerSideProps(ctx) {
 
     proData.push(pid)
 
-    return {props:{proData}}
+    return {props:{proData,email}}
 }
 
 
-export default function Program ({proData,session}) {
+export default function Program ({proData,email}) {
     const unit = 28
     let PID = proData[6]
-    // 세션은 존재한다.
-    // console.log('세션이 있는가?',session)
-
-    let sessEmail = session.email
-
 
 
     // 예약하기 버튼 비활성화 state
@@ -150,7 +149,7 @@ export default function Program ({proData,session}) {
     const handleReserve = async () => {
 
         async function bookOne () {
-            inputData.push({email: sessEmail})
+            inputData.push({email: email})
             inputData.push({PID:PID})
             inputData.push({strDate:B_strDate})
             inputData.push({endDate:B_endDate})
@@ -172,11 +171,10 @@ export default function Program ({proData,session}) {
             let result = false;
             if(await cnt.cnt >0) result = true
 
-            return {result,inputData};
+            return {result};
         }
 
-        async function redirect (result,inputData) {
-            let email = inputData[0].email
+        async function redirect (result) {
             if(result) {
                 location.href = `/preBook?email=${email}`
             }
@@ -184,7 +182,7 @@ export default function Program ({proData,session}) {
 
 
         // 세션이 넘어오면서 문자열 'null'로 바뀌어 버린다.
-        if(sessEmail !== 'null') {
+        if(email !== null) {
             // 클릭시 버튼 비활성화
             setIsSubmitting(true)
             if(Number(adult)+Number(middle)+Number(young)+Number(preschool) <= 0) {
