@@ -1,4 +1,4 @@
-import {Container, Row, Col, NavLink, Button, Modal, Form} from 'react-bootstrap';
+import {Container, Row, Col, NavLink, Button, Modal, Form, Dropdown, DropdownButton} from 'react-bootstrap';
 import { HiOutlineMapPin } from 'react-icons/hi2';
 import { BsCalendar } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
@@ -164,23 +164,53 @@ const Nav = ({props, menu, session}) => {
         <>
         <div className='border-bottom border-2 border-primary bg-white'
              style={{position: "relative", top: 0, width: "100%"}} id='navWrapper'>
-            <Container fluid='xxl'>
+            <Container fluid='xxl pt-2'>
                 <Row className='title'>
-                    <Col md={{ span: 1 }} style={{textAlign: "center"}}>
+                    <Col md={{ span: 2 }} style={{textAlign: "center"}}>
                         <NavLink href='/'>
                             Temfo,
                         </NavLink>
                     </Col>
-                    <Col md={{ span: 5 }} style={{textAlign: "right"}}>
-                        <Link href='/region'>
-                            <NavLink style={{marginTop: "0.2%"}}>
-                                <HiOutlineMapPin style={{marginTop: "-2%"}} />지역
-                            </NavLink>
-                        </Link>
-                    </Col>
-                    <Col md={{ span: 5 }} style={{textAlign: "left"}}>
+                    <Col md={{sapn:8}} style={{textAlign: "center"}}>
+                        <Row>
+                            <Col md={{ span: 6 }} style={{textAlign: "right"}}>
+                                <>
+                                <Dropdown>
+                                    <Dropdown.Toggle className="calbtn" variant="transparent" id="dropdown-basic">
+                                        <HiOutlineMapPin className="calbtn"/> 지역
+                                    </Dropdown.Toggle>
+                                <Dropdown.Menu className="ps-2 pe-2">
+                                    {/*<Link href={"/?lid=대구"}>대구</Link>*/}
+                                    <Row>
+                                    <Col>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=인천"}>인천</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=서울"}>서울</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=강원"}>강원</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=충남"}>충남</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=경기"}>경기</Dropdown.Item>
+                                    </Col>
+                                    <Col>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=충북"}>충북</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=세종"}>세종</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=경북"}>경북</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=전북"}>전북</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=대구"}>대구</Dropdown.Item>
+                                    </Col>
+                                    <Col>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=인천"}>광주</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=광주"}>전남</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=경남"}>경남</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=부산"}>부산</Dropdown.Item>
+                                    <Dropdown.Item className="dropbtn" href={"/?lid=제주"}>제주</Dropdown.Item>
+                                    </Col>
+                                    </Row>
+                                </Dropdown.Menu>
+                                </Dropdown>
+                                    </>
+                             </Col>
+                            <Col md={{ span: 6 }} style={{textAlign: "left"}}>
                         <>
-                            <Button className="calbtn" onClick={handleShow}>일정<BsCalendar style={{marginTop: "-13%"}} /></Button>
+                            <Button className="calbtn" variant="transparent" onClick={handleShow}>일정<BsCalendar style={{marginTop: "-7%"}} /></Button>
                             <Modal show={show} onHide={handleClose}>
                                 <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
                                     <Modal.Title>날짜 선택</Modal.Title>
@@ -210,7 +240,9 @@ const Nav = ({props, menu, session}) => {
                             </Modal>
                         </>
                     </Col>
-                    <Col md={{ span: 1 }} style={{textAlign: "center"}}>
+                        </Row>
+                    </Col>
+                    <Col md={{ span: 2 }} style={{textAlign: "right"}}>
                             <>
                                <span>Hi!{session.name}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
