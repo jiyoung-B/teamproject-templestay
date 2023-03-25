@@ -3,6 +3,8 @@ import mariadb from './MariaDB'
 
 const selectLikeSql = `select email, PID from LIKES where email = ? `
 
+const unlikeSql = ` delete from LIKES where PID = ? `
+
 
 class Like {
 
@@ -29,6 +31,30 @@ class Like {
         }
         return likeData;
     }
+
+
+    async delete(pid) {
+
+
+        let conn;
+        let unlikeChk
+        let param = [pid]
+
+        try {
+            conn = await mariadb.makeConn()
+            unlikeChk = await conn.query(unlikeSql,param);
+            if (unlikeChk.affectedRows > 0) unlikeChk = true
+
+
+        } catch(e) {
+
+        } finally {
+            await mariadb.closeConn(conn)
+        }
+
+        return unlikeChk
+    }
+
 
 }
 
