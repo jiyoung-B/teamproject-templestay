@@ -3,7 +3,7 @@ import mariadb from './MariaDB'
 
 const selectLikeSql = `select email, PID from LIKES where email = ? `
 
-const unlikeSql = ` delete from LIKES where PID = ? `
+const unlikeSql = ` delete from LIKES where email = ? and PID = ? `
 
 const likeSql = ` insert into LIKES (email,PID) values(?,?) `
 
@@ -35,12 +35,12 @@ class Like {
     }
 
 
-    async delete(pid) {
+    async delete(email,pid) {
 
 
         let conn;
         let unlikeChk = false
-        let param = [pid]
+        let param = [email,pid]
 
         try {
             conn = await mariadb.makeConn()
