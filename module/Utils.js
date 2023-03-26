@@ -39,6 +39,19 @@ const dateFomatter = (UTFdate) => {
     return result
 }
 
+function dateToMilliseconds(date) { // 어떤 경우에도 밀리초로 반환.
+    // date가 숫자인 경우
+    if (typeof date === 'number') {
+        return date;
+    }
+    // date가 문자열인 경우
+    if (typeof date === 'string') {
+        return new Date(date).getTime();
+    }
+    // date가 Date 객체인 경우
+    return date.getTime();
+}
+
 const handleImgError = (e) => {
     e.target.src = `https://www.templestay.com/images/templeinfo-00.jpg`
 };
