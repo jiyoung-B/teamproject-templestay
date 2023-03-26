@@ -1,0 +1,12 @@
+.scrollable-col {
+    overflow-y: scroll;
+}
+
+.scrollable-col::-webkit-scrollbar {
+    width: 10px;
+}
+
+.scrollable-col::-webkit-scrollbar-thumb {
+    background-color: #c2c2c2;
+    border-radius: 5px;
+}
