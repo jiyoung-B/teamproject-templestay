@@ -170,7 +170,7 @@ const Nav = ({props, menu, session, searchTemple}) => {
             let end = moment(endDate).format('YYYY-MM-DD');
         }
 
-        console.log(`선택한 지역 및 날짜짜 : ${li} ${str}~${end}`)
+        console.log(`선택한 지역 및 날짜짜 : ${lid} ${str}~${end}`)
 
         location.href = `/?lid=${lid}&str=${str}&end=${end}`
     };
