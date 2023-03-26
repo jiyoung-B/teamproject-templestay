@@ -1,10 +1,4 @@
 import mariadb from './MariaDB'
-
-// LIKE 검색을 쓰지 않도록 하는 것이 좋다.
-// url을 한글로 하기 어려우므로, 키를 만들어 보자.
-// 이미지를 저장할때 ?timestamp=.. 을 제거한다.
-// 프로그램에 항상 PID를 넣어보자!
-
 let programSql ={
     selectPro :` select P_NAME,T_NAME,P_CAUTION,P_STRDATE,P_ENDDATE,P_INTRO, P_LINK from PROGRAM2 where PID = ?`,
     selectProPic : `select * from PROGRAMPIC2 where T_NAME = ?`,
