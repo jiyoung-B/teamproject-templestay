@@ -1,7 +1,7 @@
-import {check_captcha, handleInput, hashPassword, process_submit} from "../../components/Util";
+import {check_captcha, handleInput, hashPassword, process_submit} from "../../module/Utils";
 import {useState} from "react"
 import {getSession} from "next-auth/client";
-import Layout from "../../components/layout/Layout";
+import Layout from "../../module/Utils";
 
 export async function getServerSideProps(ctx) {
 

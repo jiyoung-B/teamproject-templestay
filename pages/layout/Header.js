@@ -19,23 +19,26 @@ const Header = ({ props, children, pathname, menu, session }) => {
     const [showIntro, setShowIntro] = useState(true);
     const ref = useRef(null);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (ref.current) {
-                const { top } = ref.current.getBoundingClientRect();
-                setShowIntro(top >= 0);
-            }
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (ref.current) {
+    //             const { top } = ref.current.getBoundingClientRect();
+    //             setShowIntro(top >= 0);
+    //         }
+    //     };
+    //     window.addEventListener("scroll", handleScroll);
+    //     return () => window.removeEventListener("scroll", handleScroll);
+    // }, []);
 
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrollPosition(window.scrollY);
+            console.log('윈도우스크롤',window.scrollY)
+            if (window.scrollY <= 0) setShowIntro(true)
+            // setScrollPosition(window.scrollY); *******해결해~
+            if (window.scrollY >= 1) setShowIntro(false)
         };
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, true);
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
@@ -58,8 +61,6 @@ const Header = ({ props, children, pathname, menu, session }) => {
                 <div ref={ref}>
                     <div style={{ height: showIntro ? "auto" : 0, opacity: showIntro ? 1 : 0 }}>
                         <ToIntro />
-                        <div>{session.user}</div>
-                        <div>{session.email}</div>
                     </div>
                 </div>
                 <div className={showIntro ? "" : "fixed-top"}>
