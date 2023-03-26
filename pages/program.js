@@ -411,7 +411,7 @@ export default function Program ({proData,email}) {
             <div  style={{marginTop:`${unit*4}px`}} id={'contentWrapper'}>
                 <div id={'contentContainer'}>
                     <p className="fs-3 fw-bold text-secondary">프로그램 소개</p>
-                    <p> <span className={'text-warning fs-4'}> {proData[2][0].DIVISION}</span>&nbsp;{proData[0][0].P_INTRO}</p>
+                    <p> <span className={'text-warning fs-4'}>{proData[2][0].DIVISION}</span>&nbsp;{proData[0][0].P_INTRO}</p>
                 </div>
             </div>
             <div style={{marginTop:`${unit*2}px`}} id={'scheduleWrapper'}>
@@ -425,7 +425,7 @@ export default function Program ({proData,email}) {
                                             <p index={index} className={'mb-2 fw-bold'} onClick={showProModal} >{proInfo.P_DES}</p>
                                             <Modal className={'modal-dialog-centered'} show={proShow[index]} index={index} >
                                                 <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
-                                                    <Modal.Title>p{proInfo.P_DES}</Modal.Title>
+                                                    <Modal.Title>{proInfo.P_DES}</Modal.Title>
                                                 </Modal.Header>
                                                 <Modal.Body className="cal">
                                                     <p>&nbsp;{proInfo.P_DETAIL}</p>
