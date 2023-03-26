@@ -202,12 +202,12 @@ export default function Home({searchInfo,likeData, email, session}) {
 
 
         return (
-        <div className="bg-white mt-3" id="wrapper">
+        <div className="bg-white" id="wrapper" style={{marginTop:'85px'}}>
                 <Container fluid>
 
                         {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
                         <Row className="likeslist tpl align-top">
-                                <Col>
+                                <Col md={6} style={{height:'830px', overflowY: "scroll"}}>
                                         { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
 
 
@@ -259,8 +259,8 @@ export default function Home({searchInfo,likeData, email, session}) {
                                         )
                                           }
                                 </Col>
-                                <Col>
-                                        <div id={'map'} style={{ width:'928px', height:'830px',position:"fixed",top:"129",left:"965",zIndex:"1"}}></div>
+                                <Col  md={6}>
+                                        <div id={'map'} style={{ width:'928px', height:'830px'}}></div>
                                 </Col>
                         </Row>
 
