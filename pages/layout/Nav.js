@@ -1,10 +1,21 @@
-import {Container, Row, Col, NavLink, Button, Modal, Form, Dropdown, DropdownButton} from 'react-bootstrap';
+import {
+    Container,
+    Row,
+    Col,
+    NavLink,
+    Button,
+    Modal,
+    Form,
+    Dropdown,
+    DropdownButton,
+    ButtonGroup, ToggleButton
+} from 'react-bootstrap';
 import { HiOutlineMapPin } from 'react-icons/hi2';
 import { BsCalendar } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
 import Link from 'next/link';
 import React, {useEffect, useState} from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
 import {handleInput, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
@@ -49,6 +60,28 @@ const Nav = ({props, menu, session}) => {
     const [email, setEmail] = useState('');
     const [passwd, setPasswd] = useState('');
 
+    // 지역 radio button
+    registerLocale("ko", ko);
+    const [radioValue, setRadioValue] = useState('');
+    const radios = [
+        { name: "인천", value: "incheon" },
+        { name: "서울", value: "seoul" },
+        { name: "강원", value: "gangwon" },
+        { name: "충남", value: "chungnam" },
+        { name: "경기", value: "gyeonggi" },
+        { name: "충북", value: "chungbuk" },
+        { name: "세종", value: "sejong" },
+        { name: "경북", value: "gyeongbuk" },
+        { name: "전북", value: "jeonbuk" },
+        { name: "대구", value: "daegu" },
+        { name: "광주", value: "gwangju" },
+        { name: "전남", value: "jeonnam" },
+        { name: "경남", value: "gyeongnam" },
+        { name: "제주", value: "jeju" },
+        { name: "부산", value: "busan" },
+    ];
+
+    // 회원가입
     const handleJoin = async () => {
         if (passwd2 !== repasswd){
             setPasswdError('비밀번호가 일치하지 않습니다!');
@@ -80,14 +113,8 @@ const Nav = ({props, menu, session}) => {
 
 
     };
-    //
-    // // 암호화시
-    // let hashpwd2 = await hashPassword(passwd2); // 암호를 해시화 함
-    // console.log('join ', hashpwd2)
-    //
-    // const data = {passwd: await hashpwd2, name: name, email: email2};
 
-    //const data = {userid: userid, name: name, passwd:await hshpwd };
+    // 로그인
     const handlelogin = async (e) => {
         e.preventDefault();
 
@@ -112,15 +139,7 @@ const Nav = ({props, menu, session}) => {
 
      };
 
-   // const [session, loading] = useSession();
-   //  const router = useRouter();
-   //
-   //  useEffect(() => {
-   //      if (!session && !loading) {
-   //          router.push('/');
-   //      }
-   //  }, [session, loading, router]);
-
+    // 로그아웃
     const handleSignOut = async () => {
             await signOut();
             alert('로그아웃 완료')
@@ -130,19 +149,21 @@ const Nav = ({props, menu, session}) => {
 
 
 
-    const tomorrow = new Date().setDate(new Date().getDate() + 1);
+    //const tomorrow = new Date().setDate(new Date().getDate() + 1);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
     const [show, setShow] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
     const [showJoin, setShowJoin] = useState(false);
     const [startDate, setStartDate] = useState(tomorrow);
-    const [endDate, setEndDate] = useState(null);
+    const [endDate, setEndDate] = useState(new Date());
+
+    // 여기 왜 이렇게?
     const handleClose = () => {
         setShow(false)
-        location.href = '/?lid=서울'
-
-
     };
+
     const handleShow = () => setShow(true);
     const handleCloseLogin = () => setShowLogin(false);
     const handleShowLogin = () => setShowLogin(true);
@@ -158,6 +179,15 @@ const Nav = ({props, menu, session}) => {
         setEndDate(end);
     };
 
+    // 지역 및 날짜 선택
+    const handleSelection = () => {
+        console.log("선택된 지역:", radioValue);
+        console.log("선택된 일정:", startDate.toLocaleDateString(), "~", endDate.toLocaleDateString());
+        console.log(`선택한 지역 및 일정 : ${radioValue}, ${startDate} ~ ${endDate}`);
+
+        handleClose();
+    };
+
 
     return (
 
@@ -166,83 +196,86 @@ const Nav = ({props, menu, session}) => {
              style={{position: "relative", top: 0, width: "100%"}} id='navWrapper'>
             <Container fluid='xxl pt-2'>
                 <Row className='title'>
-                    <Col md={{ span: 2 }} style={{textAlign: "center"}}>
+                    <Col md={{ span: 3 }} style={{textAlign: "left"}}>
                         <NavLink href='/'>
                             Temfo,
                         </NavLink>
                     </Col>
-                    <Col md={{sapn:8}} style={{textAlign: "center"}}>
+                    <Col md={{sapn:6}} style={{textAlign: "center"}}>
                         <Row>
-                            <Col md={{ span: 6 }} style={{textAlign: "right"}}>
-                                <>
-                                <Dropdown>
-                                    <Dropdown.Toggle className="calbtn" variant="transparent" id="dropdown-basic">
+                            <Button className="calbtn" variant="transparent" onClick={handleShow}>
+                                <Row>
+                                    <Col md={{ span: 5 }} style={{textAlign: "right"}}>
                                         <HiOutlineMapPin className="calbtn"/> 지역
-                                    </Dropdown.Toggle>
-                                <Dropdown.Menu className="ps-2 pe-2">
-                                    {/*<Link href={"/?lid=대구"}>대구</Link>*/}
-                                    <Row>
-                                    <Col>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=인천"}>인천</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=서울"}>서울</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=강원"}>강원</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=충남"}>충남</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=경기"}>경기</Dropdown.Item>
                                     </Col>
-                                    <Col>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=충북"}>충북</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=세종"}>세종</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=경북"}>경북</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=전북"}>전북</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=대구"}>대구</Dropdown.Item>
+                                    <Col md={{ span: 5 }} style={{textAlign: "left"}}>
+                                        일정<BsCalendar style={{marginTop: "-7%"}} />
                                     </Col>
-                                    <Col>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=인천"}>광주</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=광주"}>전남</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=경남"}>경남</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=부산"}>부산</Dropdown.Item>
-                                    <Dropdown.Item className="dropbtn" href={"/?lid=제주"}>제주</Dropdown.Item>
-                                    </Col>
-                                    </Row>
-                                </Dropdown.Menu>
-                                </Dropdown>
-                                    </>
-                             </Col>
-                            <Col md={{ span: 6 }} style={{textAlign: "left"}}>
+                                </Row>
+                            </Button>
                         <>
-                            <Button className="calbtn" variant="transparent" onClick={handleShow}>일정<BsCalendar style={{marginTop: "-7%"}} /></Button>
                             <Modal show={show} onHide={handleClose}>
                                 <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
-                                    <Modal.Title>날짜 선택</Modal.Title>
+                                    <Modal.Title>지역 & 날짜 선택</Modal.Title>
                                 </Modal.Header>
-                                <Modal.Body className="cal">
-                                    <DatePicker
-                                        selected={startDate}
-                                        onChange={onChange}
-                                        inline
-                                        startDate={startDate}
-                                        endDate={endDate}
-                                        minDate={tomorrow}
-                                        monthsShown={2}
-                                        selectsRange
-                                        dateFormat="yyyy-MM-dd"
-                                        locale={ko}
-                                    />
+                                <Modal.Body>
+                                    <Container fluid style={{textAlign: "center"}}>
+                                        {radios.map((radio, idx) => (
+                                            idx % 5 === 0 ? (
+                                                <Row key={idx} >
+                                                    {radios.slice(idx, idx + 5).map((radio, idx2) => (
+                                                        <Col key={idx2}>
+                                                            <ToggleButton
+                                                                className="m-2"
+                                                                id={`radio-${idx}-${idx2}`} // 각각의 버튼에 유일한 id 부여
+                                                                type="radio"
+                                                                variant="outline-primary"
+                                                                name="radio"
+                                                                value={radio.value}
+                                                                checked={radioValue === radio.value}
+                                                                onChange={(e) => setRadioValue(e.currentTarget.value)}
+                                                            >
+                                                                <label htmlFor={`radio-${idx}-${idx2}`} style={{marginBottom: 0}}>
+                                                                    {radio.name}
+                                                                </label>
+                                                            </ToggleButton>
+                                                        </Col>
+                                                    ))}
+                                                </Row>
+                                            ) : null
+                                        ))}
+                                    </Container>
+                                    <br />
+                                    <Row>
+                                        <Modal.Body className="cal">
+                                            <DatePicker
+                                                selected={startDate}
+                                                onChange={onChange}
+                                                inline
+                                                startDate={startDate}
+                                                endDate={endDate}
+                                                minDate={tomorrow}
+                                                monthsShown={2}
+                                                selectsRange
+                                                dateFormat="yyyy-MM-dd"
+                                                locale={ko}
+                                            />
+                                        </Modal.Body>
+                                    </Row>
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button variant="secondary" onClick={handleClose} style={{backgroundColor: "#331904"}}>
                                         닫기
                                     </Button>
-                                    <Button variant="primary" onClick={handleClose}>
+                                    <Button variant="primary" onClick={handleSelection}>
                                         선택
                                     </Button>
                                 </Modal.Footer>
                             </Modal>
                         </>
-                    </Col>
                         </Row>
                     </Col>
-                    <Col md={{ span: 2 }} style={{textAlign: "right"}}>
+                    <Col md={{ span: 3 }} style={{textAlign: "right"}}>
                             <>
                                <span>Hi!{session.name}</span>
                                 <Button className="calbtn" onClick={handleShowLogin}>

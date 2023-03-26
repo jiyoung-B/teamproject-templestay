@@ -19,17 +19,17 @@
     color: #331904 !important;
     font-weight: bold;
     /*margin: -1% 0 0 0 !important;*/
-    border-bottom: 1px solid white !important;
+    border-bottom: 1px solid #331904 !important;
 }
 .dropbtn:hover {
     background-color: white;
     color: #331904;
-    border: 1px solid white;
+    border: 1px solid #331904;
 }
 .dropbtn:active {
     background-color: white;
     color: #331904;
-    border: 1px solid white;
+    border: 1px solid #331904;
 }
 
 .calbtn:hover {
