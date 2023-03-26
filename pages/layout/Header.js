@@ -12,12 +12,6 @@ import * as pageProps from "next-auth/client";
 
 
 const Header = ({ props, children, pathname, menu, session }) => {
-    // const user = session.user;
-    //const user = children.props.session.user;
-
-    console.log('헤더칠드런세션세스'+session)
-
-
 
     const router = useRouter();
     const currentPath = router.pathname;

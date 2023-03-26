@@ -58,7 +58,6 @@ export async function getServerSideProps(ctx) {
 }
 
 export default function Home({searchInfo,likeData, email, session}) {
-        console.log('홈홈'+session);
         let [addr,setAddr] =useState()
 
         const [likeOnoffArr, setLikeOnoffArr] = useState(Array(searchInfo.length).fill(false));

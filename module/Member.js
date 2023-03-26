@@ -62,17 +62,10 @@ class Member {
         let conn = null;
         let params = [email, passwd];
         let result = -1;
-        console.log('로그인 api진입')
-        console.log('[파람스]', params)
-        console.log('[파람스이메일]', email)
-        console.log('[파람스pwd]', await passwd)
-
 
         try {
             conn = await mariadb.makeConn();
-            console.log('커넥션~', conn)
             result = await conn.query(membersql.loginsql, params);
-            console.log('츄라이~', result)
         } catch (e) {
             console.log(e);
         } finally {
