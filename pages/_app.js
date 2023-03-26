@@ -13,8 +13,6 @@ import App from "next/app";
 
 function MyApp({ Component, pageProps, session }) {
     pageProps.session = session.user;
-    console.log('myapp페이지프롭스세션-', pageProps); // member도 있고 session도 있음
-    console.log('myapp페이지프롭스멤버세션', pageProps.session); // 세션만 있음.
     const getLayout = Component.getLayout ?? ((page) => page);
 
     return (

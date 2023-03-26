@@ -25,8 +25,18 @@
 .editorpick {
     background: #fff3cd;
     padding-bottom: 60px;
-
     padding-bottom: 5%;
+}
+
+.editorCard{
+    width: 300px;
+    background-color:#FCF5EB;
+    height: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid rgba(51, 25, 4, 0.5);
+
 }
 .mb {
     padding-bottom: 400px;
