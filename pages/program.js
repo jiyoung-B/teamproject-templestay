@@ -445,7 +445,7 @@ export default function Program ({proData,email}) {
                     <Container style={{marginTop:`${unit}px`}} id={'cardContainer'}>
                         <Row>
                             {(proData[5].length > 0 ) ? (proData[5].map(program => (
-                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '432px' }} key={shortid.generate()}>
+                                <Col md={4} style={{ marginTop:`${unit}px`, flexBasis: '420px' }} key={shortid.generate()}>
 
                                     <Card style={{ width: '100%' }} key={shortid.generate()}>
                                         <Card.Img variant="top" src={(program.P_PICLINK.length < 40) ? 'https://www.templestay.com/images/templeinfo-00.jpg' : program.P_PICLINK} onError={handleImgError} style={{height: '280px'}} key={shortid.generate()}/>
