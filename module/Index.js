@@ -1,6 +1,6 @@
 import mariadb from './MariaDB'
 
-let indexSql =
+let localSql =
     ` select p.P_NAME,p.PID,t.T_NAME,ADDR,P_CLASS, date_format(P_STRDATE, '%Y-%m-%d') P_STRDATE, date_format(P_ENDDATE, '%Y-%m-%d') P_ENDDATE,P_PICLINK
 from TEMPLE2 t
 INNER JOIN PROGRAM2 p ON t.T_NAME = p.T_NAME
@@ -13,19 +13,31 @@ from TEMPLE2 t
          INNER JOIN PROGRAMPIC2 pp on p.P_NAME = pp.P_NAME
 where E_PICKTF = 1 `;
 
-let selectDateSql = ` select p.P_NAME,p.PID,t.T_NAME,ADDR,P_CLASS, date_format(P_STRDATE, '%Y-%m-%d') P_STRDATE, date_format(P_ENDDATE, '%Y-%m-%d') P_ENDDATE,P_PICLINK, pp.E_PICKTF, t.REGION
+let selectLNDateSql = ` select p.P_NAME,p.PID,t.T_NAME,ADDR,P_CLASS, date_format(P_STRDATE, '%Y-%m-%d') P_STRDATE, date_format(P_ENDDATE, '%Y-%m-%d') P_ENDDATE,P_PICLINK, pp.E_PICKTF, t.REGION
                         from TEMPLE2 t
                                  INNER JOIN PROGRAM2 p ON t.T_NAME = p.T_NAME
                                  INNER JOIN PROGRAMPIC2 pp on p.P_NAME = pp.P_NAME
                         WHERE (t.REGION = ?) and (p.P_STRDATE < ? AND p.P_ENDDATE > ?) `;
+
+let selectDateSql = ` select p.P_NAME,p.PID,t.T_NAME,ADDR,P_CLASS, date_format(P_STRDATE, '%Y-%m-%d') P_STRDATE, date_format(P_ENDDATE, '%Y-%m-%d') P_ENDDATE,P_PICLINK, pp.E_PICKTF, t.REGION
+from TEMPLE2 t
+         INNER JOIN PROGRAM2 p ON t.T_NAME = p.T_NAME
+         INNER JOIN PROGRAMPIC2 pp on p.P_NAME = pp.P_NAME
+WHERE (p.P_STRDATE < ? AND p.P_ENDDATE > ?) `
 
 
 
 
 class Index {
 
+    constructor(lid,str,end) {
+        this.lid = lid
+        this.str = str
+        this.end = end
+    }
 
-    async editorPic () {
+
+    async editorPic () { // 검사 완
         let conn;
         let defaultData
 
@@ -42,16 +54,15 @@ class Index {
         return defaultData
     }
 
-    async searchOne(lid,str) {
+    async searchLNOne() {
         let conn;
         let searchOneData;
-        let param = []
+        let param = [this.lid,this.str,this.str]
 
         try{
             conn = await mariadb.makeConn();
-            param = [lid,str,str];
 
-            searchOneData = await conn.query(selectDateSql,param)
+            searchOneData = await conn.query(selectLNDateSql,param)
 
         }catch (e) {
             console.log(e)
@@ -62,17 +73,16 @@ class Index {
         return searchOneData
     }
 
-    async searchDate (lid,str,end) {
+    async searchLNDate () {
         let conn;
         let searchData;
-        let param = []
+        let param = [this.lid,this.str,this.end]
 
 
         try{
             conn = await mariadb.makeConn();
-            param = [lid,str,end];
 
-            searchData = await conn.query(selectDateSql,param)
+            searchData = await conn.query(selectLNDateSql,param)
 
         }catch (e) {
             console.log(e)
@@ -83,26 +93,70 @@ class Index {
         return searchData
     }
 
-}
+    async selectLocal() { // 검사 완
+        let conn = null;
+
+        let indexData
+        let param = [this.lid];
+        try {
+            conn = await mariadb.makeConn();
 
 
+            indexData = await conn.query(localSql, param);
 
-async function selectIndex(lid) {
-    let conn = null;
-
-    let indexData
-    try {
-        conn = await mariadb.makeConn();
-
-        let param = [lid];
-        indexData = await conn.query(indexSql, param);
-
-    } catch (e) {
-        console.log(e);
-    } finally {
-        await mariadb.closeConn(conn)
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await mariadb.closeConn(conn)
+        }
+        return indexData
     }
-   return indexData
+
+    async searchDate() {
+        let conn = null;
+
+        let indexData
+        let param = [this.str,this.end];
+        try {
+            conn = await mariadb.makeConn();
+
+
+            indexData = await conn.query(selectDateSql, param);
+
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await mariadb.closeConn(conn)
+        }
+        return indexData
+    }
+
+    async searchOne() { // 문제
+        let conn = null;
+
+        let indexData
+        let param = [this.str,this.str];
+
+        try {
+            conn = await mariadb.makeConn();
+            indexData = await conn.query(selectDateSql, param);
+
+        } catch (e) {
+            console.log(e);
+        } finally {
+            await mariadb.closeConn(conn)
+        }
+        return indexData
+
+
+    }
+
 }
+
+
+
+
+
+
 
 export default Index;
