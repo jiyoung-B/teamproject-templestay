@@ -1,56 +1,37 @@
-import {
-    Container,
-    Row,
-    Col,
-    NavLink,
-    Button,
-    Modal,
-    Form,
-    Dropdown,
-    DropdownButton,
-    ButtonGroup, ToggleButton
-} from 'react-bootstrap';
+import {Container, Row, Col, NavLink, Button, Modal, Form, ToggleButton} from 'react-bootstrap';
 import { HiOutlineMapPin } from 'react-icons/hi2';
 import { BsCalendar } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
-import Link from 'next/link';
 import React, {useEffect, useState} from "react";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
-import {handleInput, hashPassword, process_submit, comparePasswd} from "../../module/Utils";
+import {handleInput, hashPassword, process_submit} from "../../module/Utils";
 import {error} from "next/dist/build/output/log";
-import {getSession, signIn, signOut, useSession} from "next-auth/client";
+import {signIn, signOut} from "next-auth/client";
 import axios from "axios";
 import {useRouter} from "next/router";
+import moment from 'moment';
 
 
 
 // export async function getServerSideProps(ctx) {
+//     //const {lid ,str, end} ={ctx.query.lid, ctx.query.str, ctx.query.end}
+//     const [lid ,str, end] = [ctx.query.lid, ctx.query.str, ctx.query.end]
 //
-//     // 세션 객체 가져오기
-//     const sess = await getSession(ctx);
-//     if(!sess) { // 로그인하지 않은 경우 로그인으로 이동
-//         return {
-//             redirect: {permanent: false, destination: '/'},
-//             props: {}
-//         }
-//     }
-//     // let userid = ctx.query.userid;
-//     // let userid = 'abc123';
-//     let email = sess.user.email; // 로그인한 사용자 아이디
-//
-//     let url = `http://localhost:3000/api/member/myinfo?email=${email}`;
+//     let params = ``;
+//     let url = `http://localhost:3000/api/?email=${params}`;
 //
 //     const res = await axios.get(url);
-//     const member = await res.data[0];
-//     console.log('네브멤버api : ', await member);
+//     const searchTemple = await res.data;
+//     console.log('검색한절 : ', await searchTemple);
 //
-//     return {props : {member: member, session: sess}}
+//     return {props : {searchTemple}}
 // }
-//
 
-const Nav = ({props, menu, session}) => {
+
+const Nav = ({props, menu, session, searchTemple}) => {
+
 
     const [passwd2, setPasswd2,] = useState('');
     const [repasswd, setRepasswd] = useState('');
@@ -64,21 +45,21 @@ const Nav = ({props, menu, session}) => {
     registerLocale("ko", ko);
     const [radioValue, setRadioValue] = useState('');
     const radios = [
-        { name: "인천", value: "incheon" },
-        { name: "서울", value: "seoul" },
-        { name: "강원", value: "gangwon" },
-        { name: "충남", value: "chungnam" },
-        { name: "경기", value: "gyeonggi" },
-        { name: "충북", value: "chungbuk" },
-        { name: "세종", value: "sejong" },
-        { name: "경북", value: "gyeongbuk" },
-        { name: "전북", value: "jeonbuk" },
-        { name: "대구", value: "daegu" },
-        { name: "광주", value: "gwangju" },
-        { name: "전남", value: "jeonnam" },
-        { name: "경남", value: "gyeongnam" },
-        { name: "제주", value: "jeju" },
-        { name: "부산", value: "busan" },
+        { name: "인천", value: "인천"},
+        { name: "서울", value: "서울"},
+        { name: "강원", value: "강원"},
+        { name: "충남", value: "충남"},
+        { name: "경기", value: "경기"},
+        { name: "충북", value: "충북"},
+        { name: "세종", value: "세종"},
+        { name: "경북", value: "경북"},
+        { name: "전북", value: "전북"},
+        { name: "대구", value: "대구"},
+        { name: "광주", value: "광주"},
+        { name: "전남", value: "전남"},
+        { name: "경남", value: "경남"},
+        { name: "제주", value: "제주"},
+        { name: "부산", value: "부산"},
     ];
 
     // 회원가입
@@ -181,11 +162,17 @@ const Nav = ({props, menu, session}) => {
 
     // 지역 및 날짜 선택
     const handleSelection = () => {
-        console.log("선택된 지역:", radioValue);
-        console.log("선택된 일정:", startDate.toLocaleDateString(), "~", endDate.toLocaleDateString());
-        console.log(`선택한 지역 및 일정 : ${radioValue}, ${startDate} ~ ${endDate}`);
+        let lid = radioValue;
+        let str = moment(startDate).format('YYYY-MM-DD');
+        let end = null;
 
-        handleClose();
+        if(endDate !== null) {
+            let end = moment(endDate).format('YYYY-MM-DD');
+        }
+
+        console.log(`선택한 지역 및 날짜짜 : ${li} ${str}~${end}`)
+
+        location.href = `/?lid=${lid}&str=${str}&end=${end}`
     };
 
 
