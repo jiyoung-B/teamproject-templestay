@@ -77,8 +77,7 @@ const hashPassword = async (passwd) => {
 
 // 암호 비교 함수 - 암호와 해시화된 암호를 비교
 const comparePasswd = async (passwd, hashpwd) => {
-    console.log('컴페어입력패스워드', await passwd)
-    console.log('컴페어입력해쉬pwd패스워드', await hashpwd)
+
     try {
         return await bcrypt.compare(passwd, hashpwd);
     } catch (err) {

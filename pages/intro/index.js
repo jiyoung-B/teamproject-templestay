@@ -74,9 +74,9 @@ const Intro = ({edPicks}) => {
                                         <div key={ep.PID} className="col" style={{width: "300px", Height: "300px"}}>
                                             <NavLink href={`/program?pid=${ep.PID}`}>
                                                 <CardGroup style={{width: "300px", height: "300px"}}>
-                                                    <Card className="h-100">
+                                                    <Card className="h-100 editorCard">
                                                     <Card.Img variant="top" src={ep.P_PICLINK} style={{width: "300px", minHeight: "200px"}}/>
-                                                    <Card.Body style={{width: "300px", height: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}>
+                                                    <Card.Body>
                                                         <Card.Text>
                                                            <h6> #{ep.T_NAME}</h6>
                                                         </Card.Text>

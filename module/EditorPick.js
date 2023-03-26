@@ -11,7 +11,7 @@ async function selectEdPic() {
     try {
         conn = await mariadb.makeConn();
         let editorpick = await conn.query(editorSql.selectEdPic, param);
-        console.log('에디터픽 불러옴?', editorpick);
+
         edPickData.push(editorpick)
 
     } catch (e) {
