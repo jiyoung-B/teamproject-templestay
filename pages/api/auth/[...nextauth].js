@@ -45,9 +45,7 @@ export default NextAuth({
                 // 인증에 성공해야만 로그인 허용
                 //if (email === 'abc123' && passwd === '987xyz') {
                 if (await is_ok) {
-                    console.log('크리덴셜네임추가 전 - ', credentials);
                     credentials.name = (await result).name;
-                    console.log('크리덴셜네임추가 후- ', credentials);
                     return credentials;
                 }
             }
