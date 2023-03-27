@@ -195,10 +195,10 @@ const Nav = ({props, menu, session, searchTemple}) => {
                             <Button className="calbtn" variant="transparent" onClick={handleShow}>
                                 <Row>
                                     <Col md={{ span: 5 }} style={{textAlign: "right"}}>
-                                        <HiOutlineMapPin className="calbtn"/> 지역
+                                        <HiOutlineMapPin className="calbtn" style={{marginTop: "-3%"}} /> 지역
                                     </Col>
                                     <Col md={{ span: 5 }} style={{textAlign: "left"}}>
-                                        일정<BsCalendar style={{marginTop: "-7%"}} />
+                                        일정<BsCalendar style={{marginTop: "-3%"}} />
                                     </Col>
                                 </Row>
                             </Button>
@@ -266,7 +266,7 @@ const Nav = ({props, menu, session, searchTemple}) => {
                     </Col>
                     <Col md={{ span: 3 }} style={{textAlign: "right"}}>
                             <>
-                               <span>Hi!{session.name}</span>
+                               <span>Hi! {session.name} </span>
                                 <Button className="calbtn" onClick={handleShowLogin}>
                                     <CiUser />
                                 </Button>
