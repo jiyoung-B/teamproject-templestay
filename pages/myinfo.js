@@ -5,11 +5,11 @@ import Link from "next/link";
 import MyinfoCommon from "./layout/MyinfoCommon";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
-import {Table} from "react-bootstrap";
+import {NavLink, Table} from "react-bootstrap";
 import Likes from "./likes";
 import {getSession} from "next-auth/client";
 import axios from "axios";
-import React from "react";
+import React, {useState} from "react";
 import moment from "moment/moment";
 
 
@@ -45,23 +45,25 @@ export async function getServerSideProps(ctx) {
 
 export default function Myinfo ({session, bookedinfos}) {
     console.log('예약정보 받아오나요?', bookedinfos)
+    const [count, setCount] = useState(bookedinfos.length);
 
     return (
         <main>
             <MyinfoCommon session={session}/>
             <Container fluid>
                 <Row className="lnm2">
-                    <Col className="likesmenu2 col-6"><Link href='/likes'>좋아요</Link></Col>
+                    <Col className="likesmenu2 col-6"><NavLink href='/likes'>좋아요</NavLink></Col>
                     <Col className="bar2 col-1">|</Col>
                     <Col className="infomenu2 col-5">예약정보</Col>
                 </Row>
-                <Row className="msg">
-                    <Col className="offset-1">예약1</Col>
-                </Row>
-                <Row className="bkinfo">
-                    <Col className="col-10 offset-1">
-                        <>
-                        {bookedinfos.map(bi => (
+                    <>
+                    {bookedinfos.map((bi, index) => (
+                        <Col>
+                        <Row className="msg">
+                            <Col className="offset-1">예약{index + 1}</Col>
+                        </Row>
+                          <Row className="bkinfo">
+                          <Col className="col-10 offset-1">
                                 <Table striped="columns" bordered className="bkdtb">
                                     <tbody key={bi.PID}>
                                     <tr>
@@ -89,20 +91,13 @@ export default function Myinfo ({session, bookedinfos}) {
                                         <td>{bi.TOTAL}</td>
                                     </tr>
                                     </tbody>
-                                </Table>
-                        ))}
-                        </>
-
-                    </Col>
-                </Row>
+                                </Table></Col>
+                          </Row>
+                         </Col>
+                    ))}
+                    </>
             </Container>
         </main>
     )
 }
 
-Myinfo.getLayout = (page) => (
-    <Layout meta={{title: '마이페이지-내정보'}}>
-        <Nav />
-        {page}
-    </Layout>
-)
