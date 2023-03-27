@@ -24,10 +24,19 @@ export default function preBook ({preBookInfo}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    console.log('여기선 몇번?1')
 
-    preBookInfo.TOTAL = preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1];
     let email = preBookInfo.email
+
+    const startDate = new Date(preBookInfo.B_STRDATE);
+    const endDate = new Date(preBookInfo.B_ENDDATE);
+
+    const diffTime = endDate.getTime() - startDate.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    preBookInfo.TOTAL = diffDays*(preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]);
+    console.log(preBookInfo.TOTAL)
+
+
 
     const handleBook = async () => {
 
@@ -75,7 +84,7 @@ export default function preBook ({preBookInfo}) {
                 <tr><td style={{background:'#F2F2F2'}}><p className={'mb-0'}>분 류</p></td><td><p className={'mb-0'}>{preBookInfo.P_CLASS}</p></td></tr>
                 <tr><td style={{background:'#F2F2F2'}}><p className={'mb-0'}>기 간</p></td><td><p className={'mb-0'}>{preBookInfo.B_STRDATE.substring(0, 10)} ~ {preBookInfo.B_ENDDATE.substring(0, 10)}</p></td></tr>
                 <tr><td style={{background:'#F2F2F2'}}><p className={'mb-0'}>인 원</p></td><td><p className={'mb-0'}>성인 : {preBookInfo.ADULT[0]}명, 중고생 : {preBookInfo.MIDDLE[0]}명, 초등생 : {preBookInfo.YOUNG[0]}명, 미취학 : {preBookInfo.PRESCHOOL[0]}명</p></td></tr>
-                <tr><td style={{background:'#F2F2F2'}}><p className={'mb-0'}>합 계</p></td><td><p className={'mb-0'}>{preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]}원</p></td></tr>
+                <tr><td style={{background:'#F2F2F2'}}><p className={'mb-0'}>합 계</p></td><td><p className={'mb-0'}>{preBookInfo.TOTAL}원</p></td></tr>
                 </tbody>
             </Table>
             <Row>
