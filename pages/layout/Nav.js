@@ -43,7 +43,7 @@ const Nav = ({props, menu, session, searchTemple}) => {
 
     // 지역 radio button
     registerLocale("ko", ko);
-    const [radioValue, setRadioValue] = useState('');
+    const [radioValue, setRadioValue] = useState(null);
     const radios = [
         { name: "인천", value: "인천"},
         { name: "서울", value: "서울"},
@@ -138,7 +138,7 @@ const Nav = ({props, menu, session, searchTemple}) => {
     const [showLogin, setShowLogin] = useState(false);
     const [showJoin, setShowJoin] = useState(false);
     const [startDate, setStartDate] = useState(tomorrow);
-    const [endDate, setEndDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(tomorrow);
 
     // 여기 왜 이렇게?
     const handleClose = () => {
@@ -163,11 +163,13 @@ const Nav = ({props, menu, session, searchTemple}) => {
     // 지역 및 날짜 선택
     const handleSelection = () => {
         let lid = radioValue;
+        console.log('lid',radioValue)
         let str = moment(startDate).format('YYYY-MM-DD');
         let end = null;
-
+        console.log('str',str)
+        console.log('end',end)
         if(endDate !== null) {
-            let end = moment(endDate).format('YYYY-MM-DD');
+            end = moment(endDate).format('YYYY-MM-DD');
         }
 
         console.log(`선택한 지역 및 날짜짜 : ${lid} ${str}~${end}`)
