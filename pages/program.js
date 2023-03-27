@@ -47,7 +47,6 @@ export default function Program ({proData,email}) {
     const startIdx = proData[0][0].P_NAME.indexOf('['); // 첫번째 '['의 인덱스 찾기
     const endIdx = proData[0][0].P_NAME.indexOf(']'); // 첫번째 ']'의 인덱스 찾기
     const result = proData[0][0].P_NAME.slice(0, startIdx) + proData[0][0].P_NAME.slice(endIdx + 1); // '['와 ']' 사이의 문자열 제거하기
-    console.log('aaa',result);
 
 
     if(P_CLASS === '당일형') {
