@@ -1,5 +1,5 @@
 import {signOut} from "next-auth/client";
-import Layout from "../../module/Utils";
+import Layout from "../../models/Utils";
 
 export default function Logout({member, session}) {
     return (
