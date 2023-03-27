@@ -1,5 +1,5 @@
-import PreBook from "../../module/PreBook";
-import {UTFFomatter} from "../../module/Utils";
+import PreBook from "../../models/PreBook";
+import {UTFFomatter} from "../../models/Utils";
 
 export default async (req, res) => {
     let {email}  = req.query

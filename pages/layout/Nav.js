@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 import DatePicker, {registerLocale} from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {ko} from "date-fns/locale";
-import {handleInput, hashPassword, process_submit} from "../../module/Utils";
+import {handleInput, hashPassword, process_submit} from "../../models/Utils";
 import {error} from "next/dist/build/output/log";
 import {signIn, signOut} from "next-auth/client";
 import axios from "axios";

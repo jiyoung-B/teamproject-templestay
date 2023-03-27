@@ -5,7 +5,7 @@ import axios from "axios";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
 import shortid from 'shortid'
-import {handleImgError, dateFomatter, milliFomatter} from "../module/Utils";
+import {handleImgError, dateFomatter, milliFomatter} from "../models/Utils";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";

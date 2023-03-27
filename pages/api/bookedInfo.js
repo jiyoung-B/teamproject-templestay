@@ -1,4 +1,4 @@
-import bookInfo from "../../module/BookedInfo";
+import bookInfo from "../../models/BookedInfo";
 export default async (req, res) => {
     let email = req.query.email
 

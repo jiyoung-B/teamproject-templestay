@@ -1,4 +1,4 @@
-import PreBook from "../../module/PreBook";
+import PreBook from "../../models/PreBook";
 
 export default async (req, res) => {
     let {email}  = req.query
