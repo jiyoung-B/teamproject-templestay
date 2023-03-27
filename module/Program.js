@@ -1,6 +1,6 @@
 import mariadb from './MariaDB'
 let programSql ={
-    selectPro :` select P_NAME,T_NAME,P_CAUTION,P_STRDATE,P_ENDDATE,P_INTRO, P_LINK from PROGRAM2 where PID = ?`,
+    selectPro :` select P_NAME,T_NAME,P_CAUTION,P_STRDATE,P_ENDDATE,P_INTRO, P_LINK,P_CLASS from PROGRAM2 where PID = ?`,
     selectProPic : `select * from PROGRAMPIC2 where T_NAME = ?`,
     selectProPrice : `select DIVISION,PR_CLASS,PRICE from PROGRAMPRICE2 where PID = ? order by PR_NO`,
     selectProSchedule : ` select P_DAY, P_TIME,P_CONTENT from PROGRAMSCHEDULE2 where PID = ? ORDER BY PS_NO `,

@@ -13,7 +13,7 @@ import Myinfo from "./myinfo";
 import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
-import {Button} from "react-bootstrap";
+import {Button, NavLink} from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
         let {lid ,str,end} = ctx.query
@@ -47,7 +47,6 @@ export async function getServerSideProps(ctx) {
 
                 likeData = likeRes.data
         }
-
 
 
 
@@ -210,11 +209,13 @@ export default function Home({searchInfo,likeData, email, session}) {
 
 
                                                     <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                            <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+
                                                                     <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
+                                                                            <NavLink href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
                                                                             <img src={program.P_PICLINK} alt="프로그램 이미지" style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                            </NavLink>
                                                                     </Col>
-                                                            </Link>
+
                                                             <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
                                                                     <Row style={{height:'140px'}} key={shortid.generate()}>
                                                                             <Col key={shortid.generate()}>
