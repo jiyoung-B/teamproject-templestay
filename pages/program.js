@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import {getSession, session} from "next-auth/client";
+import Link from "next/link";
 //shortid.generate()
 
 
@@ -42,6 +43,12 @@ export default function Program ({proData,email}) {
     let P_CLASS = proData[0][0].P_CLASS
 
     let isDates = true;
+    // 제목 문자열 만들기
+    const startIdx = proData[0][0].P_NAME.indexOf('['); // 첫번째 '['의 인덱스 찾기
+    const endIdx = proData[0][0].P_NAME.indexOf(']'); // 첫번째 ']'의 인덱스 찾기
+    const result = proData[0][0].P_NAME.slice(0, startIdx) + proData[0][0].P_NAME.slice(endIdx + 1); // '['와 ']' 사이의 문자열 제거하기
+    console.log('aaa',result);
+
 
     if(P_CLASS === '당일형') {
         isDates=false
@@ -232,7 +239,7 @@ export default function Program ({proData,email}) {
         <div className={'container'} style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
 
             <div id={'titleWrapper'}>
-                <h3 className={"text-primary ps-4"}>{proData[0][0].P_NAME}</h3>
+                <h3 className={"text-primary ps-4"}><NavLink href={`/temple?id=${proData[0][0].T_NAME}`} style={{display:'inline-block'}}><span>[{proData[0][0].T_NAME}]</span></NavLink>{result}</h3>
             </div>
             <div style={{marginTop:`${unit*1}px`}} id={'imgWrapper'}>
                 <div id="carouseContainer">
