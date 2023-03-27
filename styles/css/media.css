@@ -1,0 +1,5 @@
+@media screen and (max-width: 415px) {
+    .media414 {
+        display: none;
+    }
+}
