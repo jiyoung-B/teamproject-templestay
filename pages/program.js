@@ -38,7 +38,7 @@ export async function getServerSideProps(ctx) {
 
 export default function Program ({proData,email}) {
     const unit = 28
-    let PID = proData[6]
+    let PID = proData[7]
 
 
     // 예약하기 버튼 비활성화 state
@@ -165,6 +165,7 @@ export default function Program ({proData,email}) {
         }
 
         const process_reservation = async (inputData) => {
+            // console.log('here',inputData)
 
             const cnt = await fetch('/api/preBook', {
                 method: 'POST', mode: 'cors',
