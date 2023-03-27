@@ -13,58 +13,35 @@ import GoogleMapReact from "google-map-react";
 import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb";
 
 import Geocode from "react-geocode";
+import likesListCnt from "./api/likesListCnt";
 
 export async function getServerSideProps(ctx) {
-// 세션 객체 가져오기
-//     const sess = await getSession(ctx);
-//     let email = sess?.user?.email;
-//     let url = email ? `http://localhost:3000/api/member/myinfo?email=${email}`:'';
-//
-//     if(url){
-//         const res = await axios.get(url);
-//         const member = await res.data[0];
-//         console.log('pg myinfo common : ', await member);
-//
-//         return {props : {member: member, session: sess}}
-//     } else {
-//         return {props : {session: null}};
-//     }
 
-    // 세션 객체 가져오기
-    const sess = await getSession(ctx);
-    if(!sess) { // 로그인하지 않은 경우 로그인으로 이동
-        return {
-            redirect: {permanent: false, destination: '/'},
-            props: {}
-        }
-    }
-    // let userid = ctx.query.userid;
-    // let userid = 'abc123';
-    let email = sess.user.email; // 로그인한 사용자 아이디
-
-    let url = `http://localhost:3000/api/member/myinfo?email=${email}`;
-
+    const session = await getSession(ctx);
+    // if(!session) { // 로그인하지 않은 경우 로그인으로 이동
+    //     return {
+    //         redirect: {permanent: false, destination: '/'},
+    //         props: {}
+    //     }
+    // }
+    let email = session.user.email;
+    let param = `?email=${email}`
+    let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
-    console.log('마이커먼인포res', res);
-    const member = await res.data[0];
-    console.log('인포커먼 멤버 myinfo : ', await member);
+    const likes = await res.data[0];
 
-    return {props : {member: member, session: sess}}
+    console.log('라잌스넘어옴????',likes)
+    return {props : {likes: likes}}
 }
+export default function Likes ({session, likes}) {
+    console.log('likes-------!!!', likes)
 
-export default function Likes ({member, session}) {
-    console.log('라잌스 - ', session);
-    console.log('라잌스멤버 넘어옴? - ', member);
-
-    const [checkedState, setCheckedState] = useState(
-        new Array(temples.length).fill(false)
-    );
+    const [checkedState, setCheckedState] = useState( new Array(likes.length).fill(false) );
     const [userinfo, setUserInfo] = useState({
-        name: [],
-        location: [],
-        program: [],
-        price: [],
-        details: [],
+        T_NAME: [],
+        ADDR: [],
+        P_NAME: [],
+        PRICE: [],
         response: [],
     });
 
@@ -82,30 +59,28 @@ export default function Likes ({member, session}) {
 
         // 체크박스에 체크된 데이터 가져오기!
         const { value, checked } = e.target;
-        const { name, location, program, price, details } = userinfo;
+        const { T_NAME, ADDR, P_NAME, PRICE } = userinfo;
 
         // Case 1 : The user checks the box
         if (checked) {
             setUserInfo({
-                name: [...name, value],
-                location: [...location],
-                program: [...program],
-                price: [...price],
-                details: [...details],
-                response: [...name, ...location, ...program, ...price, ...details, value],
+                T_NAME: [...T_NAME, value],
+                ADDR: [...ADDR],
+                P_NAME: [...P_NAME],
+                PRICE: [...PRICE],
+                response: [...T_NAME, ...ADDR, ...P_NAME, ...PRICE, value],
             });
         }
 
         // Case 2  : The user unchecks the box
         else {
             setUserInfo({
-                name: name.filter((e) => e !== value),
-                location: location.filter((e) => e !== value),
-                program: program.filter((e) => e !== value),
-                price: price.filter((e) => e !== value),
-                details: details.filter((e) => e !== value),
-                response: [...name.filter((e) => e !== value), ...location.filter((e) => e !== value), ...program.filter((e) => e !== value),
-                    ...price.filter((e) => e !== value), ...details.filter((e) => e !== value)],
+                T_NAME: T_NAME.filter((e) => e !== value),
+                ADDR: ADDR.filter((e) => e !== value),
+                P_NAME: P_NAME.filter((e) => e !== value),
+                PRICE: PRICE.filter((e) => e !== value),
+                response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
+                    ...PRICE.filter((e) => e !== value)],
             });
         }
     };
@@ -133,7 +108,7 @@ export default function Likes ({member, session}) {
 
     let go2bk = () => {
         handleClose()
-        location.href = '/book';
+        location.href = '/preBook?email=${email}';
     };
 
     console.log(userinfo.response)
@@ -185,6 +160,8 @@ export default function Likes ({member, session}) {
     let temloc2 = String(userinfo.response[1]).split(',')[1];
     let temloc3 = String(userinfo.response[2]).split(',')[1];
     // let address = `${temloc}`
+
+    console.log(`bbb`, temloc1)
 
     // Get latitude & longitude from address.
     const [coordinates, setCoordinates] = useState(null);
@@ -366,6 +343,7 @@ export default function Likes ({member, session}) {
     function SelectCompareCnt() {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let comCnt = 0;
+        console.log(`aa---------aaaaaaaaaaaaaaaa`, likes)
 
         checkboxes.forEach(function(checkbox) {
             if (checkbox.checked) {
@@ -470,7 +448,7 @@ export default function Likes ({member, session}) {
     return (
         <main>
             <Container fluid>
-                <MyinfoCommon member={member} session={session} />
+                <MyinfoCommon session={session} />
                 <Row className="lnm">
                     <Col className="likesmenu1 col-6">좋아요</Col>
                     <Col className="bar1 col-1">|</Col>
@@ -482,12 +460,12 @@ export default function Likes ({member, session}) {
                         <>
                             <Button letiant="primary" className="combtn" onClick={handleShow}>비교하기</Button>
                             <React.Fragment id="myModal" className="modal">
-                                <Modal size="xl" show={show} onHide={handleClose}>
+                                <Modal size="xl" show={show} onHide={handleClose} likes={likes}>
                                     <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}} closeButton>
                                         <Modal.Title></Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body className="comtab">
-                                        <SelectCompareCnt />
+                                        <SelectCompareCnt likes={likes} />
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button letiant="secondary" onClick={handleClose} style={{backgroundColor: "#331904"}}>
@@ -502,24 +480,41 @@ export default function Likes ({member, session}) {
                 <Row className="tpl">
                     <Col className="likeslist col-10 offset-1">
                         <ul className="temples-list" style={{padding: "0"}}>
-                            {temples.map(({ name, location, program, price, details }, index ) => {   // temples에서 정보 가져오기
+                            {/*{likes.likes.map(({ T_NAME, ADDR, P_NAME, PRICE }, index ) => {   // temples에서 정보 가져오기
                                 return (
                                     <Row>
                                         <li key={index} className="temples-list-item">
                                             <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                                 <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={name} value={[name, location, program, price, details]}
+                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={T_NAME} value={[T_NAME, ADDR, P_NAME, PRICE]}
                                                                 checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                     <img src="/img/temple.png" width="32" height="32" />
                                                 </Col>
-                                                <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{name}</Col>
+                                                <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{T_NAME}</Col>
                                             </Col>
-                                            <Col className="col-4">{location}</Col>
-                                            <Col className="col-5">{program}</Col>
+                                            <Col className="col-4">{ADDR}</Col>
+                                            <Col className="col-5">{P_NAME}</Col>
                                         </li>
                                     </Row>
                                 )
-                            } )}
+                            } )}*/}
+                            {likes.map((lk, index) => (
+                                    <Row key={index}>
+                                        <li key={index} className="temples-list-item">
+                                            <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
+                                                <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
+                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE]}
+                                                                checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
+                                                    <img src="/img/temple.png" width="32" height="32" />
+                                                </Col>
+                                                <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.T_NAME}</Col>
+                                            </Col>
+                                            <Col className="col-4">{lk.ADDR}</Col>
+                                            <Col className="col-5">{lk.P_NAME}</Col>
+                                        </li>
+                                    </Row>
+                                ))
+                            }
                         </ul>
                     </Col>
                 </Row>
