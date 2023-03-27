@@ -82,7 +82,7 @@ export default function Myinfo ({session, bookedinfos}) {
                                         <th>분류</th>
                                         <td>{bi.P_CLASS}</td>
                                         <th>기간</th>
-                                        <td>{bi.B_STRDATE} ~ {bi.B_ENDDATE}</td>
+                                        <td>{bi.B_STRDATE.substring(0, 10)} ~ {bi.B_ENDDATE.substring(0, 10)}</td>
                                     </tr>
                                     <tr>
                                         <th>인원</th>
