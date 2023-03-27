@@ -16,26 +16,33 @@ import {getSession} from "next-auth/client";
 import {Button, NavLink} from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
-        let {lid ,str,end} = ctx.query
+        let {lid ,str,end,epic = '1'} = ctx.query
         if(lid === undefined) lid = null;
         if(str === undefined) str = null;
         if(end === undefined) end = null;
+        if(epic === undefined) epic = null;
         let sess = await getSession(ctx);
-
+        console.log(lid ,str,end,epic)
+        let searchInfo;
+        let result;
         // 세션 여부에 따라 email 값 분기
         let email;
         (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
 
-        // param 선언
-        let searchParam = `?lid=${lid}&str=${str}&end=${end}`
+        if(lid === null && str === null && end === null) {
+                let param = `?epic=${epic}`
+                let url = `http://localhost:3000/api/editorpick/${param}`
+                const res = await axios.get(url)
+                result = res.data
 
-
-
-        // URL
-        let url = `http://localhost:3000/api/${searchParam}`
-        const res = await axios.get(url)
-        let result = res.data
-
+        } else {
+                // param 선언
+                let searchParam = `?lid=${lid}&str=${str}&end=${end}`
+                // URL
+                let url = `http://localhost:3000/api/${searchParam}`
+                const res = await axios.get(url)
+                result = res.data
+        }
 
         // likeData
         let likeData = null;
@@ -48,10 +55,7 @@ export async function getServerSideProps(ctx) {
                 likeData = likeRes.data
         }
 
-
-
-        let searchInfo = result
-
+        searchInfo = result
 
         return {props:{searchInfo, likeData, email}}
 }
@@ -204,9 +208,14 @@ export default function Home({searchInfo,likeData, email}) {
 
 
         return (
-            <div className="bg-white" id="wrapper" style={{marginTop:'85px'}}>
+            <div className="bg-white" id="wrapper" style={{marginTop:'65px'}}>
                     <Container fluid>
-                            {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
+                            <Row>
+                                    <Col><div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                            <NavLink href={'/?epic=1'}> <AiFillLike
+                                                className={"text-success fs-3"} key={shortid.generate()}/> </NavLink> </div></Col>
+                                    <Col></Col>
+                            </Row>
                             <Row className="likeslist tpl align-top">
                                     <Col md={6} className={'scrollable-col' }style={{ height: '830px'}}>
                                             { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
@@ -216,7 +225,7 @@ export default function Home({searchInfo,likeData, email}) {
 
                                                                     <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
                                                                             <NavLink href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
-                                                                            <img src={program.P_PICLINK} alt="프로그램 이미지" style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                            <img src={program.P_PICLINK} alt="프로그램 이미지" width={'157px'} style={{ height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
                                                                             </NavLink>
                                                                     </Col>
 
