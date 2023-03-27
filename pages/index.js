@@ -56,7 +56,7 @@ export async function getServerSideProps(ctx) {
         return {props:{searchInfo, likeData, email}}
 }
 
-export default function Home({searchInfo,likeData, email, session}) {
+export default function Home({searchInfo,likeData, email}) {
         let [addr,setAddr] =useState()
 
         const [likeOnoffArr, setLikeOnoffArr] = useState(Array(searchInfo.length).fill(false));
@@ -133,10 +133,13 @@ export default function Home({searchInfo,likeData, email, session}) {
         }, [addr]);
 
 
+        // 어째서인지 파이어폭스에서는 e.target.id의 값을 불러오지 못한다..........
+        // 밑의 e.target.dataset.key도 마찬가지..........
         const toggleLike = (e) => {
                 if(email !== null) {
-                        let btnPidValue = e.target.getAttribute('pid')
-                        let index = e.target.getAttribute('value');
+                        let btnPid = e.target
+                        let btnPidValue = btnPid.id
+                        let index = e.target.dataset.key;
                         let likeInfo = [{email: email}, {btnPid: btnPidValue }]
                         let unlikeInfo = [{email: email},{btnPid: btnPidValue }]
 
@@ -171,6 +174,7 @@ export default function Home({searchInfo,likeData, email, session}) {
                         }
                         else if(likeOnoffArr[index] === false)
                         {
+                                console.log('0번',likeOnoffArr[0])
                                 const process_Like = async (likeInfo) => {
 
                                         const cnt = await fetch('/api/plusLike', {
@@ -242,7 +246,7 @@ export default function Home({searchInfo,likeData, email, session}) {
                                                                                             className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
                                                                             </Col>
                                                                             <Col key={shortid.generate()}>
-                                                                                    <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                    <div data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
                                                                             </Col>
                                                                     </Row>
 
