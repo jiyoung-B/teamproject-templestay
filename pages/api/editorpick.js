@@ -1,4 +1,4 @@
-import EditorPick from "../../module/EditorPick";
+import selectEdPic from "../../models/EditorPick";
 export default async (req, res) => {
     let {epic} = req.query
     console.log('epic',epic)

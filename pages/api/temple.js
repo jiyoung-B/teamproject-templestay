@@ -1,4 +1,4 @@
-import selectTemple from "../../module/Temple";
+import selectTemple from "../../models/Temple";
 
 //?id=갑사 *
 export default async (req, res) => {
