@@ -197,74 +197,73 @@ export default function Home({searchInfo,likeData, email, session}) {
                 } else if(email === null){
                         alert('로그인해주세요!')
                 }
-                }
+        }
 
 
         return (
-        <div className="bg-white" id="wrapper" style={{marginTop:'85px'}}>
-                <Container fluid>
-
-                        {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
-                        <Row className="likeslist tpl align-top">
-                                <Col md={6} style={{height:'830px', overflowY: "scroll"}}>
-                                        { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
-
-
-                                                        <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                                <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
-                                                                        <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
-                                                                                <img src={program.P_PICLINK} alt="프로그램 이미지" style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
-                                                                        </Col>
-                                                                </Link>
-                                                                <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
-                                                                        <Row style={{height:'140px'}} key={shortid.generate()}>
-                                                                                <Col key={shortid.generate()}>
-                                                                                        <Row key={shortid.generate()}>
-                                                                                                <p className={"mb-0 pb-3 text-secondary text-center fw-bold fs-5"} key={shortid.generate()}>{program.P_NAME.substring(0, program.P_NAME.indexOf("[")) + program.P_NAME.substring(program.P_NAME.indexOf("]") + 1)}</p>
-                                                                                        </Row>
-                                                                                        <Row className={"pb-2"} key={shortid.generate()}>
-                                                                                                <Col md={6} key={shortid.generate()}>
-                                                                                                        <p className={"mb-0 fw-semibold text-primary text-center fs-6"} key={shortid.generate()}>{program.T_NAME}</p>
-                                                                                                </Col>
-                                                                                                <Col md={6} key={shortid.generate()}>
-                                                                                                        <p className={"mb-0 text-start"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
-                                                                                                </Col>
-                                                                                        </Row>
-                                                                                        <Row key={shortid.generate()}>
-                                                                                                <p className={"mb-0 text-center ADDR"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.ADDR}</p>
-                                                                                        </Row>
-                                                                                </Col>
-                                                                        </Row>
-                                                                        <Row key={shortid.generate()}>
-                                                                                <Col key={shortid.generate()}>{ (program.E_PICKTF === 1) ?
-                                                                                    <p className={'text-start ps-5'} key={shortid.generate()}>
-                                                                                                <AiFillLike
-                                                                                                    className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
-                                                                                </Col>
-                                                                                <Col key={shortid.generate()}>
-                                                                                        <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
-                                                                                </Col>
-                                                                        </Row>
-
-                                                                </Col>
-                                                        </Row>
+            <div className="bg-white" id="wrapper" style={{marginTop:'85px'}}>
+                    <Container fluid>
+                            {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
+                            <Row className="likeslist tpl align-top">
+                                    <Col md={6} className={'scrollable-col' }style={{ height: '830px'}}>
+                                            { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
 
 
-                                            )
-                                        )) : (
-                                                    <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                           <p className={'h1'} key={shortid.generate()}>프로그램이 없습니다.</p>
+                                                    <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
+                                                            <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+                                                                    <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
+                                                                            <img src={program.P_PICLINK} alt="프로그램 이미지" style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                    </Col>
+                                                            </Link>
+                                                            <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
+                                                                    <Row style={{height:'140px'}} key={shortid.generate()}>
+                                                                            <Col key={shortid.generate()}>
+                                                                                    <Row key={shortid.generate()}>
+                                                                                            <p className={"mb-0 pb-3 text-secondary text-center fw-bold fs-5"} key={shortid.generate()}>{program.P_NAME.substring(0, program.P_NAME.indexOf("[")) + program.P_NAME.substring(program.P_NAME.indexOf("]") + 1)}</p>
+                                                                                    </Row>
+                                                                                    <Row className={"pb-2"} key={shortid.generate()}>
+                                                                                            <Col md={6} key={shortid.generate()}>
+                                                                                                    <p className={"mb-0 fw-semibold text-primary text-center fs-6"} key={shortid.generate()}>{program.T_NAME}</p>
+                                                                                            </Col>
+                                                                                            <Col md={6} key={shortid.generate()}>
+                                                                                                    <p className={"mb-0 text-start"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.P_STRDATE} ~ {program.P_ENDDATE}</p>
+                                                                                            </Col>
+                                                                                    </Row>
+                                                                                    <Row key={shortid.generate()}>
+                                                                                            <p className={"mb-0 text-center ADDR"} style={{fontSize: '14px'}} key={shortid.generate()}>{program.ADDR}</p>
+                                                                                    </Row>
+                                                                            </Col>
+                                                                    </Row>
+                                                                    <Row key={shortid.generate()}>
+                                                                            <Col key={shortid.generate()}>{ (program.E_PICKTF === 1) ?
+                                                                                <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                        <AiFillLike
+                                                                                            className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
+                                                                            </Col>
+                                                                            <Col key={shortid.generate()}>
+                                                                                    <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                            </Col>
+                                                                    </Row>
+
+                                                            </Col>
                                                     </Row>
-                                        )
-                                          }
-                                </Col>
-                                <Col  md={6}>
-                                        <div id={'map'} style={{ width:'928px', height:'830px'}}></div>
-                                </Col>
-                        </Row>
 
-                </Container>
 
-        </div>
-    )
+                                                )
+                                            )) : (
+                                                <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
+                                                        <p className={'h1'} key={shortid.generate()}>프로그램이 없습니다.</p>
+                                                </Row>
+                                            )
+                                            }
+                                    </Col>
+                                    <Col  md={6}>
+                                            <div id={'map'} style={{ width:'870px', height:'830px'}}></div>
+                                    </Col>
+                            </Row>
+
+                    </Container>
+
+            </div>
+        )
 }
