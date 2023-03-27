@@ -14,6 +14,9 @@ import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
 import {Button, NavLink} from "react-bootstrap";
+import {BsCalendarHeartFill} from "react-icons/bs";
+import {MdTempleBuddhist} from "react-icons/md";
+import {GoGlobe} from "react-icons/go";
 
 export async function getServerSideProps(ctx) {
         let {lid ,str,end,epic = '1'} = ctx.query
@@ -211,9 +214,32 @@ export default function Home({searchInfo,likeData, email}) {
             <div className="bg-white" id="wrapper" style={{marginTop:'65px'}}>
                     <Container fluid>
                             <Row>
-                                    <Col><div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
-                                            <NavLink href={'/?epic=1'}> <AiFillLike
-                                                className={"text-success fs-3"} key={shortid.generate()}/> </NavLink> </div></Col>
+                                    <Col>
+                                            <Row>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=1'}> <AiFillLike
+                                                                        className={"text-success fs-3"} key={shortid.generate()}/> </NavLink> </div>
+                                                    </Col>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=2'}> <MdTempleBuddhist
+                                                                        className={"text-dark fs-3"} key={shortid.generate()}/> </NavLink> </div>
+
+                                                    </Col>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=3'}> <BsCalendarHeartFill
+                                                                        className={"text-danger fs-3"} key={shortid.generate()}/> </NavLink> </div>
+                                                    </Col>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=4'}> <GoGlobe
+                                                                        className={"fs-3"} style={{color:'0D6EFD'}} key={shortid.generate()}/> </NavLink> </div>
+                                                    </Col>
+                                            </Row>
+
+                                    </Col>
                                     <Col></Col>
                             </Row>
                             <Row className="likeslist tpl align-top">
@@ -249,10 +275,36 @@ export default function Home({searchInfo,likeData, email}) {
                                                                             </Col>
                                                                     </Row>
                                                                     <Row key={shortid.generate()}>
-                                                                            <Col key={shortid.generate()}>{ (program.E_PICKTF === 1) ?
-                                                                                <p className={'text-start ps-5'} key={shortid.generate()}>
-                                                                                        <AiFillLike
-                                                                                            className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
+                                                                            <Col key={shortid.generate()}>{(() => {
+                                                                                    switch (program.E_PICKTF) {
+                                                                                            case 1:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <AiFillLike className={"text-success fs-3"} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            case 2:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <MdTempleBuddhist className={"text-dark fs-3"} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            case 3:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <BsCalendarHeartFill className={"text-danger fs-3"} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            case 4:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <GoGlobe className={"fs-3"} style={{color:'0D6EFD'}} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            default:
+                                                                                                    return <p></p>;
+                                                                                    }
+                                                                            })()}
                                                                             </Col>
                                                                             <Col key={shortid.generate()}>
                                                                                     <div data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
