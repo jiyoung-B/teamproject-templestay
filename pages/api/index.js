@@ -1,4 +1,4 @@
-import Index from "../../module/Index";
+import Index from "../../models/Index";
 
 export default async (req, res) => {
     const {lid ,str, end} =req.query

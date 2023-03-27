@@ -164,7 +164,6 @@ export default function Home({searchInfo,likeData, email}) {
                                         }).then(res => res.json());
                                         let result = false;
                                         if(await cnt  === true) result = true
-                                        console.log(result)
 
 
                                         return {result};
@@ -323,7 +322,7 @@ export default function Home({searchInfo,likeData, email}) {
                                             )
                                             }
                                     </Col>
-                                    <Col  md={6}>
+                                    <Col md={6} className={'media414'}>
                                             <div id={'map'} style={{ width:'870px', height:'830px'}}></div>
                                     </Col>
                             </Row>

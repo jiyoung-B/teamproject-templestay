@@ -1,4 +1,4 @@
-import selectPro from "../../module/Program";
+import selectPro from "../../models/Program";
 
 //?pid=212
 export default async (req, res) => {

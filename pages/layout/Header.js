@@ -33,7 +33,6 @@ const Header = ({ props, children, pathname, menu, session }) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            console.log('윈도우스크롤',window.scrollY)
             if (window.scrollY <= 0) setShowIntro(true)
             // setScrollPosition(window.scrollY); *******해결해~
             if (window.scrollY >= 1) setShowIntro(false)
