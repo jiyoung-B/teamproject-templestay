@@ -5,6 +5,7 @@ import '../styles/css/MyinfoCommon.css'
 import '../styles/css/likes.css'
 import '../styles/css/intro.css'
 import '../styles/css/myinfo.css'
+import '../styles/css/scrollbar.css'
 import React from 'react';
 import {useEffect} from "react";
 import Layout from "./layout/Layout";
