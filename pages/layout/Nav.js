@@ -310,7 +310,6 @@ const Nav = ({props, menu, session, searchTemple}) => {
                                                                   type="password"
                                                                   value={passwd}
                                                                   placeholder="비밀번호"
-                                                                  autoFocus
                                                                   onChange={e => handleInput(setPasswd, e)}
                                                     />
                                                 </Form.Group>
@@ -350,19 +349,16 @@ const Nav = ({props, menu, session, searchTemple}) => {
                                                 <Form.Control className="mb-3"
                                                               type="email"
                                                               placeholder="이메일"
-                                                              autoFocus
                                                               onChange={e => handleInput(setEmail2, e)}
                                                 />
                                                 <Form.Control className="mb-3"
                                                               type="password"
                                                               placeholder="비밀번호"
-                                                              autoFocus
                                                               onChange={e => handleInput(setPasswd2, e)}
                                                 />
                                                 <Form.Control className="mb-3"
                                                               type="password"
                                                               placeholder="비밀번호 확인"
-                                                              autoFocus
                                                               onChange={e => handleInput(setRepasswd, e)}
                                                 />
                                                 <div style={{ color:"red",fontSize:"0.85em"}}>{passwdError}</div>

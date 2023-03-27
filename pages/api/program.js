@@ -7,6 +7,7 @@ export default async (req, res) => {
     try{
         let proData = await selectPro(pid).then(result => result)
         let copyData = [...proData]
+        //console.log('2',copyData)
 
 
         let P_INFO = [];
@@ -61,6 +62,9 @@ export default async (req, res) => {
         P_INFO.push(proData[3]);
         P_INFO.push(P_SCH); // 문제
         P_INFO.push(P_OPInfo);
+        P_INFO.push(proData[4])
+
+        console.log('progrma api- P_INFO',P_INFO[6])
 
 
         res.status(200).json(P_INFO)
