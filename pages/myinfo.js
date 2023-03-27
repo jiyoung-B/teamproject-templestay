@@ -57,34 +57,38 @@ export default function Myinfo ({member, session}) {
                 </Row>
                 <Row className="bkinfo">
                     <Col className="col-10 offset-1">
-                        <Table striped="columns" bordered className="bkdtb">
-                            <tbody>
-                            <tr>
-                                <th>예약자 이름</th>
-                                <td>{member.name}</td>
-                                <th>예약자 전화번호</th>
-                                {/*<td>{session.email}</td>*/}
-                            </tr>
-                            <tr>
-                                <th>절</th>
-                                <td></td>
-                                <th>프로그램 이름</th>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>분류</th>
-                                <td></td>
-                                <th>기간</th>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>인원</th>
-                                <td></td>
-                                <th>가격</th>
-                                <td></td>
-                            </tr>
-                            </tbody>
-                        </Table>
+                        {bookinfo.map(({name, phone, tname, pname, category, period, pplnum, price}, index) => {
+                            return (
+                                <Table striped="columns" bordered className="bkdtb">
+                                    <tbody key={index} value={[name, phone, tname, pname, category, period, pplnum, price]}>
+                                    <tr>
+                                        <th>예약자 이름</th>
+                                        <td>{name}</td>
+                                        <th>예약자 전화번호</th>
+                                        <td>{phone}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>절</th>
+                                        <td>{tname}</td>
+                                        <th>프로그램 이름</th>
+                                        <td>{pname}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>분류</th>
+                                        <td>{category}</td>
+                                        <th>기간</th>
+                                        <td>{period}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>인원</th>
+                                        <td>{pplnum}</td>
+                                        <th>가격</th>
+                                        <td>{price}</td>
+                                    </tr>
+                                    </tbody>
+                                </Table>
+                            )
+                        })}
                     </Col>
                 </Row>
             </Container>

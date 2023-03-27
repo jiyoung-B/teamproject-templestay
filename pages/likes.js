@@ -483,8 +483,8 @@ export default function Likes ({member, session}) {
                             <Button letiant="primary" className="combtn" onClick={handleShow}>비교하기</Button>
                             <React.Fragment id="myModal" className="modal">
                                 <Modal size="xl" show={show} onHide={handleClose}>
-                                    <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
-                                        <Modal.Title>템플 스테이 비교</Modal.Title>
+                                    <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}} closeButton>
+                                        <Modal.Title></Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body className="comtab">
                                         <SelectCompareCnt />
