@@ -11,8 +11,6 @@ export default async (req, res) => {
         let distintTemplePic = templePic.filter((obj) => {
             return obj.T_PICTURE.length > 40
         })
-        console.log('bbb',distintTemplePic)
-
 
         let distinctProPic = templeProPic.filter((obj,index) => {
             return templeProPic.findIndex(item => item.P_NAME === obj.P_NAME) === index;
