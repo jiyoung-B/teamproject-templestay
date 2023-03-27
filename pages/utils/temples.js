@@ -1,7 +1,6 @@
 import React from 'react';
 
-export default function Temples() {
-    const temples = [
+    export const temples = [
         {
             name: "11사",
             location: "서울특별시 마포구 서교동 양화로 45",
@@ -59,6 +58,3 @@ export default function Temples() {
             details: "상세정보8"
         }
     ];
-
-
-}
