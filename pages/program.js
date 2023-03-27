@@ -15,7 +15,6 @@ import {getSession, session} from "next-auth/client";
 
 
 export async function getServerSideProps(ctx) {
-    // null을 반환한다.
     let sess = await getSession(ctx);
 
     // 세션 여부에 따라 email 값 분기
@@ -39,15 +38,16 @@ export async function getServerSideProps(ctx) {
 
 export default function Program ({proData,email}) {
     const unit = 28
-    let PID = proData[6]
+    let PID = proData[7]
 
 
     // 예약하기 버튼 비활성화 state
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+
+    // 날짜 선택관련
     // 내일의 날짜를 구하기 (선택 가능 날짜.)
     const tomorrow = new Date().setDate(new Date().getDate() + 1);
-
 
     // state 보여주는 부분
     const [startDate, setStartDate] = useState(tomorrow);
@@ -57,6 +57,19 @@ export default function Program ({proData,email}) {
     let P_endDate = proData[0][0].P_ENDDATE
     let transDate = P_endDate.slice(0,10)
     P_endDate = new Date(transDate)
+
+
+    // 모달 on/off 해주는 함수
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
+    //날짜가 선택되면 state를 변경해주는 함수
+    const onChange = (dates) => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+    };
 
     // 경과일을 숫자로 입력하면 밀리초로 바꿔주는 함수
     // function milliTransfer (date) {
@@ -84,17 +97,6 @@ export default function Program ({proData,email}) {
     //     bookEndDate = prevBookEndDate
     // }
 
-    // 모달 on/off 해주는 함수
-    const [show, setShow] = useState(false);
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
-
-    //날짜가 선택되면 state를 변경해주는 함수
-    const onChange = (dates) => {
-        const [start, end] = dates;
-        setStartDate(start);
-        setEndDate(end);
-    };
 
     // 인원 선택 관련 함수
     // 모달 on/off
@@ -145,6 +147,7 @@ export default function Program ({proData,email}) {
     let preschool = selectedOptions["미취학"]
 
     let inputData = []
+
     // 예약 버튼을 눌렀을 때 작동
     const handleReserve = async () => {
 
@@ -162,6 +165,7 @@ export default function Program ({proData,email}) {
         }
 
         const process_reservation = async (inputData) => {
+            // console.log('here',inputData)
 
             const cnt = await fetch('/api/preBook', {
                 method: 'POST', mode: 'cors',
@@ -180,8 +184,7 @@ export default function Program ({proData,email}) {
             }
         }
 
-
-        // 세션이 넘어오면서 문자열 'null'로 바뀌어 버린다.
+        // 실행부
         if(email !== null) {
             // 클릭시 버튼 비활성화
             setIsSubmitting(true)
@@ -198,6 +201,20 @@ export default function Program ({proData,email}) {
 
     }
 
+    let [proShow,setProShow] = useState(Array(proData[6].length).fill(false))
+
+    const showProModal = (e) => {
+        let index = e.target.getAttribute("index")
+        let newProShow = [...proShow];
+        newProShow[index] = !proShow[index];
+        setProShow(newProShow)
+    };
+    const closeProShow = (e) => {
+        let index = e.target.getAttribute("index")
+        let newProShow = [...proShow];
+        newProShow[index] = !proShow[index];
+        setProShow(newProShow)
+    };
     return(
         <div className={'container'} style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
 
@@ -395,15 +412,37 @@ export default function Program ({proData,email}) {
             <div  style={{marginTop:`${unit*4}px`}} id={'contentWrapper'}>
                 <div id={'contentContainer'}>
                     <p className="fs-3 fw-bold text-secondary">프로그램 소개</p>
-                    <p> <span className={'text-warning fs-4'}> {proData[2][0].DIVISION}</span>&nbsp;{proData[0][0].P_INTRO}</p>
+                    <p> <span className={'text-warning fs-4'}>{proData[2][0].DIVISION}</span>&nbsp;{proData[0][0].P_INTRO}</p>
                 </div>
             </div>
             <div style={{marginTop:`${unit*2}px`}} id={'scheduleWrapper'}>
                 <Container id={'scheduleContainer'}>
                     <Row>
                         <Col md={3}>
-                            <p className={'fs-5 fw-bold'}>프로그램 일정</p>
-                            <p>기타 코멘트</p>
+                            <p className={'fs-5 mb-4 fw-bold'}>프로그램 일정</p>
+                            {(proData[6].length > 0) ? (proData[6].map( (proInfo,index) => {
+
+                                return(<div>
+                                            <p index={index} className={'mb-2 fw-bold'} onClick={showProModal} >{proInfo.P_DES}</p>
+                                            <Modal className={'modal-dialog-centered'} show={proShow[index]} index={index} >
+                                                <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}}>
+                                                    <Modal.Title>{proInfo.P_DES}</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body className="cal">
+                                                    <p>&nbsp;{proInfo.P_DETAIL}</p>
+                                                </Modal.Body>
+                                                <Modal.Footer>
+                                                    <Button index={index} onClick={closeProShow} variant="secondary" style={{backgroundColor: "#331904"}}>
+                                                        닫기
+                                                    </Button>
+                                                </Modal.Footer>
+                                            </Modal>
+                                        </div>
+
+                                    )
+                                }
+
+                            )):(<div></div>)}
                         </Col>
                         <Col md={9}>
                             {proData[4].map(day => (
