@@ -1,4 +1,4 @@
-import Likeslist from "../../module/Likeslist";
+import Likeslist from "../../models/Likeslist";
 
 export default async (req, res) => {
     let email = req.query.email;

@@ -5,7 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import Link from "next/link";
 import {Button, Form, Table} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import { temples } from "./utils/temples";
 import MyinfoCommon from "./layout/MyinfoCommon";
 import {getSession} from "next-auth/client";
 import axios from "axios";
@@ -13,7 +12,7 @@ import GoogleMapReact from "google-map-react";
 import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb";
 
 import Geocode from "react-geocode";
-import likesListCnt from "./api/likesListCnt";
+
 
 export async function getServerSideProps(ctx) {
 

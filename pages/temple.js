@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
 import shortid from "shortid";
-import {handleImgError} from "../module/Utils";
+import {handleImgError} from "../models/Utils";
 import {HiBadgeCheck} from "react-icons/hi";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,

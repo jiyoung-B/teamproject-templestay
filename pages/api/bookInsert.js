@@ -1,4 +1,4 @@
-import Book from "../../module/Book";
+import Book from "../../models/Book";
 
 export default async (req, res) => {
     let bookObject = req.body[0]

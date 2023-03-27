@@ -1,4 +1,4 @@
-import selectEdPic from "../../module/EditorPick";
+import selectEdPic from "../../models/EditorPick";
 export default async (req, res) => {
 
     try{

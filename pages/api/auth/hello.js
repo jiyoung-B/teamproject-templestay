@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import {hashPassword, comparePasswd} from "../../../module/Utils";
+import {hashPassword, comparePasswd} from "../../../models/Utils";
 
 const saltRounds = 10;   // salt키 생성 횟수 지정
 

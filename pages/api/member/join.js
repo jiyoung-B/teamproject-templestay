@@ -1,4 +1,4 @@
-import Member from "../../../module/Member";
+import Member from "../../../models/Member";
 
 export default async (req, res) => {
     const {passwd, name, email} = req.body;

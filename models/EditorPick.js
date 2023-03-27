@@ -1,8 +1,7 @@
 import mariadb from './MariaDB'
 
 let editorSql ={
-    selectEdPic : `select * from PROGRAMPIC2 where E_PICKTF = ?`,
-    selectOneEdPic : `select * from PROGRAMPIC2 where E_PICKTF = ?`
+    selectEdPic : `select * from PROGRAMPIC2 where E_PICKTF = ?`
 }
 async function selectEdPic() {
     let conn = null;
