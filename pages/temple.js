@@ -20,16 +20,16 @@ export async function getServerSideProps(ctx) {
 
     const res = await axios.get(url)
 
-    let {temple, templePic, distinctProPic} = await res.data;
+    let {temple, distintTemplePic, distinctProPic} = await res.data;
 
-    return {props:{temple,templePic,distinctProPic,pid}}
+    return {props:{temple,distintTemplePic,distinctProPic,pid}}
 }
 
 
 // css 단위 변수
 const unit = 28
 
-export default function temple ({temple,templePic,distinctProPic,pid}) {
+export default function temple ({temple,distintTemplePic,distinctProPic,pid}) {
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -88,8 +88,8 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
             <div id="carouselWrapper" style={{marginTop:`${unit*2}px`}}>
                 <div id="carouseContainer">
                     <Carousel>
-                        { (templePic.length > 0) ? (
-                            templePic.map(pic => (
+                        { (distintTemplePic.length > 0) ? (
+                                distintTemplePic.map(pic => (
                             <Carousel.Item key={shortid.generate()}>
                                 <img
                                     className="d-block w-100"
