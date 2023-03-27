@@ -11,13 +11,11 @@ import Carousel from 'react-grid-carousel'
 
 
 export async function getServerSideProps(ctx) {
-    console.log('씨티엑스 ??', ctx);
 
-    let url = `http://localhost:3000/api/editorpick?id=1`
+    let url = `http://localhost:3000/api/introEditorPick?id=1`
 
     const res = await axios.get(url)
     const edPicks = await res.data[0];
-    console.log('edPicks? [0]??', edPicks);
 
     return {props:{edPicks}}
 }
