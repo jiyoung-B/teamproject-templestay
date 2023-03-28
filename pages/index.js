@@ -129,9 +129,6 @@ export default function Home({searchInfo,likeData, email}) {
                 script.addEventListener('load', onLoadKakaoMap);
         }, [addr]);
 
-
-        // 어째서인지 파이어폭스에서는 e.target.id의 값을 불러오지 못한다..........
-        // 밑의 e.target.dataset.key도 마찬가지..........
         const toggleLike = (e,idx,pid) => {
                 if(email !== null) {
                         let btnPid = e.target
