@@ -23,11 +23,7 @@ export async function getServerSideProps(ctx) {
     const likes1 = await res.data[0];
     const likes2 = await res.data[1];
     const likes3 = await res.data[2];
-    // const likesList1 = await res.data[1];
-    // console.log('?', likesList1)
-    console.log('likes1', likes1)
-    console.log('likes2', likes2)
-    console.log('likes3', likes3)
+
 
     return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
 }
@@ -41,7 +37,7 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         P_SCH: [],
         response: [],
     });
-    console.log('userinfo',userinfo.P_SCH[0])
+    console.log('userinfo',userinfo.P_SCH)
 
     let handleOnChange = async (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
@@ -455,41 +451,91 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         <td>{userinfo.PRICE[1]}</td>
                         <td>{userinfo.PRICE[2]}</td>
                     </tr>
-                    <tr style={{height: "400px"}}>
-                        <td>
-                            {userinfo.P_SCH[0].map((obj) => {
-                                return(
-                                    <div>
-                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{obj.P_DAY}</p>
-                                <Table key={shortid.generate()}>
-                                    <thead key={shortid.generate()}>
-                                    <tr key={shortid.generate()}>
-                                        <th style={{width:'333px'}} key={shortid.generate()}>시작시간</th>
-                                        <th key={shortid.generate()}>일정명</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody key={shortid.generate()}>
+                    <tr>
+                        <td style={{width:'15%x'}}>
+                            {userinfo.P_SCH[0].map(day => (
 
-                                    {obj.P_INFO.map(sch => (
-                                        <tr key={shortid.generate()}>
-                                            <td style={{width:'333px'}} key={shortid.generate()}>{sch.P_TIME}</td>
-                                            <td key={shortid.generate()}>{sch.P_CONTENT}</td>
-                                        </tr>
-                                    ))}
+                                <span>
+                                            <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
 
-                                    </tbody>
-                                </Table>
-                                    </div>
+                                            <Table key={shortid.generate()}>
+                                                <thead key={shortid.generate()}>
+                                                <tr key={shortid.generate()}>
+                                                    <th  key={shortid.generate()}>시작시간</th>
+                                                    <th key={shortid.generate()}>일정명</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody key={shortid.generate()}>
+
+                                                {day.P_INFO.map(sch => (
+                                                    <tr key={shortid.generate()}>
+                                                        <td  key={shortid.generate()}>{sch.P_TIME}</td>
+                                                        <td key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                                    </tr>
+                                                ))}
+
+                                                </tbody>
+                                            </Table>
+                                </span>
                                 )
-                            })}
+                            )}
                         </td>
-                        <td>
+                        <td style={{width:'15%x'}}>
+                            {userinfo.P_SCH[0].map(day => (
 
+                                    <span>
+                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
 
-                            </td>
-                        <td>
+                                        <Table key={shortid.generate()}>
+                                            <thead key={shortid.generate()}>
+                                            <tr key={shortid.generate()}>
+                                                <th  key={shortid.generate()}>시작시간</th>
+                                                <th key={shortid.generate()}>일정명</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody key={shortid.generate()}>
 
-                            </td>
+                                            {day.P_INFO.map(sch => (
+                                                <tr key={shortid.generate()}>
+                                                    <td  key={shortid.generate()}>{sch.P_TIME}</td>
+                                                    <td key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                                </tr>
+                                            ))}
+
+                                            </tbody>
+                                        </Table>
+                                    </span>
+                                )
+                            )}
+                        </td>
+                        <td style={{width:'15%x'}}>
+                            {userinfo.P_SCH[0].map(day => (
+
+                                    <span>
+                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+
+                                        <Table key={shortid.generate()}>
+                                            <thead key={shortid.generate()}>
+                                            <tr key={shortid.generate()}>
+                                                <th  key={shortid.generate()}>시작시간</th>
+                                                <th key={shortid.generate()}>일정명</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody key={shortid.generate()}>
+
+                                            {day.P_INFO.map(sch => (
+                                                <tr key={shortid.generate()}>
+                                                    <td  key={shortid.generate()}>{sch.P_TIME}</td>
+                                                    <td key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                                </tr>
+                                            ))}
+
+                                            </tbody>
+                                        </Table>
+                                    </span>
+                                )
+                            )}
+                        </td>
                     </tr>
                     <tr className="gobkbtn">
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
