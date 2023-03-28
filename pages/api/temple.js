@@ -1,4 +1,4 @@
-import selectTemple from "../../module/Temple";
+import selectTemple from "../../models/Temple";
 
 //?id=갑사 *
 export default async (req, res) => {
@@ -8,11 +8,16 @@ export default async (req, res) => {
         let templeData = await selectTemple(id).then(result => result)
         let {temple, templePic, templeProPic} = templeData
 
+        let distintTemplePic = templePic.filter((obj) => {
+            return obj.T_PICTURE.length > 40
+        })
+
         let distinctProPic = templeProPic.filter((obj,index) => {
             return templeProPic.findIndex(item => item.P_NAME === obj.P_NAME) === index;
         })
 
-        let templeView = {temple, templePic, distinctProPic}
+        let templeView = {temple, distintTemplePic, distinctProPic}
+
 
         res.status(200).json(templeView)
     } catch (err) {

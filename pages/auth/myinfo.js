@@ -1,6 +1,6 @@
 import axios from "axios";
 import {getSession, signOut, useSession} from "next-auth/client";
-import Layout from "../../module/Utils";
+import Layout from "../../models/Utils";
 import Logout from "./logout";
 
 export async function getServerSideProps(ctx) {

@@ -1,10 +1,7 @@
-import Index from "../../module/Index";
+import Index from "../../models/Index";
 
 export default async (req, res) => {
     const {lid ,str, end} =req.query
-
-    console.log('index api - 들어오는 쿼리 확인',lid ,str, end)
-
 
     if(lid !== 'null') {
         if(str !== 'null') {

@@ -13,8 +13,6 @@ async function selectEdPic() {
         let editorpick = await conn.query(editorSql.selectEdPic, param);
 
         edPickData.push(editorpick)
-        console.log('뭐라고가져오는데에디터픽??',editorpick)
-
 
     } catch (e) {
         console.log(e);

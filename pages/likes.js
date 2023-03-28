@@ -13,31 +13,34 @@ import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb"
 
 import Geocode from "react-geocode";
 
+
 export async function getServerSideProps(ctx) {
 
     const session = await getSession(ctx);
+    // if(!session) { // 로그인하지 않은 경우 로그인으로 이동
+    //     return {
+    //         redirect: {permanent: false, destination: '/'},
+    //         props: {}
+    //     }
+    // }
     let email = session.user.email;
     let param = `?email=${email}`
     let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
     const likes = await res.data[0];
 
-    // let url2 = `http://localhost:3000/api/likescompare${param}`;
-    // const res2 = await axios.get(url2);
-    // const comps = await res2.data[0];
-    //
-    // console.log('제발....', comps)
-    console.log(`안 되니?`, likes)
+    console.log('라잌스넘어옴????',likes)
     return {props : {likes: likes}}
 }
 export default function Likes ({session, likes}) {
+    console.log('likes-------!!!', likes)
+
     const [checkedState, setCheckedState] = useState( new Array(likes.length).fill(false) );
     const [userinfo, setUserInfo] = useState({
         T_NAME: [],
         ADDR: [],
         P_NAME: [],
         PRICE: [],
-        P_CONTENT: [],
         response: [],
     });
 
@@ -55,7 +58,7 @@ export default function Likes ({session, likes}) {
 
         // 체크박스에 체크된 데이터 가져오기!
         const { value, checked } = e.target;
-        const { T_NAME, ADDR, P_NAME, PRICE, P_CONTENT } = userinfo;
+        const { T_NAME, ADDR, P_NAME, PRICE } = userinfo;
 
         // Case 1 : The user checks the box
         if (checked) {
@@ -64,8 +67,7 @@ export default function Likes ({session, likes}) {
                 ADDR: [...ADDR],
                 P_NAME: [...P_NAME],
                 PRICE: [...PRICE],
-                P_CONTENT: [...P_CONTENT],
-                response: [...T_NAME, ...ADDR, ...P_NAME, ...PRICE, ...P_CONTENT, value],
+                response: [...T_NAME, ...ADDR, ...P_NAME, ...PRICE, value],
             });
         }
 
@@ -76,9 +78,8 @@ export default function Likes ({session, likes}) {
                 ADDR: ADDR.filter((e) => e !== value),
                 P_NAME: P_NAME.filter((e) => e !== value),
                 PRICE: PRICE.filter((e) => e !== value),
-                P_CONTENT: P_CONTENT.filter((e) => e !== value),
                 response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
-                    ...PRICE.filter((e) => e !== value), ...P_CONTENT.filter((e) => e !== value)],
+                    ...PRICE.filter((e) => e !== value)],
             });
         }
     };
@@ -108,6 +109,8 @@ export default function Likes ({session, likes}) {
         handleClose()
         location.href = '/preBook?email=${email}';
     };
+
+    console.log(userinfo.response)
 
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
@@ -155,10 +158,9 @@ export default function Likes ({session, likes}) {
     let temloc1 = String(userinfo.response[0]).split(',')[1];
     let temloc2 = String(userinfo.response[1]).split(',')[1];
     let temloc3 = String(userinfo.response[2]).split(',')[1];
+    // let address = `${temloc}`
 
-    console.log(`1`, userinfo.response[0])
-    console.log(`2`, userinfo.response[1])
-    console.log(`3`, userinfo.response[2])
+    console.log(`bbb`, temloc1)
 
     // Get latitude & longitude from address.
     const [coordinates, setCoordinates] = useState(null);
@@ -340,6 +342,7 @@ export default function Likes ({session, likes}) {
     function SelectCompareCnt() {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let comCnt = 0;
+        console.log(`aa---------aaaaaaaaaaaaaaaa`, likes)
 
         checkboxes.forEach(function(checkbox) {
             if (checkbox.checked) {
@@ -476,12 +479,30 @@ export default function Likes ({session, likes}) {
                 <Row className="tpl">
                     <Col className="likeslist col-10 offset-1">
                         <ul className="temples-list" style={{padding: "0"}}>
+                            {/*{likes.likes.map(({ T_NAME, ADDR, P_NAME, PRICE }, index ) => {   // temples에서 정보 가져오기
+                                return (
+                                    <Row>
+                                        <li key={index} className="temples-list-item">
+                                            <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
+                                                <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
+                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={T_NAME} value={[T_NAME, ADDR, P_NAME, PRICE]}
+                                                                checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
+                                                    <img src="/img/temple.png" width="32" height="32" />
+                                                </Col>
+                                                <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{T_NAME}</Col>
+                                            </Col>
+                                            <Col className="col-4">{ADDR}</Col>
+                                            <Col className="col-5">{P_NAME}</Col>
+                                        </li>
+                                    </Row>
+                                )
+                            } )}*/}
                             {likes.map((lk, index) => (
                                     <Row key={index}>
                                         <li key={index} className="temples-list-item">
                                             <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                                 <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE, lk.P_CONTENT]}
+                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE]}
                                                                 checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                     <img src="/img/temple.png" width="32" height="32" />
                                                 </Col>
