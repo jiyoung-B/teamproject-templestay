@@ -132,15 +132,15 @@ export default function Home({searchInfo,likeData, email}) {
 
         // 어째서인지 파이어폭스에서는 e.target.id의 값을 불러오지 못한다..........
         // 밑의 e.target.dataset.key도 마찬가지..........
-        const toggleLike = (e) => {
+        const toggleLike = (e,idx,pid) => {
                 if(email !== null) {
                         let btnPid = e.target
                         let btnPidValue = btnPid.id
                         let index = e.target.dataset.key;
-                        let likeInfo = [{email: email}, {btnPid: btnPidValue }]
-                        let unlikeInfo = [{email: email},{btnPid: btnPidValue }]
+                        let likeInfo = [{email: email}, {btnPid: pid }]
+                        let unlikeInfo = [{email: email},{btnPid: pid }]
 
-                        if(likeOnoffArr[index] === true)
+                        if(likeOnoffArr[idx] === true)
                         {
 
                                 const process_unLike = async (unlikeInfo) => {
@@ -161,13 +161,13 @@ export default function Home({searchInfo,likeData, email}) {
                                 process_unLike(unlikeInfo).then(result => result).then(({result}) =>{
                                         if( result === true) {
                                                 const newLikeOnoffArr = [...likeOnoffArr];
-                                                newLikeOnoffArr[index] = !newLikeOnoffArr[index]
+                                                newLikeOnoffArr[idx] = !newLikeOnoffArr[idx]
                                                 setLikeOnoffArr(newLikeOnoffArr);
                                         }
                                 })
 
                         }
-                        else if(likeOnoffArr[index] === false)
+                        else if(likeOnoffArr[idx] === false)
                         {
                                 const process_Like = async (likeInfo) => {
 
@@ -184,7 +184,7 @@ export default function Home({searchInfo,likeData, email}) {
                                 process_Like(likeInfo).then(result => result).then(({result}) => {
                                         if( result === true) {
                                                 const newLikeOnoffArr = [...likeOnoffArr];
-                                                newLikeOnoffArr[index] = !newLikeOnoffArr[index]
+                                                newLikeOnoffArr[idx] = !newLikeOnoffArr[idx]
                                                 setLikeOnoffArr(newLikeOnoffArr)
                                         }
                                 })
@@ -293,7 +293,7 @@ export default function Home({searchInfo,likeData, email}) {
                                                                             })()}
                                                                             </Col>
                                                                             <Col key={shortid.generate()}>
-                                                                                    <div className={'me-0'} data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                    <div className={'me-0'} data-key={idx} data-id={program.PID} id={program.PID} onClick={(e) =>toggleLike(e,idx,program.PID)} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
                                                                             </Col>
                                                                             <Col>
                                                                                     <div key={shortid.generate()}>{
