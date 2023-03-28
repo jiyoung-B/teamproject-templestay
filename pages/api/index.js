@@ -36,7 +36,6 @@ export default async (req, res) => {
                     res.status(500).json(err)
                 }
 
-
             }
         } else if (str === 'null') {
             if(end !== 'null') { // 없는 경우

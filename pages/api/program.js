@@ -1,13 +1,11 @@
 import selectPro from "../../models/Program";
 
-//?pid=212
 export default async (req, res) => {
     const {pid} =req.query
 
     try{
         let proData = await selectPro(pid).then(result => result)
         let copyData = [...proData]
-        //console.log('2',copyData)
 
 
         let P_INFO = [];

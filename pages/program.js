@@ -17,11 +17,9 @@ import Link from "next/link";
 
 export async function getServerSideProps(ctx) {
     let sess = await getSession(ctx);
-
     // 세션 여부에 따라 email 값 분기
     let email;
     (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
-
 
     let {pid} = ctx.query
 
@@ -48,14 +46,12 @@ export default function Program ({proData,email}) {
     const endIdx = proData[0][0].P_NAME.indexOf(']'); // 첫번째 ']'의 인덱스 찾기
     const result = proData[0][0].P_NAME.slice(0, startIdx) + proData[0][0].P_NAME.slice(endIdx + 1); // '['와 ']' 사이의 문자열 제거하기
 
-
     if(P_CLASS === '당일형') {
         isDates=false
     }
 
     // 예약하기 버튼 비활성화 state
     const [isSubmitting, setIsSubmitting] = useState(false);
-
 
     // 날짜 선택관련
     // 내일의 날짜를 구하기 (선택 가능 날짜.)
@@ -69,7 +65,6 @@ export default function Program ({proData,email}) {
     let P_endDate = proData[0][0].P_ENDDATE
     let transDate = P_endDate.slice(0,10)
     P_endDate = new Date(transDate)
-
 
     // 모달 on/off 해주는 함수
     const [show, setShow] = useState(false);
@@ -89,33 +84,6 @@ export default function Program ({proData,email}) {
 
     };
 
-    // 경과일을 숫자로 입력하면 밀리초로 바꿔주는 함수
-    // function milliTransfer (date) {
-    //     let result;
-    //     try{
-    //         result = Number(date)*24*60*60*1000
-    //     } catch(e) {
-    //         console.log(e)
-    //     }
-    //     return result
-    // }
-
-    // 주의 사항에서 예약 가능 기간을 추출하는 부분. 데이터에는 ~박 으로 나와 있으므로, 하루를 더하여 기간으로 바꾼다.
-    // const str = proData[0][0].P_CAUTION;
-    // const start = str.indexOf('~ ') + 2;
-    // const end = str.indexOf('박', start);
-    // const result = Number(str.substring(start, end));
-    // let date = result +1
-    //
-    // let prevBookEndDate = milliFomatter(milliTransfer(date)+Number(startDate))
-    //
-    // let bookEndDate = endDate
-    // // 종료날짜를 결정하는 부분
-    // if(endDate > prevBookEndDate) {
-    //     bookEndDate = prevBookEndDate
-    // }
-
-
     // 인원 선택 관련 함수
     // 모달 on/off
     const [show2, setShow2] = useState(false);
@@ -129,6 +97,7 @@ export default function Program ({proData,email}) {
         setShow2(false);
     }
     const handleShow2 = () => setShow2(true);
+
 
     const [selectedOptions, setSelectedOptions] = useState({"성인": 0,"중고생":0,"초등생":0,"미취학":0});
 
@@ -146,8 +115,6 @@ export default function Program ({proData,email}) {
             return newSelectedOptions;
         });
     }
-
-
 
     // 전 처리 부분
     // strDate, endDate 결정
@@ -215,7 +182,6 @@ export default function Program ({proData,email}) {
         } else {
             alert('로그인해 주세요!')
         }
-
 
     }
 
