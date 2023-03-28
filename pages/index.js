@@ -1,19 +1,13 @@
-import Layout from "./layout/Layout";
-import ToIntro from "./layout/ToIntro";
-import Nav from "./layout/Nav";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import shortid from 'shortid'
-import * as PropTypes from "prop-types";
-import Myinfo from "./myinfo";
 import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
-import {Button, NavLink} from "react-bootstrap";
+import {NavLink} from "react-bootstrap";
 import {BsCalendarHeartFill} from "react-icons/bs";
 import {MdTempleBuddhist} from "react-icons/md";
 import {GoGlobe} from "react-icons/go";
@@ -68,7 +62,6 @@ export default function Home({searchInfo,likeData, email}) {
 
         const [likeOnoffArr, setLikeOnoffArr] = useState(Array(searchInfo.length).fill(false));
 
-
         if(email !== null) {
                 useEffect(() => {
                         const updatedLikeOnoffArr = [...likeOnoffArr];
@@ -81,7 +74,6 @@ export default function Home({searchInfo,likeData, email}) {
                         setLikeOnoffArr(updatedLikeOnoffArr);
                 }, [likeData, searchInfo]);
         }
-
 
         // 마우스 오버에 따라 지도 변경
         const handleMouseOver = (e) => {
@@ -150,7 +142,6 @@ export default function Home({searchInfo,likeData, email}) {
                         let likeInfo = [{email: email}, {btnPid: btnPidValue }]
                         let unlikeInfo = [{email: email},{btnPid: btnPidValue }]
 
-
                         if(likeOnoffArr[index] === true)
                         {
 
@@ -201,7 +192,6 @@ export default function Home({searchInfo,likeData, email}) {
                                         }
                                 })
                         }
-
 
                 } else if(email === null){
                         alert('로그인해주세요!')

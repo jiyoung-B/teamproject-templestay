@@ -12,12 +12,10 @@ import {HiBadgeCheck} from "react-icons/hi";
 // 빈 화면이 표시 될 수 있다.
 
 export async function getServerSideProps(ctx) {
-
     let {id, pid = null} = ctx.query
 
     let param = `?id=${id}`
     let url = `http://localhost:3000/api/temple${param}`
-
     const res = await axios.get(url)
 
     let {temple, distintTemplePic, distinctProPic} = await res.data;
