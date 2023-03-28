@@ -13,7 +13,11 @@ import shortid from "shortid";
 
 export async function getServerSideProps(ctx) {
 
-    let url = `http://localhost:3000/api/introEditorPick?id=1`
+    let {id} = ctx.query
+
+    let introParam = `?=${id}`
+
+    let url = `http://localhost:3000/api/introEditorPick${introParam}`
 
     const res = await axios.get(url)
     const edPicks = await res.data[0];

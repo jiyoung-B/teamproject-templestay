@@ -13,7 +13,6 @@ export async function getServerSideProps(context) {
 const Layout =({children, meta, pathname, session}) => {
 
     let sess = children.props.session;
-
     const title = meta?.title;
     //console.log('레이아웃'+children);
     useEffect(() => {

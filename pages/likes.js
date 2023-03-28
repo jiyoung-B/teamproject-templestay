@@ -23,11 +23,7 @@ export async function getServerSideProps(ctx) {
     const likes1 = await res.data[0];
     const likes2 = await res.data[1];
     const likes3 = await res.data[2];
-    // const likesList1 = await res.data[1];
-    // console.log('?', likesList1)
-    console.log('likes1', likes1)
-    console.log('likes2', likes2)
-    console.log('likes3', likes3)
+
 
     return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
 }
@@ -39,9 +35,10 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         P_NAME: [],
         PRICE: [],
         P_SCH: [],
+        PID: [],
         response: [],
     });
-    console.log('userinfo',userinfo.P_SCH[0])
+    console.log('userinfo',userinfo.P_SCH)
 
     let handleOnChange = async (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
@@ -61,11 +58,12 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         let addr = e.target.getAttribute('addr')
         let p_name = e.target.getAttribute('p_name')
         let price = e.target.getAttribute('price')
+        let pid = e.target.getAttribute('pid')
         let p_sch = likes3[position].P_SCH
 
 
 
-        const {T_NAME, ADDR, P_NAME, PRICE, P_SCH} = userinfo;
+        const {T_NAME, ADDR, P_NAME, PRICE, P_SCH, PID} = userinfo;
 
                 // Case 1 : The user checks the box
                 if (checked) {
@@ -81,6 +79,8 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                             newState.PRICE.push(price)
                             newState.P_SCH = [...prev.P_SCH]
                             newState.P_SCH.push(p_sch)
+                            newState.PID = [...prev.PID]
+                            newState.PID.push(pid)
                             newState.response= [...prev.T_NAME, ...prev.ADDR, ...prev.P_NAME, ...prev.PRICE, ...prev.P_SCH]
 
 
@@ -98,6 +98,7 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         P_NAME: P_NAME.filter((e) => e !== p_name),
                         PRICE: [...PRICE].slice(0,index).concat([...PRICE].slice(index+1)),
                         P_SCH: P_SCH.filter((e) => e !== p_sch),
+                        PID : [...PID].slice(0,index).concat([...PID].slice(index+1)),
                         response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
                             ...PRICE.filter((e) => e !== value), ...P_SCH.filter((e) => e !== value)],
                     });
@@ -127,9 +128,11 @@ export default function Likes ({session, likes1, likes2, likes3}) {
 
     const handleClose = () => setShow(false);
 
-    let go2bk = () => {
+    let go2bk = (e) => {
         handleClose()
-        location.href = '/preBook?email=${email}';
+        let PID = e.target.dataset.pid
+        let param = `?pid=${PID}`
+        location.href = `/program${param}`;
     };
 
     console.log(`배열`, userinfo.response)
@@ -402,20 +405,73 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{userinfo.P_NAME[0]}</td>
-                        <td>{userinfo.P_NAME[1]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[0]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[1]}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
                         <td>{userinfo.PRICE[0]}</td>
                         <td>{userinfo.PRICE[1]}</td>
                     </tr>
-                    <tr style={{height: "400px"}}>
-                        <td>{stdts}</td>
-                        <td>{nddts}</td>
+                    <tr>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[0].map(day => (
+
+                                    <div>
+                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                        <Table style={{width:'100%'}}>
+                                            <thead key={shortid.generate()}>
+                                            <tr key={shortid.generate()}>
+                                                <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                                <th key={shortid.generate()}>일정명</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody key={shortid.generate()}>
+
+                                            {day.P_INFO.map(sch => (
+                                                <tr key={shortid.generate()}>
+                                                    <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                    <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                                </tr>
+                                            ))}
+
+                                            </tbody>
+                                        </Table>
+                                    </div>
+
+                                )
+                            )}
+                        </td>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[1].map(day => (
+
+                                    <div>
+                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                        <Table style={{width:'100%'}}>
+                                            <thead key={shortid.generate()}>
+                                            <tr key={shortid.generate()}>
+                                                <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                                <th style={{width:'280px'}} key={shortid.generate()}>일정명</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody key={shortid.generate()}>
+
+                                            {day.P_INFO.map(sch => (
+                                                <tr key={shortid.generate()}>
+                                                    <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                    <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                                </tr>
+                                            ))}
+
+                                            </tbody>
+                                        </Table>
+                                    </div>
+                                )
+                            )}
+                        </td>
                     </tr>
                     <tr className="gobkbtn">
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[0]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[1]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
                     </tr>
                     </tbody>
                 </Table>
@@ -446,55 +502,103 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{userinfo.P_NAME[0]}</td>
-                        <td>{userinfo.P_NAME[1]}</td>
-                        <td>{userinfo.P_NAME[2]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[0]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[1]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[2]}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
                         <td>{userinfo.PRICE[0]}</td>
                         <td>{userinfo.PRICE[1]}</td>
                         <td>{userinfo.PRICE[2]}</td>
                     </tr>
-                    <tr style={{height: "400px"}}>
-                        <td>
-                            {userinfo.P_SCH[0].map((obj) => {
-                                return(
-                                    <div>
-                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{obj.P_DAY}</p>
-                                <Table key={shortid.generate()}>
-                                    <thead key={shortid.generate()}>
-                                    <tr key={shortid.generate()}>
-                                        <th style={{width:'333px'}} key={shortid.generate()}>시작시간</th>
-                                        <th key={shortid.generate()}>일정명</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody key={shortid.generate()}>
+                    <tr>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[0].map(day => (
 
-                                    {obj.P_INFO.map(sch => (
-                                        <tr key={shortid.generate()}>
-                                            <td style={{width:'333px'}} key={shortid.generate()}>{sch.P_TIME}</td>
-                                            <td key={shortid.generate()}>{sch.P_CONTENT}</td>
-                                        </tr>
-                                    ))}
+                                <div>
+                                   <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                   <Table style={{width:'100%'}}>
+                                       <thead key={shortid.generate()}>
+                                       <tr key={shortid.generate()}>
+                                           <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                           <th key={shortid.generate()}>일정명</th>
+                                       </tr>
+                                       </thead>
+                                       <tbody key={shortid.generate()}>
 
-                                    </tbody>
-                                </Table>
-                                    </div>
+                                       {day.P_INFO.map(sch => (
+                                           <tr key={shortid.generate()}>
+                                               <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                               <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                           </tr>
+                                       ))}
+
+                                       </tbody>
+                                   </Table>
+                                </div>
+
                                 )
-                            })}
+                            )}
                         </td>
-                        <td>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[1].map(day => (
 
+                                <div>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                    <Table style={{width:'100%'}}>
+                                        <thead key={shortid.generate()}>
+                                        <tr key={shortid.generate()}>
+                                            <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                            <th style={{width:'280px'}} key={shortid.generate()}>일정명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody key={shortid.generate()}>
 
-                            </td>
-                        <td>
+                                        {day.P_INFO.map(sch => (
+                                            <tr key={shortid.generate()}>
+                                                <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                            </tr>
+                                        ))}
 
-                            </td>
+                                        </tbody>
+                                    </Table>
+                                </div>
+                                )
+                            )}
+                        </td>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[2].map(day => (
+
+                                <div>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                    <Table style={{width:'100%'}}>
+                                        <thead key={shortid.generate()}>
+                                        <tr key={shortid.generate()}>
+                                            <th  key={shortid.generate()}>시작시간</th>
+                                            <th key={shortid.generate()}>일정명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody key={shortid.generate()}>
+
+                                        {day.P_INFO.map(sch => (
+                                            <tr key={shortid.generate()}>
+                                                <td  key={shortid.generate()}>{sch.P_TIME}</td>
+                                                <td key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                            </tr>
+                                        ))}
+
+                                        </tbody>
+                                    </Table>
+                                </div>
+                                )
+                            )}
+                        </td>
                     </tr>
                     <tr className="gobkbtn">
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[0]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[1]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[2]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
                     </tr>
                     </tbody>
                 </Table>
@@ -555,7 +659,7 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                     <li key={index} className="temples-list-item">
                                         <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                             <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} t_name={llk.T_NAME} addr={llk.ADDR} p_name={llk.P_NAME} price={llk.PRICE} data-p_sch={llk.P_SCH}
+                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} pid={llk.PID} t_name={llk.T_NAME} addr={llk.ADDR} p_name={llk.P_NAME} price={llk.PRICE} data-p_sch={llk.P_SCH}
                                                             checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                 <img src="/img/temple.png" width="32" height="32" />
                                             </Col>

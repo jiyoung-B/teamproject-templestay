@@ -12,7 +12,6 @@ import * as pageProps from "next-auth/client";
 
 
 const Header = ({ props, children, pathname, menu, session }) => {
-
     const router = useRouter();
     const currentPath = router.pathname;
     const [scrollPosition, setScrollPosition] = useState(0);
