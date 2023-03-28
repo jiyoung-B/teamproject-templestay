@@ -10,41 +10,38 @@ import {getSession} from "next-auth/client";
 import axios from "axios";
 import GoogleMapReact from "google-map-react";
 import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb";
-
 import Geocode from "react-geocode";
-
 
 export async function getServerSideProps(ctx) {
 
     const session = await getSession(ctx);
-    // if(!session) { // 로그인하지 않은 경우 로그인으로 이동
-    //     return {
-    //         redirect: {permanent: false, destination: '/'},
-    //         props: {}
-    //     }
-    // }
     let email = session.user.email;
     let param = `?email=${email}`
     let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
-    const likes = await res.data[0];
+    const likes1 = await res.data[0];
+    const likes2 = await res.data[1];
+    const likes3 = await res.data[2];
+    // const likesList1 = await res.data[1];
+    // console.log('?', likesList1)
+    console.log('likes1', likes1)
+    console.log('likes2', likes2)
+    console.log('likes3', likes3)
 
-    console.log('라잌스넘어옴????',likes)
-    return {props : {likes: likes}}
+    return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
 }
-export default function Likes ({session, likes}) {
-    console.log('likes-------!!!', likes)
-
-    const [checkedState, setCheckedState] = useState( new Array(likes.length).fill(false) );
+export default function Likes ({session, likes1, likes2, likes3}) {
+    const [checkedState, setCheckedState] = useState( new Array(likes1.length).fill(false) );
     const [userinfo, setUserInfo] = useState({
         T_NAME: [],
         ADDR: [],
         P_NAME: [],
         PRICE: [],
+        P_CONTENT: [],
         response: [],
     });
 
-    let handleOnChange = (position, e) => {
+    let handleOnChange = async (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
         let updatedCheckedState = checkedState.map((item, index) =>
             index === position ? !item : item
@@ -57,32 +54,37 @@ export default function Likes ({session, likes}) {
         setCheckedState(updatedCheckedState);
 
         // 체크박스에 체크된 데이터 가져오기!
-        const { value, checked } = e.target;
-        const { T_NAME, ADDR, P_NAME, PRICE } = userinfo;
+        const {value, checked} = e.target;
 
-        // Case 1 : The user checks the box
-        if (checked) {
-            setUserInfo({
-                T_NAME: [...T_NAME, value],
-                ADDR: [...ADDR],
-                P_NAME: [...P_NAME],
-                PRICE: [...PRICE],
-                response: [...T_NAME, ...ADDR, ...P_NAME, ...PRICE, value],
-            });
-        }
+        const {T_NAME, ADDR, P_NAME, PRICE, P_CONTENT} = userinfo;
 
-        // Case 2  : The user unchecks the box
-        else {
-            setUserInfo({
-                T_NAME: T_NAME.filter((e) => e !== value),
-                ADDR: ADDR.filter((e) => e !== value),
-                P_NAME: P_NAME.filter((e) => e !== value),
-                PRICE: PRICE.filter((e) => e !== value),
-                response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
-                    ...PRICE.filter((e) => e !== value)],
-            });
-        }
-    };
+                // Case 1 : The user checks the box
+                if (checked) {
+                    setUserInfo({
+                        T_NAME: [...T_NAME, value],
+                        ADDR: [...ADDR],
+                        P_NAME: [...P_NAME],
+                        PRICE: [...PRICE],
+                        P_CONTENT: [...P_CONTENT],
+                        response: [...T_NAME, ...ADDR, ...P_NAME, ...PRICE, ...P_CONTENT, value],
+                    });
+                }
+
+                // Case 2  : The user unchecks the box
+                else {
+                    setUserInfo({
+                        T_NAME: T_NAME.filter((e) => e !== value),
+                        ADDR: ADDR.filter((e) => e !== value),
+                        P_NAME: P_NAME.filter((e) => e !== value),
+                        PRICE: PRICE.filter((e) => e !== value),
+                        P_CONTENT: P_CONTENT.filter((e) => e !== value),
+                        response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
+                            ...PRICE.filter((e) => e !== value), ...P_CONTENT.filter((e) => e !== value)],
+                    });
+                }
+            };
+    // console.log(`likes`, likes);
+
 
     const [show, setShow] = useState(false);
     const handleShow = () => {
@@ -110,7 +112,7 @@ export default function Likes ({session, likes}) {
         location.href = '/preBook?email=${email}';
     };
 
-    console.log(userinfo.response)
+    console.log(`배열`, userinfo.response)
 
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
@@ -158,18 +160,28 @@ export default function Likes ({session, likes}) {
     let temloc1 = String(userinfo.response[0]).split(',')[1];
     let temloc2 = String(userinfo.response[1]).split(',')[1];
     let temloc3 = String(userinfo.response[2]).split(',')[1];
-    // let address = `${temloc}`
 
-    console.log(`bbb`, temloc1)
+    let aa = String(userinfo.response[0]).split(',');
+    let stdts = aa[aa.length-1];
+    let stpr = aa[aa.length-2];
+    let stpn = aa[aa.length-3];
+
+    let bb = String(userinfo.response[1]).split(',');
+    let nddts = bb[bb.length-1];
+    let ndpr = bb[bb.length-2];
+    let ndpn = bb[bb.length-3];
+
+    let cc = String(userinfo.response[2]).split(',');
+    let rddts = cc[cc.length-1];
+    let rdpr = cc[cc.length-2];
+    let rdpn = cc[cc.length-3];
 
     // Get latitude & longitude from address.
     const [coordinates, setCoordinates] = useState(null);
     let getCoordinates = (address) => {
         Geocode.fromAddress(address).then(
             (response) => {
-                // let {lat, lng} = response.results[0].geometry.location;
                 setCoordinates(response.results[0].geometry.location);
-                // console.log(`${address} : [lat: ${lat}, lng: ${lng}]`);
             },
             (error) => {
                 console.error(error);
@@ -185,9 +197,7 @@ export default function Likes ({session, likes}) {
     let getCoordinates2 = (address) => {
         Geocode.fromAddress(address).then(
             (response) => {
-                // let {lat, lng} = response.results[0].geometry.location;
                 setCoordinates2(response.results[0].geometry.location);
-                // console.log(`${address} : [lat: ${lat}, lng: ${lng}]`);
             },
             (error) => {
                 console.error(error);
@@ -203,9 +213,7 @@ export default function Likes ({session, likes}) {
     let getCoordinates3 = (address) => {
         Geocode.fromAddress(address).then(
             (response) => {
-                // let {lat, lng} = response.results[0].geometry.location;
                 setCoordinates3(response.results[0].geometry.location);
-                // console.log(`${address} : [lat: ${lat}, lng: ${lng}]`);
             },
             (error) => {
                 console.error(error);
@@ -247,7 +255,7 @@ export default function Likes ({session, likes}) {
                     layerTypes={this.state.defaultProps.layerTypes}
                     options={{ styles: this.state.defaultProps.styles }}
                 >
-                    <TbCircleNumber1 lat={coordinates?.lat} lng={coordinates2?.lng} text={"Point 1"} size="30" color="#984C0C" />
+                    <TbCircleNumber1 lat={coordinates?.lat} lng={coordinates?.lng} text={"Point 1"} size="30" color="#984C0C" />
                     <TbCircleNumber2 lat={coordinates2?.lat} lng={coordinates2?.lng} text={"Point 2"} size="30" color="#984C0C" />
                 </GoogleMapReact>
 
@@ -342,7 +350,6 @@ export default function Likes ({session, likes}) {
     function SelectCompareCnt() {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let comCnt = 0;
-        console.log(`aa---------aaaaaaaaaaaaaaaa`, likes)
 
         checkboxes.forEach(function(checkbox) {
             if (checkbox.checked) {
@@ -375,16 +382,16 @@ export default function Likes ({session, likes}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[2]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[2]}</td>
+                        <td>{stpn}</td>
+                        <td>{ndpn}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[3]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[3]}</td>
+                        <td>{stpr}</td>
+                        <td>{ndpr}</td>
                     </tr>
                     <tr style={{height: "400px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[4]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[4]}</td>
+                        <td>{stdts}</td>
+                        <td>{nddts}</td>
                     </tr>
                     <tr className="gobkbtn">
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
@@ -419,19 +426,19 @@ export default function Likes ({session, likes}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[2]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[2]}</td>
-                        <td>{String(userinfo.response[2]).split(',')[2]}</td>
+                        <td>{stpn}</td>
+                        <td>{ndpn}</td>
+                        <td>{rdpn}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[3]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[3]}</td>
-                        <td>{String(userinfo.response[2]).split(',')[3]}</td>
+                        <td>{stpr}</td>
+                        <td>{ndpr}</td>
+                        <td>{rdpr}</td>
                     </tr>
                     <tr style={{height: "400px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[4]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[4]}</td>
-                        <td>{String(userinfo.response[2]).split(',')[4]}</td>
+                        <td>{stdts}</td>
+                        <td>{nddts}</td>
+                        <td>{rddts}</td>
                     </tr>
                     <tr className="gobkbtn">
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
@@ -459,18 +466,13 @@ export default function Likes ({session, likes}) {
                         <>
                             <Button letiant="primary" className="combtn" onClick={handleShow}>비교하기</Button>
                             <React.Fragment id="myModal" className="modal">
-                                <Modal size="xl" show={show} onHide={handleClose} likes={likes}>
+                                <Modal size="xl" show={show} onHide={handleClose} likes1={likes1}>
                                     <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}} closeButton>
                                         <Modal.Title></Modal.Title>
                                     </Modal.Header>
                                     <Modal.Body className="comtab">
-                                        <SelectCompareCnt likes={likes} />
+                                        <SelectCompareCnt likes1={likes1} />
                                     </Modal.Body>
-                                    <Modal.Footer>
-                                        <Button letiant="secondary" onClick={handleClose} style={{backgroundColor: "#331904"}}>
-                                            닫기
-                                        </Button>
-                                    </Modal.Footer>
                                 </Modal>
                             </React.Fragment>
                         </>
@@ -479,40 +481,41 @@ export default function Likes ({session, likes}) {
                 <Row className="tpl">
                     <Col className="likeslist col-10 offset-1">
                         <ul className="temples-list" style={{padding: "0"}}>
-                            {/*{likes.likes.map(({ T_NAME, ADDR, P_NAME, PRICE }, index ) => {   // temples에서 정보 가져오기
-                                return (
-                                    <Row>
-                                        <li key={index} className="temples-list-item">
-                                            <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
-                                                <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={T_NAME} value={[T_NAME, ADDR, P_NAME, PRICE]}
-                                                                checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
-                                                    <img src="/img/temple.png" width="32" height="32" />
-                                                </Col>
-                                                <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{T_NAME}</Col>
+                            {/*{likes.map((lk, index) => (*/}
+                            {/*    <Row key={index}>*/}
+                            {/*            <li key={index} className="temples-list-item">*/}
+                            {/*                <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>*/}
+                            {/*                    <Col className="col-5" style={{display: "flex", alignItems: "center"}}>*/}
+                            {/*                        <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE, lk.P_CONTENT]}*/}
+                            {/*                                    checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>*/}
+                            {/*                        <img src="/img/temple.png" width="32" height="32" />*/}
+                            {/*                    </Col>*/}
+                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.T_NAME}</Col>*/}
+                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
+                            {/*                </Col>*/}
+                            {/*                <Col className="col-4">{lk.ADDR}</Col>*/}
+                            {/*                <Col className="col-5">{lk.P_NAME}</Col>*/}
+                            {/*            </li>*/}
+                            {/*        </Row>*/}
+                            {/*    ))*/}
+                            {/*}*/}
+                            {likes1.map((llk, index) => (
+                                <Row key={index}>
+                                    <li key={index} className="temples-list-item">
+                                        <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
+                                            <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
+                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} value={[llk.T_NAME, llk.ADDR, llk.P_NAME]}
+                                                            checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
+                                                <img src="/img/temple.png" width="32" height="32" />
                                             </Col>
-                                            <Col className="col-4">{ADDR}</Col>
-                                            <Col className="col-5">{P_NAME}</Col>
-                                        </li>
-                                    </Row>
-                                )
-                            } )}*/}
-                            {likes.map((lk, index) => (
-                                    <Row key={index}>
-                                        <li key={index} className="temples-list-item">
-                                            <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
-                                                <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                    <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE]}
-                                                                checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
-                                                    <img src="/img/temple.png" width="32" height="32" />
-                                                </Col>
-                                                <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.T_NAME}</Col>
-                                            </Col>
-                                            <Col className="col-4">{lk.ADDR}</Col>
-                                            <Col className="col-5">{lk.P_NAME}</Col>
-                                        </li>
-                                    </Row>
-                                ))
+                                            <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{llk.T_NAME}</Col>
+                                            {/*<Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
+                                        </Col>
+                                        <Col className="col-4">{llk.ADDR}</Col>
+                                        <Col className="col-5">{llk.P_NAME}</Col>
+                                    </li>
+                                </Row>
+                            ))
                             }
                         </ul>
                     </Col>

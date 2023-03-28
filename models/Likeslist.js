@@ -1,17 +1,15 @@
 import mariadb from './MariaDB';
 
 let likeslistsql = {
-    // selectLikeslist : ` select PID, T_NAME, P_NAME, ADDR from LIKES join PROGRAM3 using (PID) join TEMPLE3 using (T_NAME)
-    //                     where email = ? `,
     selectLikeslist : ` select l.PID, T_NAME, P_NAME, ADDR, PR_CLASS, PRICE, P_DAY, P_TIME, P_CONTENT
                         from LIKES l join PROGRAM3 using (PID)
                                      join TEMPLE3 using (T_NAME)
                                      join PROGRAMPRICE3 using (P_NAME)
                                      join PROGRAMSCHEDULE3 using (P_NAME)
-                        where email = ? group by l.PID `,
+                        where email = ? `,
 //     selectCompare : ` select distinct l.PID, T_NAME, p.P_NAME, ADDR, PRICE, P_CONTENT
-// from LIKES l join PROGRAM3 p using (PID)
-//     join PROGRAMSCHEDULE3 s using (PID)
+// from LI l join PROGRAM3 p using (PID)
+//           join PROGKESRAMSCHEDULE3 s using (PID)
 // join PROGRAMPRICE3 using (PID)
 // join TEMPLE3 using (T_NAME)
 // where (email = ?)
@@ -73,5 +71,4 @@ let likeslistsql = {
 
 export default selectLikeslist
 
-// export default Likeslist
 // module.exports = Likeslist;
