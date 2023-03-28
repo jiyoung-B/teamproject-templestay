@@ -452,87 +452,85 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         <td>{userinfo.PRICE[2]}</td>
                     </tr>
                     <tr>
-                        <td style={{width:'15%x'}}>
+                        <td style={{width:'33%'}}>
                             {userinfo.P_SCH[0].map(day => (
 
-                                <span>
-                                            <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                <div>
+                                   <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                   <Table style={{width:'100%'}}>
+                                       <thead key={shortid.generate()}>
+                                       <tr key={shortid.generate()}>
+                                           <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                           <th key={shortid.generate()}>일정명</th>
+                                       </tr>
+                                       </thead>
+                                       <tbody key={shortid.generate()}>
 
-                                            <Table key={shortid.generate()}>
-                                                <thead key={shortid.generate()}>
-                                                <tr key={shortid.generate()}>
-                                                    <th  key={shortid.generate()}>시작시간</th>
-                                                    <th key={shortid.generate()}>일정명</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody key={shortid.generate()}>
+                                       {day.P_INFO.map(sch => (
+                                           <tr key={shortid.generate()}>
+                                               <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                               <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                           </tr>
+                                       ))}
 
-                                                {day.P_INFO.map(sch => (
-                                                    <tr key={shortid.generate()}>
-                                                        <td  key={shortid.generate()}>{sch.P_TIME}</td>
-                                                        <td key={shortid.generate()}>{sch.P_CONTENT}</td>
-                                                    </tr>
-                                                ))}
+                                       </tbody>
+                                   </Table>
+                                </div>
 
-                                                </tbody>
-                                            </Table>
-                                </span>
                                 )
                             )}
                         </td>
-                        <td style={{width:'15%x'}}>
-                            {userinfo.P_SCH[0].map(day => (
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[1].map(day => (
 
-                                    <span>
-                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                <div>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                    <Table style={{width:'100%'}}>
+                                        <thead key={shortid.generate()}>
+                                        <tr key={shortid.generate()}>
+                                            <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                            <th style={{width:'280px'}} key={shortid.generate()}>일정명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody key={shortid.generate()}>
 
-                                        <Table key={shortid.generate()}>
-                                            <thead key={shortid.generate()}>
+                                        {day.P_INFO.map(sch => (
                                             <tr key={shortid.generate()}>
-                                                <th  key={shortid.generate()}>시작시간</th>
-                                                <th key={shortid.generate()}>일정명</th>
+                                                <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
                                             </tr>
-                                            </thead>
-                                            <tbody key={shortid.generate()}>
+                                        ))}
 
-                                            {day.P_INFO.map(sch => (
-                                                <tr key={shortid.generate()}>
-                                                    <td  key={shortid.generate()}>{sch.P_TIME}</td>
-                                                    <td key={shortid.generate()}>{sch.P_CONTENT}</td>
-                                                </tr>
-                                            ))}
-
-                                            </tbody>
-                                        </Table>
-                                    </span>
+                                        </tbody>
+                                    </Table>
+                                </div>
                                 )
                             )}
                         </td>
-                        <td style={{width:'15%x'}}>
-                            {userinfo.P_SCH[0].map(day => (
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[2].map(day => (
 
-                                    <span>
-                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                <div>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                    <Table style={{width:'100%'}}>
+                                        <thead key={shortid.generate()}>
+                                        <tr key={shortid.generate()}>
+                                            <th  key={shortid.generate()}>시작시간</th>
+                                            <th key={shortid.generate()}>일정명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody key={shortid.generate()}>
 
-                                        <Table key={shortid.generate()}>
-                                            <thead key={shortid.generate()}>
+                                        {day.P_INFO.map(sch => (
                                             <tr key={shortid.generate()}>
-                                                <th  key={shortid.generate()}>시작시간</th>
-                                                <th key={shortid.generate()}>일정명</th>
+                                                <td  key={shortid.generate()}>{sch.P_TIME}</td>
+                                                <td key={shortid.generate()}>{sch.P_CONTENT}</td>
                                             </tr>
-                                            </thead>
-                                            <tbody key={shortid.generate()}>
+                                        ))}
 
-                                            {day.P_INFO.map(sch => (
-                                                <tr key={shortid.generate()}>
-                                                    <td  key={shortid.generate()}>{sch.P_TIME}</td>
-                                                    <td key={shortid.generate()}>{sch.P_CONTENT}</td>
-                                                </tr>
-                                            ))}
-
-                                            </tbody>
-                                        </Table>
-                                    </span>
+                                        </tbody>
+                                    </Table>
+                                </div>
                                 )
                             )}
                         </td>
