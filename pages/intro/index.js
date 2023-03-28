@@ -8,6 +8,7 @@ import Card from 'react-bootstrap/Card';
 import {Button, CardGroup, NavLink} from "react-bootstrap";
 import axios from "axios";
 import Carousel from 'react-grid-carousel'
+import shortid from "shortid";
 
 
 export async function getServerSideProps(ctx) {
@@ -24,8 +25,8 @@ const Intro = ({edPicks}) => {
 
     return (
         <>
-            <Container fluid>
-                <Row style={{marginTop:'160px'}}>
+            <Container fluid className="mt-4">
+                <Row style={{marginTop:'700px'}}>
                     <Col md={{ span: 6, offset: 1 }}>
                        <img src="https://noms.templestay.com/images/TiImage/H/L/3806.png"  className="rounded" alt="intro_img_1" width={"100%"} height={550}/>
                     </Col>
@@ -67,18 +68,18 @@ const Intro = ({edPicks}) => {
                             <Col className="offset-2" style={{maxHeight : "500px"}}>
                                 <div className="row align-items-center mt-10" style={{ display: "flex", overflow: "hidden", scrollSnapType: "x mandatory" }}>
                                     <Carousel cols={3} rows={1} gap={7} loop autoplay={2000}>
-                                        {edPicks.map(ep => (
-                                        <Carousel.Item interval={1000} >
-                                        <div key={ep.PID} className="col" style={{width: "300px", Height: "300px"}}>
-                                            <NavLink href={`/program?pid=${ep.PID}`}>
-                                                <CardGroup style={{width: "300px", height: "300px"}}>
-                                                    <Card className="h-100 editorCard">
-                                                    <Card.Img variant="top" src={ep.P_PICLINK} style={{width: "300px", minHeight: "200px"}}/>
-                                                    <Card.Body>
-                                                        <Card.Text>
-                                                           <h6> #{ep.T_NAME}</h6>
+                                        {edPicks.map((ep, idx) => (
+                                        <Carousel.Item interval={1000} key={shortid.generate()}>
+                                        <div key={shortid.generate()} pid={ep.PID} className="col" style={{width: "300px", Height: "300px"}}>
+                                            <NavLink href={`/program?pid=${ep.PID}`} key={shortid.generate()}>
+                                                <CardGroup style={{width: "300px", height: "300px"}} key={shortid.generate()}>
+                                                    <Card className="h-100 editorCard" key={shortid.generate()}>
+                                                    <Card.Img variant="top" src={ep.P_PICLINK} style={{width: "300px", minHeight: "200px"}} key={shortid.generate()}/>
+                                                    <Card.Body key={shortid.generate()}>
+                                                        <Card.Text key={shortid.generate()}>
+                                                           <span className="fs-6" key={shortid.generate()}> #{ep.T_NAME}</span>
                                                         </Card.Text>
-                                                        <Card.Text className="pr-3">
+                                                        <Card.Text className="pr-3" key={shortid.generate()}>
                                                             {ep.P_NAME}
                                                         </Card.Text>
                                                     </Card.Body>

@@ -7,7 +7,7 @@ export default async (req, res) => {
         const likeslist = await Likeslist(email).then((lk) => lk);
 
         // console.log('plz : ', likeslist);
-        let likesList1=likeslist[0].map((llk) => ({PID : llk.PID, T_NAME : llk.T_NAME, P_NAME : llk.P_NAME, ADDR : llk.ADDR})
+        let likesList1=likeslist[0].map((llk) => ({PID : llk.PID, T_NAME : llk.T_NAME, P_NAME : llk.P_NAME, ADDR : llk.ADDR, PRICE : llk.PRICE})
         )
         let distinctLikesList1 = likesList1.filter((obj,index) => {
             return likesList1.findIndex(item => item.PID === obj.PID) === index;
@@ -80,6 +80,11 @@ export default async (req, res) => {
         }
 
         distinctLikeList3 = transformData(distinctLikeList3)
+        console.log('distinctLikeList3',distinctLikeList3)
+
+        for (let i = 0; i < distinctLikesList1.length; i++) {
+            distinctLikesList1[i].P_SCH = distinctLikeList3[i].P_SCH
+        }
         console.log('distinctLikeList3',distinctLikeList3)
 
         res.status(200).json([distinctLikesList1, distinctLikeList2, distinctLikeList3]);
