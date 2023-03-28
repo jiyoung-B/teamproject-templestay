@@ -83,7 +83,6 @@ class Index {
         let searchData;
         let param = [this.lid,this.str,this.end]
 
-
         try{
             conn = await mariadb.makeConn();
 
@@ -153,15 +152,9 @@ class Index {
         }
         return indexData
 
-
     }
 
 }
-
-
-
-
-
 
 
 export default Index;

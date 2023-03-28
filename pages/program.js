@@ -2,17 +2,14 @@ import Carousel from "react-bootstrap/Carousel";
 import {Button, Card, Col, Container, Modal, NavLink, Row, Table, Form} from "react-bootstrap";
 import {BsCheck2} from "react-icons/bs";
 import axios from "axios";
-import Layout from "./layout/Layout";
-import Nav from "./layout/Nav";
 import shortid from 'shortid'
 import {handleImgError, dateFomatter, milliFomatter} from "../models/Utils";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
-import {getSession, session} from "next-auth/client";
-import Link from "next/link";
-//shortid.generate()
+import {getSession} from "next-auth/client";
+
 
 
 export async function getServerSideProps(ctx) {
