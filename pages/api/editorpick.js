@@ -1,7 +1,7 @@
 import EditorPick from "../../models/EditorPick";
 export default async (req, res) => {
     let {epic} = req.query
-    console.log('epic',epic)
+
 
         try {
             let edpickData = await new EditorPick().selectEdPic(epic).then(result => result)

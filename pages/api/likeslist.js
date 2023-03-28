@@ -12,7 +12,6 @@ export default async (req, res) => {
         let distinctLikesList1 = likesList1.filter((obj,index) => {
             return likesList1.findIndex(item => item.PID === obj.PID) === index;
         })
-        console.log('distinctLikesList1',distinctLikesList1)
         let likesList2=likeslist[0].map((llk) => ({P_NAME:llk.P_NAME,PR_CLASS:llk.PR_CLASS,PRICE:llk.PRICE}))
         let distinctLikeList2 = likesList2.filter((obj,index) => {
             return likesList2.findIndex(item => item.P_NAME === obj.P_NAME) === index;
@@ -21,17 +20,66 @@ export default async (req, res) => {
         let distinctLikeList3 = likeList3.filter((obj,index) => {
             return likeList3.findIndex(item => item.P_NAME === obj.P_NAME && item.P_DAY === obj.P_DAY && item.P_TIME === obj.P_TIME) === index;
         })
-        const reducedistinctLikeList3 = distinctLikeList3.reduce((acc, obj) => {
-            if (acc.email === obj.email) {
-                acc.PID.push(obj.PID);
-            } else {
-                acc = { email: obj.email, PID: [obj.PID] };
-            }
-            return acc;
-        }, { email: '', PID: [] });
 
-        // console.log('distinctLikesList1',distinctLikesList1)
-        // console.log('distinctLikeList2',distinctLikeList2)
+        //위 함수에서는 forEach() 함수를 이용해서 원본 데이터 배열을 순회하면서, 각 아이템을 새로운 형식으로 변환합니다.
+        // 먼저, 변환된 데이터를 저장할 빈 배열 transformedData를 선언합니다.
+        // 그리고 forEach() 함수를 이용해서 원본 데이터 배열을 순회하면서, 각 아이템을 새로운 형식으로 변환합니다.
+        // 이때, find() 함수를 이용해서 같은 이름을 가진 일정이 이미 있는지 검사합니다.
+        // 같은 이름을 가진 일정이 이미 있다면, 해당 일정의 일자(P_DAY)를 검사합니다.
+        // 일자가 같은 일정이 이미 있다면, 해당 일정의 정보(P_INFO) 배열에 새로운 정보를 추가합니다.
+        // 일자가 없다면, 해당 일정을 새로 추가합니다.
+        // 같은 이름을 가진 일정이 없다면, 새로운 일정을 추가합니다.
+        function transformData(data) {
+            const transformedData = [];
+
+            data.forEach((item) => {
+                const existingItem = transformedData.find(
+                    (transformedItem) => transformedItem.P_NAME === item.P_NAME
+                );
+
+                if (existingItem) {
+                    const existingDay = existingItem.P_SCH.find(
+                        (day) => day.P_DAY === item.P_DAY
+                    );
+
+                    if (existingDay) {
+                        existingDay.P_INFO.push({
+                            P_TIME: item.P_TIME,
+                            P_CONTENT: item.P_CONTENT,
+                        });
+                    } else {
+                        existingItem.P_SCH.push({
+                            P_DAY: item.P_DAY,
+                            P_INFO: [
+                                {
+                                    P_TIME: item.P_TIME,
+                                    P_CONTENT: item.P_CONTENT,
+                                },
+                            ],
+                        });
+                    }
+                } else {
+                    transformedData.push({
+                        P_NAME: item.P_NAME,
+                        P_SCH: [
+                            {
+                                P_DAY: item.P_DAY,
+                                P_INFO: [
+                                    {
+                                        P_TIME: item.P_TIME,
+                                        P_CONTENT: item.P_CONTENT,
+                                    },
+                                ],
+                            },
+                        ],
+                    });
+                }
+            });
+
+            return transformedData;
+        }
+
+        distinctLikeList3 = transformData(distinctLikeList3)
         console.log('distinctLikeList3',distinctLikeList3)
 
         res.status(200).json([distinctLikesList1, distinctLikeList2, distinctLikeList3]);
