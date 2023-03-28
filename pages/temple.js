@@ -2,8 +2,6 @@ import Carousel from 'react-bootstrap/Carousel';
 import {Button, Card, Col, Container, NavLink, Row} from "react-bootstrap";
 import axios from 'axios'
 import {useEffect} from "react";
-import Layout from "./layout/Layout";
-import Nav from "./layout/Nav";
 import shortid from "shortid";
 import {handleImgError} from "../models/Utils";
 import {HiBadgeCheck} from "react-icons/hi";
@@ -12,12 +10,10 @@ import {HiBadgeCheck} from "react-icons/hi";
 // 빈 화면이 표시 될 수 있다.
 
 export async function getServerSideProps(ctx) {
-
     let {id, pid = null} = ctx.query
 
     let param = `?id=${id}`
     let url = `http://localhost:3000/api/temple${param}`
-
     const res = await axios.get(url)
 
     let {temple, distintTemplePic, distinctProPic} = await res.data;

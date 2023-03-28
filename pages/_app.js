@@ -25,7 +25,6 @@ function MyApp({ Component, pageProps, session }) {
     )
 }
 
-
 MyApp.getInitialProps = async (ctx) => {
     // next app의 기본 props객체 초기화 - application단위의 전역변수
     const appProps = await App.getInitialProps(ctx);
