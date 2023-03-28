@@ -53,7 +53,6 @@ export async function getServerSideProps(ctx) {
 
         searchInfo = result
 
-        console.log(searchInfo);
         return {props:{searchInfo, likeData, email}}
 }
 
