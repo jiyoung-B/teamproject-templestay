@@ -49,6 +49,7 @@ export default async (req, res) => {
         }
 
         const P_SCH = mergeObjects(preP_SCH);
+        console.log('P_SCH', P_SCH)
 
 
         let P_OPInfo = copyData[1]
