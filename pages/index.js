@@ -8,7 +8,7 @@ import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
 import {NavLink} from "react-bootstrap";
-import {BsCalendarHeartFill} from "react-icons/bs";
+import {BsCalendarHeartFill, BsFillStarFill} from "react-icons/bs";
 import {MdTempleBuddhist} from "react-icons/md";
 import {GoGlobe} from "react-icons/go";
 
@@ -19,7 +19,6 @@ export async function getServerSideProps(ctx) {
         if(end === undefined) end = null;
         if(epic === undefined) epic = null;
         let sess = await getSession(ctx);
-        console.log(lid ,str,end,epic)
         let searchInfo;
         let result;
         // 세션 여부에 따라 email 값 분기
@@ -54,6 +53,7 @@ export async function getServerSideProps(ctx) {
 
         searchInfo = result
 
+        console.log(searchInfo);
         return {props:{searchInfo, likeData, email}}
 }
 
@@ -296,7 +296,16 @@ export default function Home({searchInfo,likeData, email}) {
                                                                             })()}
                                                                             </Col>
                                                                             <Col key={shortid.generate()}>
-                                                                                    <div data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                    <div className={'me-0'} data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                            </Col>
+                                                                            <Col>
+                                                                                    <div key={shortid.generate()}>{
+                                                                                            (program.REVIEWCNT >= 2000) ?
+                                                                                                (<div><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /></div>)
+                                                                                                : (program.REVIEWCNT >= 1000) ? (<div><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /></div>)
+                                                                                                : (program.REVIEWCNT >= 500) ? (<div><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /></div>)
+                                                                                                : (<div></div>)
+                                                                                    }</div>
                                                                             </Col>
                                                                     </Row>
 
