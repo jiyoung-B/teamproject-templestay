@@ -6,7 +6,6 @@ export default async (req, res) => {
     try{
         let templeData = await selectTemple(id).then(result => result)
         let {temple, templePic, templeProPic} = templeData
-        console.log('templeProPic',templeProPic)
 
         let distintTemplePic = templePic.filter((obj) => {
             return obj.T_PICTURE.length > 40
