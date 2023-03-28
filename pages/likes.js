@@ -19,23 +19,20 @@ export async function getServerSideProps(ctx) {
     let param = `?email=${email}`
     let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
+    const likes = await res.data;
     const likes1 = await res.data[0];
     const likes2 = await res.data[1];
     const likes3 = await res.data[2];
-    // const likesList1 = await res.data[1];
-    // console.log('?', likesList1)
-    console.log('likes1', likes1)
-    console.log('likes2', likes2)
-    console.log('likes3', likes3)
 
-    return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
+    return {props : {likes: likes, likes1: likes1, likes2: likes2, likes3: likes3}}
 }
-export default function Likes ({session, likes1, likes2, likes3}) {
+export default function Likes ({session, likes, likes1, likes2, likes3}) {
     const [checkedState, setCheckedState] = useState( new Array(likes1.length).fill(false) );
     const [userinfo, setUserInfo] = useState({
         T_NAME: [],
         ADDR: [],
         P_NAME: [],
+        PR_CLASS: [],
         PRICE: [],
         P_CONTENT: [],
         response: [],
@@ -55,36 +52,33 @@ export default function Likes ({session, likes1, likes2, likes3}) {
 
         // 체크박스에 체크된 데이터 가져오기!
         const {value, checked} = e.target;
+        const {T_NAME, ADDR, P_NAME, PR_CLASS, PRICE, P_CONTENT} = userinfo;
+        // Case 1 : The user checks the box
+        if (checked) {
+            setUserInfo({
+                T_NAME: [...T_NAME, value],
+                ADDR: [...ADDR],
+                P_NAME: [...P_NAME],
+                PR_CLASS: [...PR_CLASS],
+                PRICE: [...PRICE],
+                P_CONTENT: [...P_CONTENT],
+                response: [...T_NAME, ...ADDR, ...P_NAME, ...PR_CLASS, ...PRICE, ...P_CONTENT, value],
+            });
+        }
 
-        const {T_NAME, ADDR, P_NAME, PRICE, P_CONTENT} = userinfo;
-
-                // Case 1 : The user checks the box
-                if (checked) {
-                    setUserInfo({
-                        T_NAME: [...T_NAME, value],
-                        ADDR: [...ADDR],
-                        P_NAME: [...P_NAME],
-                        PRICE: [...PRICE],
-                        P_CONTENT: [...P_CONTENT],
-                        response: [...T_NAME, ...ADDR, ...P_NAME, ...PRICE, ...P_CONTENT, value],
-                    });
-                }
-
-                // Case 2  : The user unchecks the box
-                else {
-                    setUserInfo({
-                        T_NAME: T_NAME.filter((e) => e !== value),
-                        ADDR: ADDR.filter((e) => e !== value),
-                        P_NAME: P_NAME.filter((e) => e !== value),
-                        PRICE: PRICE.filter((e) => e !== value),
-                        P_CONTENT: P_CONTENT.filter((e) => e !== value),
-                        response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
-                            ...PRICE.filter((e) => e !== value), ...P_CONTENT.filter((e) => e !== value)],
-                    });
-                }
-            };
-    // console.log(`likes`, likes);
-
+        // Case 2  : The user unchecks the box
+        else {
+            setUserInfo({
+                T_NAME: T_NAME.filter((e) => e !== value),
+                ADDR: ADDR.filter((e) => e !== value),
+                P_NAME: P_NAME.filter((e) => e !== value),
+                PRICE: PRICE.filter((e) => e !== value),
+                P_CONTENT: P_CONTENT.filter((e) => e !== value),
+                response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
+                    PR_CLASS.filter((e) => e !== value), ...PRICE.filter((e) => e !== value), ...P_CONTENT.filter((e) => e !== value)],
+            });
+        }
+    };
 
     const [show, setShow] = useState(false);
     const handleShow = () => {
@@ -111,8 +105,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         handleClose()
         location.href = '/preBook?email=${email}';
     };
-
-    console.log(`배열`, userinfo.response)
 
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
@@ -175,6 +167,13 @@ export default function Likes ({session, likes1, likes2, likes3}) {
     let rddts = cc[cc.length-1];
     let rdpr = cc[cc.length-2];
     let rdpn = cc[cc.length-3];
+
+    console.log(`likes3`, likes3[0].P_SCH)
+    // const selectedLikes = likes3.filter((llk) => llk.P_NAME === stpn);
+    // console.log('selectedLikes', selectedLikes)
+    // selectedLikes.forEach((like) => {
+    //     console.log(`P_DAY: ${like.P_DAY}, P_TIME: ${like.P_TIME}, P_CONTENT: ${like.P_CONTENT}`);
+    // });
 
     // Get latitude & longitude from address.
     const [coordinates, setCoordinates] = useState(null);
@@ -351,11 +350,13 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let comCnt = 0;
 
-        checkboxes.forEach(function(checkbox) {
+        checkboxes.forEach(function (checkbox) {
             if (checkbox.checked) {
                 comCnt++;
             }
         });
+
+        let ll = `${likes3[0].P_SCH[0].P_DAY} | ${likes3[0].P_SCH[0].P_INFO[0].P_TIME} | ${likes3[0].P_SCH[0].P_INFO[0].P_CONTENT}`
 
         if (comCnt === 2) {
             return (
@@ -382,25 +383,33 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpn}</td>
-                        <td>{ndpn}</td>
+                        {/*<td>{stpn}</td>*/}
+                        <td>{String(userinfo.response[0]).split(',')[2]}</td>
+                        {/*<td>{ndpn}</td>*/}
+                        <td>{String(userinfo.response[1]).split(',')[2]}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpr}</td>
-                        <td>{ndpr}</td>
+                        {/*<td>{stpr}원</td>*/}
+                        <td>{String(userinfo.response[0]).split(',')[3]}원</td>
+                        {/*<td>{ndpr}원</td>*/}
+                        <td>{String(userinfo.response[1]).split(',')[3]}원</td>
                     </tr>
                     <tr style={{height: "400px"}}>
-                        <td>{stdts}</td>
+                        {/*<td>{stdts}</td>*/}
+                        {/*<td>{(String(userinfo.response[0]).split(',')[4])}</td>*/}
+                        <td>{ll}</td>
                         <td>{nddts}</td>
                     </tr>
                     <tr className="gobkbtn">
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
+                            <Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
+                            <Button onClick={go2bk}>예약하러 가기</Button></td>
                     </tr>
                     </tbody>
                 </Table>
             );
-        } else if(comCnt === 3) {
+        } else if (comCnt === 3) {
             return (
                 <Table style={{textAlign: "center", border: "1px solid #331904"}}>
                     <thead>
@@ -431,9 +440,9 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         <td>{rdpn}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpr}</td>
-                        <td>{ndpr}</td>
-                        <td>{rdpr}</td>
+                        <td>{stpr}원</td>
+                        <td>{ndpr}원</td>
+                        <td>{rdpr}원</td>
                     </tr>
                     <tr style={{height: "400px"}}>
                         <td>{stdts}</td>
@@ -441,15 +450,20 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         <td>{rddts}</td>
                     </tr>
                     <tr className="gobkbtn">
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
+                            <Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
+                            <Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
+                            <Button onClick={go2bk}>예약하러 가기</Button></td>
                     </tr>
                     </tbody>
                 </Table>
             );
         }
     }
+    // console.log(`유저인포`, String(userinfo.response[0]).split(',')[4]['P_SCH'])
+    // console.log(`...`, ((userinfo.response[0]).slice(5, 6)).P_NAME)
 
     return (
         <main>
@@ -481,35 +495,16 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                 <Row className="tpl">
                     <Col className="likeslist col-10 offset-1">
                         <ul className="temples-list" style={{padding: "0"}}>
-                            {/*{likes.map((lk, index) => (*/}
-                            {/*    <Row key={index}>*/}
-                            {/*            <li key={index} className="temples-list-item">*/}
-                            {/*                <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>*/}
-                            {/*                    <Col className="col-5" style={{display: "flex", alignItems: "center"}}>*/}
-                            {/*                        <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE, lk.P_CONTENT]}*/}
-                            {/*                                    checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>*/}
-                            {/*                        <img src="/img/temple.png" width="32" height="32" />*/}
-                            {/*                    </Col>*/}
-                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.T_NAME}</Col>*/}
-                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
-                            {/*                </Col>*/}
-                            {/*                <Col className="col-4">{lk.ADDR}</Col>*/}
-                            {/*                <Col className="col-5">{lk.P_NAME}</Col>*/}
-                            {/*            </li>*/}
-                            {/*        </Row>*/}
-                            {/*    ))*/}
-                            {/*}*/}
                             {likes1.map((llk, index) => (
                                 <Row key={index}>
                                     <li key={index} className="temples-list-item">
                                         <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                             <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} value={[llk.T_NAME, llk.ADDR, llk.P_NAME]}
+                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} value={[llk.T_NAME, llk.ADDR, llk.P_NAME, llk.PRICE, likes3]}
                                                             checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                 <img src="/img/temple.png" width="32" height="32" />
                                             </Col>
                                             <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{llk.T_NAME}</Col>
-                                            {/*<Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
                                         </Col>
                                         <Col className="col-4">{llk.ADDR}</Col>
                                         <Col className="col-5">{llk.P_NAME}</Col>
