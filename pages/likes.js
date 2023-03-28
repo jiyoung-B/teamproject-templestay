@@ -11,6 +11,7 @@ import axios from "axios";
 import GoogleMapReact from "google-map-react";
 import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb";
 import Geocode from "react-geocode";
+import shortid from "shortid";
 
 export async function getServerSideProps(ctx) {
 
@@ -37,9 +38,10 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         ADDR: [],
         P_NAME: [],
         PRICE: [],
-        P_CONTENT: [],
+        P_SCH: [],
         response: [],
     });
+    console.log('userinfo',userinfo.P_SCH[0])
 
     let handleOnChange = async (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
@@ -54,32 +56,50 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         setCheckedState(updatedCheckedState);
 
         // 체크박스에 체크된 데이터 가져오기!
-        const {value, checked} = e.target;
+        const { value,checked} = e.target;
+        let t_name = e.target.getAttribute('t_name')
+        let addr = e.target.getAttribute('addr')
+        let p_name = e.target.getAttribute('p_name')
+        let price = e.target.getAttribute('price')
+        let p_sch = likes3[position].P_SCH
 
-        const {T_NAME, ADDR, P_NAME, PRICE, P_CONTENT} = userinfo;
+
+
+        const {T_NAME, ADDR, P_NAME, PRICE, P_SCH} = userinfo;
 
                 // Case 1 : The user checks the box
                 if (checked) {
-                    setUserInfo({
-                        T_NAME: [...T_NAME, value],
-                        ADDR: [...ADDR],
-                        P_NAME: [...P_NAME],
-                        PRICE: [...PRICE],
-                        P_CONTENT: [...P_CONTENT],
-                        response: [...T_NAME, ...ADDR, ...P_NAME, ...PRICE, ...P_CONTENT, value],
-                    });
+                    setUserInfo( (prev) => {
+                            let newState = {...prev}
+                            newState.T_NAME= [...prev.T_NAME]
+                            newState.T_NAME.push(t_name)
+                            newState.ADDR= [...prev.ADDR]
+                            newState.ADDR.push(addr)
+                            newState.P_NAME= [...prev.P_NAME]
+                            newState.P_NAME.push(p_name)
+                            newState.PRICE= [...prev.PRICE]
+                            newState.PRICE.push(price)
+                            newState.P_SCH = [...prev.P_SCH]
+                            newState.P_SCH.push(p_sch)
+                            newState.response= [...prev.T_NAME, ...prev.ADDR, ...prev.P_NAME, ...prev.PRICE, ...prev.P_SCH]
+
+
+                        return newState
+
+                    } );
                 }
 
                 // Case 2  : The user unchecks the box
                 else {
+                    let index = P_NAME.indexOf(p_name)
                     setUserInfo({
-                        T_NAME: T_NAME.filter((e) => e !== value),
-                        ADDR: ADDR.filter((e) => e !== value),
-                        P_NAME: P_NAME.filter((e) => e !== value),
-                        PRICE: PRICE.filter((e) => e !== value),
-                        P_CONTENT: P_CONTENT.filter((e) => e !== value),
+                        T_NAME: [...T_NAME].slice(0,index).concat([...T_NAME].slice(index+1)),
+                        ADDR: [...ADDR].slice(0,index).concat([...ADDR].slice(index+1)),
+                        P_NAME: P_NAME.filter((e) => e !== p_name),
+                        PRICE: [...PRICE].slice(0,index).concat([...PRICE].slice(index+1)),
+                        P_SCH: P_SCH.filter((e) => e !== p_sch),
                         response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
-                            ...PRICE.filter((e) => e !== value), ...P_CONTENT.filter((e) => e !== value)],
+                            ...PRICE.filter((e) => e !== value), ...P_SCH.filter((e) => e !== value)],
                     });
                 }
             };
@@ -157,9 +177,9 @@ export default function Likes ({session, likes1, likes2, likes3}) {
     Geocode.setLocationType("ROOFTOP");
     Geocode.enableDebug()
 
-    let temloc1 = String(userinfo.response[0]).split(',')[1];
-    let temloc2 = String(userinfo.response[1]).split(',')[1];
-    let temloc3 = String(userinfo.response[2]).split(',')[1];
+    let temloc1 = String(userinfo.ADDR[0]);
+    let temloc2 = String(userinfo.ADDR[1]);
+    let temloc3 = String(userinfo.ADDR[2]);
 
     let aa = String(userinfo.response[0]).split(',');
     let stdts = aa[aa.length-1];
@@ -368,8 +388,8 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     </thead>
                     <tbody>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[0]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[0]}</td>
+                        <td>{userinfo.T_NAME[0]}</td>
+                        <td>{userinfo.T_NAME[1]}</td>
                     </tr>
                     <tr style={{height: "750px"}}>
                         <td colSpan="2" id="map" style={{height: "100%", width: "100%"}}>
@@ -382,12 +402,12 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpn}</td>
-                        <td>{ndpn}</td>
+                        <td>{userinfo.P_NAME[0]}</td>
+                        <td>{userinfo.P_NAME[1]}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpr}</td>
-                        <td>{ndpr}</td>
+                        <td>{userinfo.PRICE[0]}</td>
+                        <td>{userinfo.PRICE[1]}</td>
                     </tr>
                     <tr style={{height: "400px"}}>
                         <td>{stdts}</td>
@@ -412,9 +432,9 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     </thead>
                     <tbody>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[0]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[0]}</td>
-                        <td>{String(userinfo.response[2]).split(',')[0]}</td>
+                        <td>{userinfo.T_NAME[0]}</td>
+                        <td>{userinfo.T_NAME[1]}</td>
+                        <td>{userinfo.T_NAME[2]}</td>
                     </tr>
                     <tr style={{height: "750px"}}>
                         <td colSpan="3" id="map" style={{height: "100%", width: "100%"}}>
@@ -426,19 +446,50 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpn}</td>
-                        <td>{ndpn}</td>
-                        <td>{rdpn}</td>
+                        <td>{userinfo.P_NAME[0]}</td>
+                        <td>{userinfo.P_NAME[1]}</td>
+                        <td>{userinfo.P_NAME[2]}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpr}</td>
-                        <td>{ndpr}</td>
-                        <td>{rdpr}</td>
+                        <td>{userinfo.PRICE[0]}</td>
+                        <td>{userinfo.PRICE[1]}</td>
+                        <td>{userinfo.PRICE[2]}</td>
                     </tr>
                     <tr style={{height: "400px"}}>
-                        <td>{stdts}</td>
-                        <td>{nddts}</td>
-                        <td>{rddts}</td>
+                        <td>
+                            {userinfo.P_SCH[0].map((obj) => {
+                                return(
+                                    <div>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{obj.P_DAY}</p>
+                                <Table key={shortid.generate()}>
+                                    <thead key={shortid.generate()}>
+                                    <tr key={shortid.generate()}>
+                                        <th style={{width:'333px'}} key={shortid.generate()}>시작시간</th>
+                                        <th key={shortid.generate()}>일정명</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody key={shortid.generate()}>
+
+                                    {obj.P_INFO.map(sch => (
+                                        <tr key={shortid.generate()}>
+                                            <td style={{width:'333px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                            <td key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                        </tr>
+                                    ))}
+
+                                    </tbody>
+                                </Table>
+                                    </div>
+                                )
+                            })}
+                        </td>
+                        <td>
+
+
+                            </td>
+                        <td>
+
+                            </td>
                     </tr>
                     <tr className="gobkbtn">
                         <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button onClick={go2bk}>예약하러 가기</Button></td>
@@ -504,7 +555,7 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                     <li key={index} className="temples-list-item">
                                         <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                             <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} value={[llk.T_NAME, llk.ADDR, llk.P_NAME]}
+                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} t_name={llk.T_NAME} addr={llk.ADDR} p_name={llk.P_NAME} price={llk.PRICE} data-p_sch={llk.P_SCH}
                                                             checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                 <img src="/img/temple.png" width="32" height="32" />
                                             </Col>
