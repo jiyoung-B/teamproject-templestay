@@ -2,7 +2,6 @@ import Book from "../../models/Book";
 
 export default async (req, res) => {
     let bookObject = req.body[0]
-    console.log(bookObject)
     let copyObject = {...bookObject}
     copyObject.B_STRDATE = bookObject.B_STRDATE.substring(0, 10)
     copyObject.B_ENDDATE = bookObject.B_ENDDATE.substring(0, 10)
