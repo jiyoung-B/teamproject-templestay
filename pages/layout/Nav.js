@@ -188,14 +188,14 @@ const Nav = ({props, menu, session, searchTemple}) => {
                             Temfo,
                         </NavLink>
                     </Col>
-                    <Col md={{sapn:6}} style={{textAlign: "center"}}>
+                    <Col md={{span:6}} style={{textAlign: "center"}}>
                         <Row>
                             <Button className="calbtn" variant="transparent" onClick={handleShow}>
                                 <Row>
-                                    <Col md={{ span: 5 }} style={{textAlign: "right"}}>
+                                    <Col md={{ span: 6 }} style={{textAlign: "right"}}>
                                         <HiOutlineMapPin className="calbtn" style={{marginTop: "-3%"}} /> 지역
                                     </Col>
-                                    <Col md={{ span: 5 }} style={{textAlign: "left"}}>
+                                    <Col md={{ span: 6 }} style={{textAlign: "left"}}>
                                         일정<BsCalendar style={{marginTop: "-3%"}} />
                                     </Col>
                                 </Row>
