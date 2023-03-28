@@ -85,7 +85,7 @@ export default async (req, res) => {
         for (let i = 0; i < distinctLikesList1.length; i++) {
             distinctLikesList1[i].P_SCH = distinctLikeList3[i].P_SCH
         }
-        console.log('distinctLikeList3',distinctLikeList3)
+        console.log('distinctLikesList1',distinctLikesList1)
 
         res.status(200).json([distinctLikesList1, distinctLikeList2, distinctLikeList3]);
     } catch (err) {

@@ -95,7 +95,7 @@ export default async (req, res) => {
             if(end !== 'null') {    // 없음
             } else if( end === 'null') {    // 기본 값 : 에디터 픽
                 try{
-                    let indexData = await new Index().editorPic().then(result => result)
+                    let indexData = await new Index().default().then(result => result)
 
                     // 사진 중복 제거 절차
                     let indexInfo = indexData.filter((obj,index) => (
