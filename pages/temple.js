@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import Layout from "./layout/Layout";
 import Nav from "./layout/Nav";
 import shortid from "shortid";
-import {handleImgError} from "../module/Utils";
+import {handleImgError} from "../models/Utils";
 import {HiBadgeCheck} from "react-icons/hi";
 
 // 캐러셀에 들어갈 사진은 서버에서 불러온 다음에 제공되어야 한다. 만약 그렇지 않으면 페이지가 로드된 후에 다운받기 때문에 잘린 이미지나,
@@ -20,16 +20,16 @@ export async function getServerSideProps(ctx) {
 
     const res = await axios.get(url)
 
-    let {temple, templePic, distinctProPic} = await res.data;
+    let {temple, distintTemplePic, distinctProPic} = await res.data;
 
-    return {props:{temple,templePic,distinctProPic,pid}}
+    return {props:{temple,distintTemplePic,distinctProPic,pid}}
 }
 
 
 // css 단위 변수
 const unit = 28
 
-export default function temple ({temple,templePic,distinctProPic,pid}) {
+export default function temple ({temple,distintTemplePic,distinctProPic,pid}) {
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -88,8 +88,8 @@ export default function temple ({temple,templePic,distinctProPic,pid}) {
             <div id="carouselWrapper" style={{marginTop:`${unit*2}px`}}>
                 <div id="carouseContainer">
                     <Carousel>
-                        { (templePic.length > 0) ? (
-                            templePic.map(pic => (
+                        { (distintTemplePic.length > 0) ? (
+                                distintTemplePic.map(pic => (
                             <Carousel.Item key={shortid.generate()}>
                                 <img
                                     className="d-block w-100"

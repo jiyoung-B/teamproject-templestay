@@ -13,29 +13,39 @@ import Myinfo from "./myinfo";
 import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
-import {Button} from "react-bootstrap";
+import {Button, NavLink} from "react-bootstrap";
+import {BsCalendarHeartFill} from "react-icons/bs";
+import {MdTempleBuddhist} from "react-icons/md";
+import {GoGlobe} from "react-icons/go";
 
 export async function getServerSideProps(ctx) {
-        let {lid ,str,end} = ctx.query
+        let {lid ,str,end,epic = '1'} = ctx.query
         if(lid === undefined) lid = null;
         if(str === undefined) str = null;
         if(end === undefined) end = null;
+        if(epic === undefined) epic = null;
         let sess = await getSession(ctx);
-
+        console.log(lid ,str,end,epic)
+        let searchInfo;
+        let result;
         // 세션 여부에 따라 email 값 분기
         let email;
         (sess?.user?.email !== undefined) ? email = sess.user.email : email = null
 
-        // param 선언
-        let searchParam = `?lid=${lid}&str=${str}&end=${end}`
+        if(lid === null && str === null && end === null) {
+                let param = `?epic=${epic}`
+                let url = `http://localhost:3000/api/editorpick/${param}`
+                const res = await axios.get(url)
+                result = res.data
 
-
-
-        // URL
-        let url = `http://localhost:3000/api/${searchParam}`
-        const res = await axios.get(url)
-        let result = res.data
-
+        } else {
+                // param 선언
+                let searchParam = `?lid=${lid}&str=${str}&end=${end}`
+                // URL
+                let url = `http://localhost:3000/api/${searchParam}`
+                const res = await axios.get(url)
+                result = res.data
+        }
 
         // likeData
         let likeData = null;
@@ -48,16 +58,12 @@ export async function getServerSideProps(ctx) {
                 likeData = likeRes.data
         }
 
-
-
-
-        let searchInfo = result
-
+        searchInfo = result
 
         return {props:{searchInfo, likeData, email}}
 }
 
-export default function Home({searchInfo,likeData, email, session}) {
+export default function Home({searchInfo,likeData, email}) {
         let [addr,setAddr] =useState()
 
         const [likeOnoffArr, setLikeOnoffArr] = useState(Array(searchInfo.length).fill(false));
@@ -134,10 +140,13 @@ export default function Home({searchInfo,likeData, email, session}) {
         }, [addr]);
 
 
+        // 어째서인지 파이어폭스에서는 e.target.id의 값을 불러오지 못한다..........
+        // 밑의 e.target.dataset.key도 마찬가지..........
         const toggleLike = (e) => {
                 if(email !== null) {
-                        let btnPidValue = e.target.getAttribute('pid')
-                        let index = e.target.getAttribute('value');
+                        let btnPid = e.target
+                        let btnPidValue = btnPid.id
+                        let index = e.target.dataset.key;
                         let likeInfo = [{email: email}, {btnPid: btnPidValue }]
                         let unlikeInfo = [{email: email},{btnPid: btnPidValue }]
 
@@ -172,6 +181,7 @@ export default function Home({searchInfo,likeData, email, session}) {
                         }
                         else if(likeOnoffArr[index] === false)
                         {
+                                console.log('0번',likeOnoffArr[0])
                                 const process_Like = async (likeInfo) => {
 
                                         const cnt = await fetch('/api/plusLike', {
@@ -201,20 +211,50 @@ export default function Home({searchInfo,likeData, email, session}) {
 
 
         return (
-            <div className="bg-white" id="wrapper" style={{marginTop:'85px'}}>
+            <div className="bg-white" id="wrapper" style={{marginTop:'65px'}}>
                     <Container fluid>
-                            {/*<h1>당신의 이메일: {session.user.email}</h1>*/}
+                            <Row>
+                                    <Col>
+                                            <Row>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=1'}> <AiFillLike
+                                                                        className={"text-success fs-3"} key={shortid.generate()}/> </NavLink> </div>
+                                                    </Col>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=2'}> <MdTempleBuddhist
+                                                                        className={"text-dark fs-3"} key={shortid.generate()}/> </NavLink> </div>
+
+                                                    </Col>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=3'}> <BsCalendarHeartFill
+                                                                        className={"text-danger fs-3"} key={shortid.generate()}/> </NavLink> </div>
+                                                    </Col>
+                                                    <Col>
+                                                            <div className={'text-start pb-3 ps-5'} key={shortid.generate()}>
+                                                                    <NavLink href={'/?epic=4'}> <GoGlobe
+                                                                        className={"fs-3"} style={{color:'0D6EFD'}} key={shortid.generate()}/> </NavLink> </div>
+                                                    </Col>
+                                            </Row>
+
+                                    </Col>
+                                    <Col></Col>
+                            </Row>
                             <Row className="likeslist tpl align-top">
                                     <Col md={6} className={'scrollable-col' }style={{ height: '830px'}}>
                                             { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
 
 
                                                     <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                            <Link href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+
                                                                     <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
-                                                                            <img src={program.P_PICLINK} alt="프로그램 이미지" style={{width: '100%', height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                            <NavLink href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
+                                                                            <img src={program.P_PICLINK} alt="프로그램 이미지" width={'157px'} style={{ height:'100%',paddingTop:'13px',paddingBottom:'13px'}} key={shortid.generate()}/>
+                                                                            </NavLink>
                                                                     </Col>
-                                                            </Link>
+
                                                             <Col md={8} style={{height:'100%'}} key={shortid.generate()}>
                                                                     <Row style={{height:'140px'}} key={shortid.generate()}>
                                                                             <Col key={shortid.generate()}>
@@ -235,13 +275,39 @@ export default function Home({searchInfo,likeData, email, session}) {
                                                                             </Col>
                                                                     </Row>
                                                                     <Row key={shortid.generate()}>
-                                                                            <Col key={shortid.generate()}>{ (program.E_PICKTF === 1) ?
-                                                                                <p className={'text-start ps-5'} key={shortid.generate()}>
-                                                                                        <AiFillLike
-                                                                                            className={"text-success fs-3"} key={shortid.generate()}/></p> : <p></p> }
+                                                                            <Col key={shortid.generate()}>{(() => {
+                                                                                    switch (program.E_PICKTF) {
+                                                                                            case 1:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <AiFillLike className={"text-success fs-3"} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            case 2:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <MdTempleBuddhist className={"text-dark fs-3"} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            case 3:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <BsCalendarHeartFill className={"text-danger fs-3"} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            case 4:
+                                                                                                    return (
+                                                                                                        <p className={'text-start ps-5'} key={shortid.generate()}>
+                                                                                                                <GoGlobe className={"fs-3"} style={{color:'0D6EFD'}} key={shortid.generate()}/>
+                                                                                                        </p>
+                                                                                                    );
+                                                                                            default:
+                                                                                                    return <p></p>;
+                                                                                    }
+                                                                            })()}
                                                                             </Col>
                                                                             <Col key={shortid.generate()}>
-                                                                                    <div value={idx} pid={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} key={shortid.generate()} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                    <div data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
                                                                             </Col>
                                                                     </Row>
 
