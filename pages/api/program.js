@@ -63,9 +63,6 @@ export default async (req, res) => {
         P_INFO.push(P_OPInfo);
         P_INFO.push(proData[4])
 
-        console.log('progrma api- P_INFO',P_INFO[6])
-
-
         res.status(200).json(P_INFO)
     } catch (err) {
         console.log(err)

@@ -16,7 +16,6 @@ export default async (req,res) => {
 
             likeData = await new Like(email).select().then(result => result)
 
-
             const reduceLikeData = likeData.reduce((acc, obj) => {
                 if (acc.email === obj.email) {
                     acc.PID.push(obj.PID);
