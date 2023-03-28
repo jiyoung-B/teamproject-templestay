@@ -3,10 +3,14 @@ import {Button, Table} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {useState} from "react";
+import {getSession} from "next-auth/client";
 
 export async function getServerSideProps(ctx) {
-
-    let {email} = ctx.query
+    let sess = await getSession(ctx);
+    // 세션 여부에 따라 email 값 분기
+    let email;
+    (sess?.user?.email !== undefined) ?  email = sess.user.email :  email =  null
+    console.log('email',email)
 
     let param = `?email=${email}`
     let url = `http://localhost:3000/api/preBookCheck${param}`
@@ -15,16 +19,15 @@ export async function getServerSideProps(ctx) {
     let preBookInfo = res.data[0][0]
 
 
-    return {props:{preBookInfo}}
+    return {props:{preBookInfo,email}}
 }
 
 
 
-export default function preBook ({preBookInfo}) {
+export default function preBook ({preBookInfo,email}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    let email = preBookInfo.email
 
     const startDate = new Date(preBookInfo.B_STRDATE);
     const endDate = new Date(preBookInfo.B_ENDDATE);
@@ -54,21 +57,20 @@ export default function preBook ({preBookInfo}) {
            let param = `?email=${email}`
            let del = await fetch('api/preBookDelete'+param)
 
-           location.href = '/'
+           location.href = `/myinfo${param}`
        }
 
     };
 
     const cancelBook = async () => {
-        let param = `?email=${preBookInfo.email}`
         let del = await fetch('api/preBookDelete'+param)
 
-        location.href = '/'
+        location.href = `/`
     };
     return(
         <div className={'container mt-5 mb-5'} >
             <h1>hi! 예약페이지!</h1>
-            <p>{preBookInfo.email}님의 예약정보!</p>
+            <p>{email}님의 예약정보!</p>
 
             <Table>
                 <thead>
