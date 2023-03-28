@@ -24,8 +24,8 @@ const Intro = ({edPicks}) => {
 
     return (
         <>
-            <Container fluid>
-                <Row style={{marginTop:'160px'}}>
+            <Container fluid className="mt-4">
+                <Row style={{marginTop:'700px'}}>
                     <Col md={{ span: 6, offset: 1 }}>
                        <img src="https://noms.templestay.com/images/TiImage/H/L/3806.png"  className="rounded" alt="intro_img_1" width={"100%"} height={550}/>
                     </Col>
