@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import {ko} from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import {getSession, session} from "next-auth/client";
+import Link from "next/link";
 //shortid.generate()
 
 
@@ -39,7 +40,18 @@ export async function getServerSideProps(ctx) {
 export default function Program ({proData,email}) {
     const unit = 28
     let PID = proData[7]
+    let P_CLASS = proData[0][0].P_CLASS
 
+    let isDates = true;
+    // 제목 문자열 만들기
+    const startIdx = proData[0][0].P_NAME.indexOf('['); // 첫번째 '['의 인덱스 찾기
+    const endIdx = proData[0][0].P_NAME.indexOf(']'); // 첫번째 ']'의 인덱스 찾기
+    const result = proData[0][0].P_NAME.slice(0, startIdx) + proData[0][0].P_NAME.slice(endIdx + 1); // '['와 ']' 사이의 문자열 제거하기
+
+
+    if(P_CLASS === '당일형') {
+        isDates=false
+    }
 
     // 예약하기 버튼 비활성화 state
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,9 +78,15 @@ export default function Program ({proData,email}) {
 
     //날짜가 선택되면 state를 변경해주는 함수
     const onChange = (dates) => {
-        const [start, end] = dates;
-        setStartDate(start);
-        setEndDate(end);
+        if(P_CLASS === '당일형') {
+            setStartDate(dates);
+            setEndDate(dates);
+        }else {
+            const [start, end] = dates;
+            setStartDate(start);
+            setEndDate(end);
+        }
+
     };
 
     // 경과일을 숫자로 입력하면 밀리초로 바꿔주는 함수
@@ -215,11 +233,12 @@ export default function Program ({proData,email}) {
         newProShow[index] = !proShow[index];
         setProShow(newProShow)
     };
+
     return(
         <div className={'container'} style={{marginTop:`${unit*2}px`}} id={'programWrapper'}>
 
             <div id={'titleWrapper'}>
-                <h3 className={"text-primary ps-4"}>{proData[0][0].P_NAME}</h3>
+                <h3 className={"text-primary ps-4"}><NavLink href={`/temple?id=${proData[0][0].T_NAME}`} style={{display:'inline-block'}}><span>[{proData[0][0].T_NAME}]</span></NavLink>{result}</h3>
             </div>
             <div style={{marginTop:`${unit*1}px`}} id={'imgWrapper'}>
                 <div id="carouseContainer">
@@ -276,7 +295,7 @@ export default function Program ({proData,email}) {
                                             minDate={tomorrow}
                                             maxDate={P_endDate}
                                             monthsShown={2}
-                                            selectsRange
+                                            selectsRange={isDates}
                                             dateFormat="yyyy-mm-dd"
                                             locale={ko}
                                         />
