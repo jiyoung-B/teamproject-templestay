@@ -24,7 +24,6 @@ export default function preBook ({preBookInfo}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-
     let email = preBookInfo.email
 
     const startDate = new Date(preBookInfo.B_STRDATE);
@@ -34,9 +33,6 @@ export default function preBook ({preBookInfo}) {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
     preBookInfo.TOTAL = diffDays*(preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]);
-    console.log(preBookInfo.TOTAL)
-
-
 
     const handleBook = async () => {
 
@@ -44,7 +40,6 @@ export default function preBook ({preBookInfo}) {
         setIsSubmitting(true);
 
         // Book테이블에 데이터를 삽입하는 과정
-
         let bookInsert = [preBookInfo]
 
             let cnt = await fetch('/api/bookInsert', {
@@ -60,13 +55,11 @@ export default function preBook ({preBookInfo}) {
            location.href = '/'
        }
 
-
     };
 
     const cancelBook = async () => {
         let param = `?email=${preBookInfo.email}`
         let del = await fetch('api/preBookDelete'+param)
-        console.log(del)
 
         location.href = '/'
     };

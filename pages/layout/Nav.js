@@ -128,8 +128,6 @@ const Nav = ({props, menu, session, searchTemple}) => {
 
     }
 
-
-
     //const tomorrow = new Date().setDate(new Date().getDate() + 1);
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -137,8 +135,8 @@ const Nav = ({props, menu, session, searchTemple}) => {
     const [show, setShow] = useState(false);
     const [showLogin, setShowLogin] = useState(false);
     const [showJoin, setShowJoin] = useState(false);
-    const [startDate, setStartDate] = useState(tomorrow);
-    const [endDate, setEndDate] = useState(tomorrow);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     // 여기 왜 이렇게?
     const handleClose = () => {
@@ -163,16 +161,16 @@ const Nav = ({props, menu, session, searchTemple}) => {
     // 지역 및 날짜 선택
     const handleSelection = () => {
         let lid = radioValue;
-        console.log('lid',radioValue)
+
         let str = moment(startDate).format('YYYY-MM-DD');
         let end = null;
-        console.log('str',str)
-        console.log('end',end)
+        if(str === 'Invalid date') {
+            str = null
+        }
+
         if(endDate !== null) {
             end = moment(endDate).format('YYYY-MM-DD');
         }
-
-        console.log(`선택한 지역 및 날짜짜 : ${lid} ${str}~${end}`)
 
         location.href = `/?lid=${lid}&str=${str}&end=${end}`
     };
@@ -190,14 +188,14 @@ const Nav = ({props, menu, session, searchTemple}) => {
                             Temfo,
                         </NavLink>
                     </Col>
-                    <Col md={{sapn:6}} style={{textAlign: "center"}}>
+                    <Col md={{span:6}} style={{textAlign: "center"}}>
                         <Row>
                             <Button className="calbtn" variant="transparent" onClick={handleShow}>
                                 <Row>
-                                    <Col md={{ span: 5 }} style={{textAlign: "right"}}>
+                                    <Col md={{ span: 6 }} style={{textAlign: "right"}}>
                                         <HiOutlineMapPin className="calbtn" style={{marginTop: "-3%"}} /> 지역
                                     </Col>
-                                    <Col md={{ span: 5 }} style={{textAlign: "left"}}>
+                                    <Col md={{ span: 6 }} style={{textAlign: "left"}}>
                                         일정<BsCalendar style={{marginTop: "-3%"}} />
                                     </Col>
                                 </Row>
@@ -243,7 +241,7 @@ const Nav = ({props, menu, session, searchTemple}) => {
                                                 inline
                                                 startDate={startDate}
                                                 endDate={endDate}
-                                                minDate={tomorrow}
+                                                minDate={startDate}
                                                 monthsShown={2}
                                                 selectsRange
                                                 dateFormat="yyyy-MM-dd"

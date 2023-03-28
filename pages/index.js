@@ -1,20 +1,14 @@
-import Layout from "./layout/Layout";
-import ToIntro from "./layout/ToIntro";
-import Nav from "./layout/Nav";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import shortid from 'shortid'
-import * as PropTypes from "prop-types";
-import Myinfo from "./myinfo";
 import {FcLike, FcLikePlaceholder} from "react-icons/fc";
 import {AiFillLike} from "react-icons/ai";
 import {getSession} from "next-auth/client";
-import {Button, NavLink} from "react-bootstrap";
-import {BsCalendarHeartFill} from "react-icons/bs";
+import {NavLink} from "react-bootstrap";
+import {BsCalendarHeartFill, BsFillStarFill} from "react-icons/bs";
 import {MdTempleBuddhist} from "react-icons/md";
 import {GoGlobe} from "react-icons/go";
 
@@ -25,7 +19,6 @@ export async function getServerSideProps(ctx) {
         if(end === undefined) end = null;
         if(epic === undefined) epic = null;
         let sess = await getSession(ctx);
-        console.log(lid ,str,end,epic)
         let searchInfo;
         let result;
         // 세션 여부에 따라 email 값 분기
@@ -68,7 +61,6 @@ export default function Home({searchInfo,likeData, email}) {
 
         const [likeOnoffArr, setLikeOnoffArr] = useState(Array(searchInfo.length).fill(false));
 
-
         if(email !== null) {
                 useEffect(() => {
                         const updatedLikeOnoffArr = [...likeOnoffArr];
@@ -81,7 +73,6 @@ export default function Home({searchInfo,likeData, email}) {
                         setLikeOnoffArr(updatedLikeOnoffArr);
                 }, [likeData, searchInfo]);
         }
-
 
         // 마우스 오버에 따라 지도 변경
         const handleMouseOver = (e) => {
@@ -150,7 +141,6 @@ export default function Home({searchInfo,likeData, email}) {
                         let likeInfo = [{email: email}, {btnPid: btnPidValue }]
                         let unlikeInfo = [{email: email},{btnPid: btnPidValue }]
 
-
                         if(likeOnoffArr[index] === true)
                         {
 
@@ -164,7 +154,6 @@ export default function Home({searchInfo,likeData, email}) {
                                         }).then(res => res.json());
                                         let result = false;
                                         if(await cnt  === true) result = true
-                                        console.log(result)
 
 
                                         return {result};
@@ -202,7 +191,6 @@ export default function Home({searchInfo,likeData, email}) {
                                         }
                                 })
                         }
-
 
                 } else if(email === null){
                         alert('로그인해주세요!')
@@ -307,7 +295,16 @@ export default function Home({searchInfo,likeData, email}) {
                                                                             })()}
                                                                             </Col>
                                                                             <Col key={shortid.generate()}>
-                                                                                    <div data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                                    <div className={'me-0'} data-key={idx} data-id={program.PID} id={program.PID} onClick={toggleLike} style={{width:'48px',zIndex:'2',position: 'relative'}} className={'text-end pe-5'} key={shortid.generate()}>{(likeOnoffArr[idx]) ? (<FcLike className={"fs-3"} style={{zIndex:'-1',position: 'relative'}} />) : (<FcLikePlaceholder className={"fs-3"} style={{zIndex:'-2',position: 'relative'}} key={shortid.generate()} />)} </div>
+                                                                            </Col>
+                                                                            <Col>
+                                                                                    <div key={shortid.generate()}>{
+                                                                                            (program.REVIEWCNT >= 2000) ?
+                                                                                                (<div><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /></div>)
+                                                                                                : (program.REVIEWCNT >= 1000) ? (<div><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /></div>)
+                                                                                                : (program.REVIEWCNT >= 500) ? (<div><BsFillStarFill className={'text-warning'} /><BsFillStarFill className={'text-warning'} /></div>)
+                                                                                                : (<div></div>)
+                                                                                    }</div>
                                                                             </Col>
                                                                     </Row>
 
@@ -323,7 +320,7 @@ export default function Home({searchInfo,likeData, email}) {
                                             )
                                             }
                                     </Col>
-                                    <Col  md={6}>
+                                    <Col md={6} className={'media414'}>
                                             <div id={'map'} style={{ width:'870px', height:'830px'}}></div>
                                     </Col>
                             </Row>

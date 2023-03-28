@@ -1,6 +1,5 @@
 import selectTemple from "../../models/Temple";
 
-//?id=갑사 *
 export default async (req, res) => {
     const {id} =req.query
 

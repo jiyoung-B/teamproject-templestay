@@ -5,13 +5,11 @@ import Like from "../../models/Like";
 export default async (req,res) => {
     const {email} =req.query
 
-
     if(email !== 'null') {
 
         // // 이메일의 '@' 부분이 '%'로 바뀌어 들어오므로, 변환하는 부분, api를 index와 like로 분리하였더니, 이 문제는 사라졌다.
         // let transEmail = email.replace('%','@')
         // console.log('index api - transEmail',transEmail)
-
         let likeData
 
         try {

@@ -2,8 +2,6 @@ import {NavLink} from "react-bootstrap";
 import Link from "next/link";
 
 
-
-
 const ToIntro = () => {
     return (
         <div className={"bg-primary"}>
