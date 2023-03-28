@@ -52,7 +52,6 @@ export async function getServerSideProps(ctx) {
         }
 
         searchInfo = result
-
         return {props:{searchInfo, likeData, email}}
 }
 
@@ -170,7 +169,6 @@ export default function Home({searchInfo,likeData, email}) {
                         }
                         else if(likeOnoffArr[index] === false)
                         {
-                                console.log('0번',likeOnoffArr[0])
                                 const process_Like = async (likeInfo) => {
 
                                         const cnt = await fetch('/api/plusLike', {
