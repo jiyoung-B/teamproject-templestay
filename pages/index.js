@@ -74,11 +74,9 @@ export default function Home({searchInfo,likeData, email}) {
         }
 
         // 마우스 오버에 따라 지도 변경
-        const handleMouseOver = (e) => {
-                const addrElement = e.target.querySelector('.ADDR');
-                if (addrElement) {
-                        const text = addrElement.textContent;
-                        setAddr(text) // ADDR 클래스를 가진 요소의 텍스트 정보
+        const handleMouseOver = (e,ADDR) => {
+                if (ADDR) {
+                        setAddr(ADDR)
                 }
         };
 
@@ -230,7 +228,7 @@ export default function Home({searchInfo,likeData, email}) {
                                             { (searchInfo.length > 0 ) ? (      searchInfo.map((program,idx) => (
 
 
-                                                    <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={handleMouseOver} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
+                                                    <Row className="tpl border border-2 border-danger rounded-2" onMouseOver={(e) => handleMouseOver(e,program.ADDR)} style={{height: '190px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
 
                                                                     <Col md={4} className={'d-flex justify-content-start'} style={{height:'100%'}} key={shortid.generate()}>
                                                                             <NavLink href={`/temple?id=${program.T_NAME}&pid=${program.PID}`} key={shortid.generate()}>
@@ -310,7 +308,7 @@ export default function Home({searchInfo,likeData, email}) {
                                                 )
                                             )) : (
                                                 <Row className="tpl border border-2 border-danger rounded-2" style={{height: '150px',backgroundColor:'#FCF5EB'}} key={shortid.generate()}>
-                                                        <p className={'h1'} key={shortid.generate()}>프로그램이 없습니다.</p>
+                                                        <p className={'h1'} key={shortid.generate()}>예약 가능한 프로그램이 없습니다.</p>
                                                 </Row>
                                             )
                                             }

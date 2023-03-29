@@ -127,6 +127,7 @@ export default function Likes ({session, likes1, likes3}) {
         location.href = `/program${param}`;
     };
 
+
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
     const modalMapStyles = [

@@ -93,7 +93,7 @@ export default async (req, res) => {
             }
         } else if (str === 'null') {
             if(end !== 'null') {    // 없음
-            } else if( end === 'null') {    // 기본 값 : 에디터 픽
+            } else if( end === 'null') {    // 현재 기본 값 : 에디터 픽
                 try{
                     let indexData = await new Index().default().then(result => result)
 
