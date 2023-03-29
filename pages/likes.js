@@ -609,7 +609,7 @@ export default function Likes ({session, likes1, likes3}) {
                                             </Row>
                                         </Col>
                                         <Col className="col-5">{llk.ADDR}</Col>
-                                        <Col className="col-5">{llk.P_NAME}</Col>
+                                        <Col className="col-5" style={{width: "38%"}}>{llk.P_NAME}</Col>
                                     </li>
                                 </Row>
                             ))
