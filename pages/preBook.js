@@ -62,6 +62,7 @@ export default function preBook ({preBookInfo,email}) {
     };
 
     const cancelBook = async () => {
+        let param = `?email=${email}`
         let del = await fetch('api/preBookDelete'+param)
 
         location.href = `/`
