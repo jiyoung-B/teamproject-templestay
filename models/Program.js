@@ -19,7 +19,7 @@ async function selectPro(pid) {
 
         let paramPid = [pid,tomorrow];
         let P_Meta = await conn.query(programSql.selectPro, paramPid);
-        console.log('P_Meta',P_Meta)
+
         let paramTName = [await P_Meta[0].T_NAME]
         let P_PIC = await conn.query(programSql.selectProPic,paramTName)
 
