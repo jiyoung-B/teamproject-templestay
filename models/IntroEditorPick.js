@@ -4,9 +4,10 @@ let editorSql ={
     selectEdPic : `select * from PROGRAMPIC2 where E_PICKTF = ?`,
     selectOneEdPic : `select * from PROGRAMPIC2 where E_PICKTF = ?`
 }
-async function selectEdPic() {
+async function selectEdPic(id) {
     let conn = null;
-    let param = [1];
+
+    let param = [2]; // [id] 일단 하드코딩함.
     let edPickData = [];
     try {
         conn = await mariadb.makeConn();

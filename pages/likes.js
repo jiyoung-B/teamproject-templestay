@@ -11,6 +11,7 @@ import axios from "axios";
 import GoogleMapReact from "google-map-react";
 import {TbCircleNumber1, TbCircleNumber2, TbCircleNumber3} from "react-icons/tb";
 import Geocode from "react-geocode";
+import shortid from "shortid";
 
 export async function getServerSideProps(ctx) {
 
@@ -19,24 +20,25 @@ export async function getServerSideProps(ctx) {
     let param = `?email=${email}`
     let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
-    const likes = await res.data;
     const likes1 = await res.data[0];
     const likes2 = await res.data[1];
     const likes3 = await res.data[2];
 
-    return {props : {likes: likes, likes1: likes1, likes2: likes2, likes3: likes3}}
+
+    return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
 }
-export default function Likes ({session, likes, likes1, likes2, likes3}) {
+export default function Likes ({session, likes1, likes2, likes3}) {
     const [checkedState, setCheckedState] = useState( new Array(likes1.length).fill(false) );
     const [userinfo, setUserInfo] = useState({
         T_NAME: [],
         ADDR: [],
         P_NAME: [],
-        PR_CLASS: [],
         PRICE: [],
-        P_CONTENT: [],
+        P_SCH: [],
+        PID: [],
         response: [],
     });
+    console.log('userinfo',userinfo.P_SCH)
 
     let handleOnChange = async (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
@@ -51,34 +53,59 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
         setCheckedState(updatedCheckedState);
 
         // 체크박스에 체크된 데이터 가져오기!
-        const {value, checked} = e.target;
-        const {T_NAME, ADDR, P_NAME, PR_CLASS, PRICE, P_CONTENT} = userinfo;
-        // Case 1 : The user checks the box
-        if (checked) {
-            setUserInfo({
-                T_NAME: [...T_NAME, value],
-                ADDR: [...ADDR],
-                P_NAME: [...P_NAME],
-                PR_CLASS: [...PR_CLASS],
-                PRICE: [...PRICE],
-                P_CONTENT: [...P_CONTENT],
-                response: [...T_NAME, ...ADDR, ...P_NAME, ...PR_CLASS, ...PRICE, ...P_CONTENT, value],
-            });
-        }
+        const { value,checked} = e.target;
+        let t_name = e.target.getAttribute('t_name')
+        let addr = e.target.getAttribute('addr')
+        let p_name = e.target.getAttribute('p_name')
+        let price = e.target.getAttribute('price')
+        let pid = e.target.getAttribute('pid')
+        let p_sch = likes3[position].P_SCH
 
-        // Case 2  : The user unchecks the box
-        else {
-            setUserInfo({
-                T_NAME: T_NAME.filter((e) => e !== value),
-                ADDR: ADDR.filter((e) => e !== value),
-                P_NAME: P_NAME.filter((e) => e !== value),
-                PRICE: PRICE.filter((e) => e !== value),
-                P_CONTENT: P_CONTENT.filter((e) => e !== value),
-                response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
-                    PR_CLASS.filter((e) => e !== value), ...PRICE.filter((e) => e !== value), ...P_CONTENT.filter((e) => e !== value)],
-            });
-        }
-    };
+
+
+        const {T_NAME, ADDR, P_NAME, PRICE, P_SCH, PID} = userinfo;
+
+                // Case 1 : The user checks the box
+                if (checked) {
+                    setUserInfo( (prev) => {
+                            let newState = {...prev}
+                            newState.T_NAME= [...prev.T_NAME]
+                            newState.T_NAME.push(t_name)
+                            newState.ADDR= [...prev.ADDR]
+                            newState.ADDR.push(addr)
+                            newState.P_NAME= [...prev.P_NAME]
+                            newState.P_NAME.push(p_name)
+                            newState.PRICE= [...prev.PRICE]
+                            newState.PRICE.push(price)
+                            newState.P_SCH = [...prev.P_SCH]
+                            newState.P_SCH.push(p_sch)
+                            newState.PID = [...prev.PID]
+                            newState.PID.push(pid)
+                            newState.response= [...prev.T_NAME, ...prev.ADDR, ...prev.P_NAME, ...prev.PRICE, ...prev.P_SCH]
+
+
+                        return newState
+
+                    } );
+                }
+
+                // Case 2  : The user unchecks the box
+                else {
+                    let index = P_NAME.indexOf(p_name)
+                    setUserInfo({
+                        T_NAME: [...T_NAME].slice(0,index).concat([...T_NAME].slice(index+1)),
+                        ADDR: [...ADDR].slice(0,index).concat([...ADDR].slice(index+1)),
+                        P_NAME: P_NAME.filter((e) => e !== p_name),
+                        PRICE: [...PRICE].slice(0,index).concat([...PRICE].slice(index+1)),
+                        P_SCH: P_SCH.filter((e) => e !== p_sch),
+                        PID : [...PID].slice(0,index).concat([...PID].slice(index+1)),
+                        response: [...T_NAME.filter((e) => e !== value), ...ADDR.filter((e) => e !== value), ...P_NAME.filter((e) => e !== value),
+                            ...PRICE.filter((e) => e !== value), ...P_SCH.filter((e) => e !== value)],
+                    });
+                }
+            };
+    // console.log(`likes`, likes);
+
 
     const [show, setShow] = useState(false);
     const handleShow = () => {
@@ -101,10 +128,14 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
 
     const handleClose = () => setShow(false);
 
-    let go2bk = () => {
+    let go2bk = (e) => {
         handleClose()
-        location.href = '/preBook?email=${email}';
+        let PID = e.target.dataset.pid
+        let param = `?pid=${PID}`
+        location.href = `/program${param}`;
     };
+
+    console.log(`배열`, userinfo.response)
 
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
@@ -149,9 +180,9 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
     Geocode.setLocationType("ROOFTOP");
     Geocode.enableDebug()
 
-    let temloc1 = String(userinfo.response[0]).split(',')[1];
-    let temloc2 = String(userinfo.response[1]).split(',')[1];
-    let temloc3 = String(userinfo.response[2]).split(',')[1];
+    let temloc1 = String(userinfo.ADDR[0]);
+    let temloc2 = String(userinfo.ADDR[1]);
+    let temloc3 = String(userinfo.ADDR[2]);
 
     let aa = String(userinfo.response[0]).split(',');
     let stdts = aa[aa.length-1];
@@ -167,13 +198,6 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
     let rddts = cc[cc.length-1];
     let rdpr = cc[cc.length-2];
     let rdpn = cc[cc.length-3];
-
-    console.log(`likes3`, likes3[0].P_SCH)
-    // const selectedLikes = likes3.filter((llk) => llk.P_NAME === stpn);
-    // console.log('selectedLikes', selectedLikes)
-    // selectedLikes.forEach((like) => {
-    //     console.log(`P_DAY: ${like.P_DAY}, P_TIME: ${like.P_TIME}, P_CONTENT: ${like.P_CONTENT}`);
-    // });
 
     // Get latitude & longitude from address.
     const [coordinates, setCoordinates] = useState(null);
@@ -350,13 +374,11 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
         let checkboxes = document.querySelectorAll('input[type="checkbox"]');
         let comCnt = 0;
 
-        checkboxes.forEach(function (checkbox) {
+        checkboxes.forEach(function(checkbox) {
             if (checkbox.checked) {
                 comCnt++;
             }
         });
-
-        let ll = `${likes3[0].P_SCH[0].P_DAY} | ${likes3[0].P_SCH[0].P_INFO[0].P_TIME} | ${likes3[0].P_SCH[0].P_INFO[0].P_CONTENT}`
 
         if (comCnt === 2) {
             return (
@@ -369,8 +391,8 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
                     </thead>
                     <tbody>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[0]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[0]}</td>
+                        <td>{userinfo.T_NAME[0]}</td>
+                        <td>{userinfo.T_NAME[1]}</td>
                     </tr>
                     <tr style={{height: "750px"}}>
                         <td colSpan="2" id="map" style={{height: "100%", width: "100%"}}>
@@ -383,33 +405,78 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        {/*<td>{stpn}</td>*/}
-                        <td>{String(userinfo.response[0]).split(',')[2]}</td>
-                        {/*<td>{ndpn}</td>*/}
-                        <td>{String(userinfo.response[1]).split(',')[2]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[0]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[1]}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        {/*<td>{stpr}원</td>*/}
-                        <td>{String(userinfo.response[0]).split(',')[3]}원</td>
-                        {/*<td>{ndpr}원</td>*/}
-                        <td>{String(userinfo.response[1]).split(',')[3]}원</td>
+                        <td>{userinfo.PRICE[0]}</td>
+                        <td>{userinfo.PRICE[1]}</td>
                     </tr>
-                    <tr style={{height: "400px"}}>
-                        {/*<td>{stdts}</td>*/}
-                        {/*<td>{(String(userinfo.response[0]).split(',')[4])}</td>*/}
-                        <td>{ll}</td>
-                        <td>{nddts}</td>
+                    <tr>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[0].map(day => (
+
+                                    <div>
+                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                        <Table style={{width:'100%'}}>
+                                            <thead key={shortid.generate()}>
+                                            <tr key={shortid.generate()}>
+                                                <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                                <th key={shortid.generate()}>일정명</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody key={shortid.generate()}>
+
+                                            {day.P_INFO.map(sch => (
+                                                <tr key={shortid.generate()}>
+                                                    <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                    <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                                </tr>
+                                            ))}
+
+                                            </tbody>
+                                        </Table>
+                                    </div>
+
+                                )
+                            )}
+                        </td>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[1].map(day => (
+
+                                    <div>
+                                        <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                        <Table style={{width:'100%'}}>
+                                            <thead key={shortid.generate()}>
+                                            <tr key={shortid.generate()}>
+                                                <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                                <th style={{width:'280px'}} key={shortid.generate()}>일정명</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody key={shortid.generate()}>
+
+                                            {day.P_INFO.map(sch => (
+                                                <tr key={shortid.generate()}>
+                                                    <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                    <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                                </tr>
+                                            ))}
+
+                                            </tbody>
+                                        </Table>
+                                    </div>
+                                )
+                            )}
+                        </td>
                     </tr>
                     <tr className="gobkbtn">
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
-                            <Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
-                            <Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[0]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[1]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
                     </tr>
                     </tbody>
                 </Table>
             );
-        } else if (comCnt === 3) {
+        } else if(comCnt === 3) {
             return (
                 <Table style={{textAlign: "center", border: "1px solid #331904"}}>
                     <thead>
@@ -421,9 +488,9 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
                     </thead>
                     <tbody>
                     <tr style={{height: "40px"}}>
-                        <td>{String(userinfo.response[0]).split(',')[0]}</td>
-                        <td>{String(userinfo.response[1]).split(',')[0]}</td>
-                        <td>{String(userinfo.response[2]).split(',')[0]}</td>
+                        <td>{userinfo.T_NAME[0]}</td>
+                        <td>{userinfo.T_NAME[1]}</td>
+                        <td>{userinfo.T_NAME[2]}</td>
                     </tr>
                     <tr style={{height: "750px"}}>
                         <td colSpan="3" id="map" style={{height: "100%", width: "100%"}}>
@@ -435,35 +502,109 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
                         </td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpn}</td>
-                        <td>{ndpn}</td>
-                        <td>{rdpn}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[0]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[1]}</td>
+                        <td className={'fw-bold'}>{userinfo.P_NAME[2]}</td>
                     </tr>
                     <tr style={{height: "40px"}}>
-                        <td>{stpr}원</td>
-                        <td>{ndpr}원</td>
-                        <td>{rdpr}원</td>
+                        <td>{userinfo.PRICE[0]}</td>
+                        <td>{userinfo.PRICE[1]}</td>
+                        <td>{userinfo.PRICE[2]}</td>
                     </tr>
-                    <tr style={{height: "400px"}}>
-                        <td>{stdts}</td>
-                        <td>{nddts}</td>
-                        <td>{rddts}</td>
+                    <tr>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[0].map(day => (
+
+                                <div>
+                                   <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                   <Table style={{width:'100%'}}>
+                                       <thead key={shortid.generate()}>
+                                       <tr key={shortid.generate()}>
+                                           <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                           <th key={shortid.generate()}>일정명</th>
+                                       </tr>
+                                       </thead>
+                                       <tbody key={shortid.generate()}>
+
+                                       {day.P_INFO.map(sch => (
+                                           <tr key={shortid.generate()}>
+                                               <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                               <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                           </tr>
+                                       ))}
+
+                                       </tbody>
+                                   </Table>
+                                </div>
+
+                                )
+                            )}
+                        </td>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[1].map(day => (
+
+                                <div>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                    <Table style={{width:'100%'}}>
+                                        <thead key={shortid.generate()}>
+                                        <tr key={shortid.generate()}>
+                                            <th style={{width:'100px'}} key={shortid.generate()}>시작시간</th>
+                                            <th style={{width:'280px'}} key={shortid.generate()}>일정명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody key={shortid.generate()}>
+
+                                        {day.P_INFO.map(sch => (
+                                            <tr key={shortid.generate()}>
+                                                <td style={{width:'100px'}} key={shortid.generate()}>{sch.P_TIME}</td>
+                                                <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                            </tr>
+                                        ))}
+
+                                        </tbody>
+                                    </Table>
+                                </div>
+                                )
+                            )}
+                        </td>
+                        <td style={{width:'33%'}}>
+                            {userinfo.P_SCH[2].map(day => (
+
+                                <div>
+                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
+                                    <Table style={{width:'100%'}}>
+                                        <thead key={shortid.generate()}>
+                                        <tr key={shortid.generate()}>
+                                            <th  key={shortid.generate()}>시작시간</th>
+                                            <th key={shortid.generate()}>일정명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody key={shortid.generate()}>
+
+                                        {day.P_INFO.map(sch => (
+                                            <tr key={shortid.generate()}>
+                                                <td  key={shortid.generate()}>{sch.P_TIME}</td>
+                                                <td key={shortid.generate()}>{sch.P_CONTENT}</td>
+                                            </tr>
+                                        ))}
+
+                                        </tbody>
+                                    </Table>
+                                </div>
+                                )
+                            )}
+                        </td>
                     </tr>
                     <tr className="gobkbtn">
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
-                            <Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
-                            <Button onClick={go2bk}>예약하러 가기</Button></td>
-                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}>
-                            <Button onClick={go2bk}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[0]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[1]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
+                        <td style={{border: "1px solid white", borderTop: "1px solid #331904", paddingTop: "10px"}}><Button data-pid={userinfo.PID[2]} onClick={(e ) => (go2bk(e ))}>예약하러 가기</Button></td>
                     </tr>
                     </tbody>
                 </Table>
             );
         }
     }
-    // console.log(`유저인포`, String(userinfo.response[0]).split(',')[4]['P_SCH'])
-    // console.log(`...`, ((userinfo.response[0]).slice(5, 6)).P_NAME)
 
     return (
         <main>
@@ -495,16 +636,35 @@ export default function Likes ({session, likes, likes1, likes2, likes3}) {
                 <Row className="tpl">
                     <Col className="likeslist col-10 offset-1">
                         <ul className="temples-list" style={{padding: "0"}}>
+                            {/*{likes.map((lk, index) => (*/}
+                            {/*    <Row key={index}>*/}
+                            {/*            <li key={index} className="temples-list-item">*/}
+                            {/*                <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>*/}
+                            {/*                    <Col className="col-5" style={{display: "flex", alignItems: "center"}}>*/}
+                            {/*                        <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE, lk.P_CONTENT]}*/}
+                            {/*                                    checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>*/}
+                            {/*                        <img src="/img/temple.png" width="32" height="32" />*/}
+                            {/*                    </Col>*/}
+                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.T_NAME}</Col>*/}
+                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
+                            {/*                </Col>*/}
+                            {/*                <Col className="col-4">{lk.ADDR}</Col>*/}
+                            {/*                <Col className="col-5">{lk.P_NAME}</Col>*/}
+                            {/*            </li>*/}
+                            {/*        </Row>*/}
+                            {/*    ))*/}
+                            {/*}*/}
                             {likes1.map((llk, index) => (
                                 <Row key={index}>
                                     <li key={index} className="temples-list-item">
                                         <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
                                             <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
-                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} value={[llk.T_NAME, llk.ADDR, llk.P_NAME, llk.PRICE, likes3]}
+                                                <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} pid={llk.PID} t_name={llk.T_NAME} addr={llk.ADDR} p_name={llk.P_NAME} price={llk.PRICE} data-p_sch={llk.P_SCH}
                                                             checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                 <img src="/img/temple.png" width="32" height="32" />
                                             </Col>
                                             <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{llk.T_NAME}</Col>
+                                            {/*<Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
                                         </Col>
                                         <Col className="col-4">{llk.ADDR}</Col>
                                         <Col className="col-5">{llk.P_NAME}</Col>
