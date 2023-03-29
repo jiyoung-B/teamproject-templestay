@@ -17,7 +17,7 @@ export async function getServerSideProps(ctx) {
     const res = await axios.get(url)
     let preBookInfo = res.data[0][0]
 
-
+    console.log('preBookInfo',preBookInfo)
     return {props:{preBookInfo,email}}
 }
 
@@ -35,6 +35,9 @@ export default function preBook ({preBookInfo,email}) {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
     preBookInfo.TOTAL = diffDays*(preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]);
+
+    if(preBookInfo.P_CLASS === '체험형' && preBookInfo.P_CLASS !== '1박')
+        preBookInfo.TOTAL = (preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]);
 
 
 
