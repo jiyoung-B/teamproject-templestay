@@ -24,7 +24,6 @@ export async function getServerSideProps(ctx) {
     const likes2 = await res.data[1];
     const likes3 = await res.data[2];
 
-
     return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
 }
 export default function Likes ({session, likes1, likes2, likes3}) {
@@ -139,7 +138,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
 
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
-
     const modalMapStyles = [
         {
             featureType: "landscape.natural",
@@ -183,21 +181,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
     let temloc1 = String(userinfo.ADDR[0]);
     let temloc2 = String(userinfo.ADDR[1]);
     let temloc3 = String(userinfo.ADDR[2]);
-
-    let aa = String(userinfo.response[0]).split(',');
-    let stdts = aa[aa.length-1];
-    let stpr = aa[aa.length-2];
-    let stpn = aa[aa.length-3];
-
-    let bb = String(userinfo.response[1]).split(',');
-    let nddts = bb[bb.length-1];
-    let ndpr = bb[bb.length-2];
-    let ndpn = bb[bb.length-3];
-
-    let cc = String(userinfo.response[2]).split(',');
-    let rddts = cc[cc.length-1];
-    let rdpr = cc[cc.length-2];
-    let rdpn = cc[cc.length-3];
 
     // Get latitude & longitude from address.
     const [coordinates, setCoordinates] = useState(null);
@@ -277,6 +260,7 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     defaultZoom={this.state.defaultProps.zoom}
                     layerTypes={this.state.defaultProps.layerTypes}
                     options={{ styles: this.state.defaultProps.styles }}
+                    yesIWantToUseGoogleMapApiInternals={true}
                 >
                     <TbCircleNumber1 lat={coordinates?.lat} lng={coordinates?.lng} text={"Point 1"} size="30" color="#984C0C" />
                     <TbCircleNumber2 lat={coordinates2?.lat} lng={coordinates2?.lng} text={"Point 2"} size="30" color="#984C0C" />
@@ -395,7 +379,7 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         <td>{userinfo.T_NAME[1]}</td>
                     </tr>
                     <tr style={{height: "750px"}}>
-                        <td colSpan="2" id="map" style={{height: "100%", width: "100%"}}>
+                        <td colSpan="2" id="map" style={{height: "740px", width: "990px"}}>
                             <GoogleMap1
                                 apiKey={googleMapsApiKey}
                                 center={[medianLat, medianLng]}
@@ -493,7 +477,7 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         <td>{userinfo.T_NAME[2]}</td>
                     </tr>
                     <tr style={{height: "750px"}}>
-                        <td colSpan="3" id="map" style={{height: "100%", width: "100%"}}>
+                        <td colSpan="3" id="map" style={{height: "740px", width: "990px"}}>
                             <GoogleMap2
                                 apiKey={googleMapsApiKey}
                                 styles={modalMapStyles}
@@ -620,40 +604,20 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     <Col className="col-5">
                         <>
                             <Button letiant="primary" className="combtn" onClick={handleShow}>비교하기</Button>
-                            <React.Fragment id="myModal" className="modal">
-                                <Modal size="xl" show={show} onHide={handleClose} likes1={likes1}>
-                                    <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}} closeButton>
-                                        <Modal.Title></Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body className="comtab">
-                                        <SelectCompareCnt likes1={likes1} />
-                                    </Modal.Body>
-                                </Modal>
-                            </React.Fragment>
+                            <Modal size="xl" show={show} onHide={handleClose} likes1={likes1}>
+                                <Modal.Header style={{justifyContent: "center", height: "45px", color: "#331904"}} closeButton>
+                                    <Modal.Title></Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body className="comtab">
+                                    <SelectCompareCnt likes1={likes1} />
+                                </Modal.Body>
+                            </Modal>
                         </>
                     </Col>
                 </Row>
                 <Row className="tpl">
                     <Col className="likeslist col-10 offset-1">
                         <ul className="temples-list" style={{padding: "0"}}>
-                            {/*{likes.map((lk, index) => (*/}
-                            {/*    <Row key={index}>*/}
-                            {/*            <li key={index} className="temples-list-item">*/}
-                            {/*                <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>*/}
-                            {/*                    <Col className="col-5" style={{display: "flex", alignItems: "center"}}>*/}
-                            {/*                        <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={lk.T_NAME} value={[lk.T_NAME, lk.ADDR, lk.P_NAME, lk.PRICE, lk.P_CONTENT]}*/}
-                            {/*                                    checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>*/}
-                            {/*                        <img src="/img/temple.png" width="32" height="32" />*/}
-                            {/*                    </Col>*/}
-                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.T_NAME}</Col>*/}
-                            {/*                    <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
-                            {/*                </Col>*/}
-                            {/*                <Col className="col-4">{lk.ADDR}</Col>*/}
-                            {/*                <Col className="col-5">{lk.P_NAME}</Col>*/}
-                            {/*            </li>*/}
-                            {/*        </Row>*/}
-                            {/*    ))*/}
-                            {/*}*/}
                             {likes1.map((llk, index) => (
                                 <Row key={index}>
                                     <li key={index} className="temples-list-item">
@@ -664,7 +628,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                 <img src="/img/temple.png" width="32" height="32" />
                                             </Col>
                                             <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{llk.T_NAME}</Col>
-                                            {/*<Col className="col-7" style={{display: "flex", alignItems: "center"}}>{lk.P_NAME}</Col>*/}
                                         </Col>
                                         <Col className="col-4">{llk.ADDR}</Col>
                                         <Col className="col-5">{llk.P_NAME}</Col>
