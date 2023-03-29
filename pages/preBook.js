@@ -10,7 +10,6 @@ export async function getServerSideProps(ctx) {
     // 세션 여부에 따라 email 값 분기
     let email;
     (sess?.user?.email !== undefined) ?  email = sess.user.email :  email =  null
-    console.log('email',email)
 
     let param = `?email=${email}`
     let url = `http://localhost:3000/api/preBookCheck${param}`

@@ -5,7 +5,7 @@ import {milliFomatter} from "./Utils";
 let templeSql ={
     selectTemple :`select * from TEMPLE2 where T_NAME = ?`,
     selectTemplePic : `select * from TEMPLEPIC2 where T_NAME = ?`,
-    selectTempleProPic : ` select T_NAME,p.PID,pp.P_NAME,pp.E_PICKTF,P_PICLINK from PROGRAMPIC2 pp join PROGRAM2 p USING(T_NAME) where T_NAME = ? and P_ENDDATE > ? `
+    selectTempleProPic : ` select T_NAME,pp.PID,pp.P_NAME,pp.E_PICKTF,P_PICLINK from PROGRAMPIC2 pp join PROGRAM2 p USING(T_NAME) where T_NAME = ? and P_ENDDATE > ? `
 }
 let tomorrow = milliFomatter(new Date().setDate(new Date().getDate() + 1));
 async function selectTemple(id) {  // 템플 정보 출력
