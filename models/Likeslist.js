@@ -41,7 +41,7 @@ let likeslistsql = {
         } finally {
             await mariadb.closeConn(conn)
         }
-        console.log('왜', likeslist)
+        // console.log('왜', likeslist)
 
         return likeslist;
     }
