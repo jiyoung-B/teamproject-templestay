@@ -21,12 +21,11 @@ export async function getServerSideProps(ctx) {
     let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
     const likes1 = await res.data[0];
-    const likes2 = await res.data[1];
-    const likes3 = await res.data[2];
+    const likes3 = await res.data[1];
 
-    return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
+    return {props : {likes1: likes1, likes3: likes3}}
 }
-export default function Likes ({session, likes1, likes2, likes3}) {
+export default function Likes ({session, likes1, likes3}) {
     const [checkedState, setCheckedState] = useState( new Array(likes1.length).fill(false) );
     const [userinfo, setUserInfo] = useState({
         T_NAME: [],
@@ -37,7 +36,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         PID: [],
         response: [],
     });
-    console.log('userinfo',userinfo.P_SCH)
 
     let handleOnChange = async (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
@@ -60,8 +58,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         let pid = e.target.getAttribute('pid')
         let p_sch = likes3[position].P_SCH
 
-
-
         const {T_NAME, ADDR, P_NAME, PRICE, P_SCH, PID} = userinfo;
 
                 // Case 1 : The user checks the box
@@ -81,7 +77,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                             newState.PID = [...prev.PID]
                             newState.PID.push(pid)
                             newState.response= [...prev.T_NAME, ...prev.ADDR, ...prev.P_NAME, ...prev.PRICE, ...prev.P_SCH]
-
 
                         return newState
 
@@ -103,8 +98,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     });
                 }
             };
-    // console.log(`likes`, likes);
-
 
     const [show, setShow] = useState(false);
     const handleShow = () => {
@@ -196,7 +189,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
     useEffect( () => {
         getCoordinates(`${temloc1}`);
     }, [`${temloc1}`]);
-    console.log(`lat: `, coordinates?.lat, `lng: `, coordinates?.lng)
 
     const [coordinates2, setCoordinates2] = useState(null);
     let getCoordinates2 = (address) => {
@@ -212,7 +204,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
     useEffect( () => {
         getCoordinates2(`${temloc2}`);
     }, [`${temloc2}`]);
-    console.log(`lat2: `, coordinates2?.lat, `lng2: `, coordinates2?.lng)
 
     const [coordinates3, setCoordinates3] = useState(null);
     let getCoordinates3 = (address) => {
@@ -228,7 +219,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
     useEffect( () => {
         getCoordinates3(`${temloc3}`);
     }, [`${temloc3}`]);
-    console.log(`lat3: `, coordinates3?.lat, `lng3: `, coordinates3?.lng)
 
     let medianLat = (coordinates?.lat + coordinates2?.lat) / 2;
     let medianLng = (coordinates?.lng + coordinates2?.lng) / 2;
@@ -398,7 +388,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     <tr>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[0].map(day => (
-
                                     <div>
                                         <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                         <Table style={{width:'100%'}}>
@@ -420,13 +409,11 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                             </tbody>
                                         </Table>
                                     </div>
-
                                 )
                             )}
                         </td>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[1].map(day => (
-
                                     <div>
                                         <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                         <Table style={{width:'100%'}}>
@@ -444,7 +431,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                     <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
                                                 </tr>
                                             ))}
-
                                             </tbody>
                                         </Table>
                                     </div>
@@ -497,7 +483,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     <tr>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[0].map(day => (
-
                                 <div>
                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                    <Table style={{width:'100%'}}>
@@ -515,17 +500,14 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
                                            </tr>
                                        ))}
-
                                        </tbody>
                                    </Table>
                                 </div>
-
                                 )
                             )}
                         </td>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[1].map(day => (
-
                                 <div>
                                     <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                     <Table style={{width:'100%'}}>
@@ -543,7 +525,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                 <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
                                             </tr>
                                         ))}
-
                                         </tbody>
                                     </Table>
                                 </div>
@@ -552,7 +533,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         </td>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[2].map(day => (
-
                                 <div>
                                     <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                     <Table style={{width:'100%'}}>
@@ -570,7 +550,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                 <td key={shortid.generate()}>{sch.P_CONTENT}</td>
                                             </tr>
                                         ))}
-
                                         </tbody>
                                     </Table>
                                 </div>
@@ -620,16 +599,18 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                             {likes1.map((llk, index) => (
                                 <Row key={index}>
                                     <li key={index} className="temples-list-item">
-                                        <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
+                                        <Col className="col-2" style={{display: "flex", paddingLeft: "1%", width: "20%"}}>
+                                            <Row style={{display: "flex", justifyContent: "center", width: "100%"}}>
                                             <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
                                                 <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} pid={llk.PID} t_name={llk.T_NAME} addr={llk.ADDR} p_name={llk.P_NAME} price={llk.PRICE} data-p_sch={llk.P_SCH}
                                                             checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                 <img src="/img/temple.png" width="32" height="32" />
                                             </Col>
                                             <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{llk.T_NAME}</Col>
+                                            </Row>
                                         </Col>
-                                        <Col className="col-4">{llk.ADDR}</Col>
-                                        <Col className="col-5">{llk.P_NAME}</Col>
+                                        <Col className="col-5">{llk.ADDR}</Col>
+                                        <Col className="col-5" style={{width: "38%"}}>{llk.P_NAME}</Col>
                                     </li>
                                 </Row>
                             ))
