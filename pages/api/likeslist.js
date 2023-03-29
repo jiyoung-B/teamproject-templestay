@@ -6,15 +6,10 @@ export default async (req, res) => {
     try {
         const likeslist = await Likeslist(email).then((lk) => lk);
 
-        // console.log('plz : ', likeslist);
         let likesList1=likeslist[0].map((llk) => ({PID : llk.PID, T_NAME : llk.T_NAME, P_NAME : llk.P_NAME, ADDR : llk.ADDR, PRICE : llk.PRICE})
         )
         let distinctLikesList1 = likesList1.filter((obj,index) => {
             return likesList1.findIndex(item => item.PID === obj.PID) === index;
-        })
-        let likesList2=likeslist[0].map((llk) => ({P_NAME:llk.P_NAME,PR_CLASS:llk.PR_CLASS,PRICE:llk.PRICE}))
-        let distinctLikeList2 = likesList2.filter((obj,index) => {
-            return likesList2.findIndex(item => item.P_NAME === obj.P_NAME) === index;
         })
         let likeList3=likeslist[0].map((llk) => ({P_NAME:llk.P_NAME,P_DAY:llk.P_DAY,P_TIME:llk.P_TIME,P_CONTENT:llk.P_CONTENT}))
         let distinctLikeList3 = likeList3.filter((obj,index) => {
@@ -80,14 +75,12 @@ export default async (req, res) => {
         }
 
         distinctLikeList3 = transformData(distinctLikeList3)
-        console.log('distinctLikeList3',distinctLikeList3)
 
         for (let i = 0; i < distinctLikesList1.length; i++) {
             distinctLikesList1[i].P_SCH = distinctLikeList3[i].P_SCH
         }
-        console.log('distinctLikesList1',distinctLikesList1)
 
-        res.status(200).json([distinctLikesList1, distinctLikeList2, distinctLikeList3]);
+        res.status(200).json([distinctLikesList1, distinctLikeList3]);
     } catch (err) {
         console.log(err);
         res.status(500).json(err);
