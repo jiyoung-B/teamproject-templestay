@@ -8,7 +8,7 @@ export default async (req, res) => {
         let result = await new PreBook().selectPreBook(email).then(result => result)
 
         // 전처리 부분
-        // 해단 단위에 맞는 가격을 매칭한다. 이것으로
+        // 해당 단위에 맞는 가격을 매칭한다.
         let adultPrice = 0;
         let middlePrice = 0;
         let youngPrice = 0;

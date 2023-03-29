@@ -1,8 +1,11 @@
 import selectEdPic from "../../models/IntroEditorPick";
 export default async (req, res) => {
 
+    let {id} = req.query
+
     try{
-        let edpickData = await selectEdPic().then(result => result)
+
+        let edpickData = await selectEdPic(id).then(result => result)
 
 
         res.status(200).json(edpickData)

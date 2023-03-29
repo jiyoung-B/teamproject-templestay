@@ -32,7 +32,6 @@ import moment from 'moment';
 
 const Nav = ({props, menu, session, searchTemple}) => {
 
-
     const [passwd2, setPasswd2,] = useState('');
     const [repasswd, setRepasswd] = useState('');
     const [name, setName] = useState('');

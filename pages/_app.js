@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps, session }) {
     pageProps.session = session.user;
     const getLayout = Component.getLayout ?? ((page) => page);
 
+
     return (
         <React.Fragment>
             <Layout {...pageProps}>

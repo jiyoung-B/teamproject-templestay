@@ -34,6 +34,8 @@ export default function preBook ({preBookInfo}) {
 
     preBookInfo.TOTAL = diffDays*(preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]);
 
+
+
     const handleBook = async () => {
 
         // 클릭시 버튼 비활성화
@@ -64,7 +66,7 @@ export default function preBook ({preBookInfo}) {
         location.href = '/'
     };
     return(
-        <div className={'container mt-5'} >
+        <div className={'container mt-5 mb-5'} >
             <h1>hi! 예약페이지!</h1>
             <p>{preBookInfo.email}님의 예약정보!</p>
 
