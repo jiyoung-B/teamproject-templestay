@@ -21,7 +21,7 @@ export async function getServerSideProps(ctx) {
     let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
     const likes1 = await res.data[0];
-    const likes3 = await res.data[2];
+    const likes3 = await res.data[1];
 
     return {props : {likes1: likes1, likes3: likes3}}
 }
@@ -602,15 +602,17 @@ export default function Likes ({session, likes1, likes3}) {
                             {likes1.map((llk, index) => (
                                 <Row key={index}>
                                     <li key={index} className="temples-list-item">
-                                        <Col className="col-3" style={{display: "flex", paddingLeft: "1%"}}>
+                                        <Col className="col-2" style={{display: "flex", paddingLeft: "1%", width: "20%"}}>
+                                            <Row style={{display: "flex", justifyContent: "center", width: "100%"}}>
                                             <Col className="col-5" style={{display: "flex", alignItems: "center"}}>
                                                 <Form.Check type="checkbox" className="checkbox" id={`custom-checkbox-${index}`} namd={llk.T_NAME} pid={llk.PID} t_name={llk.T_NAME} addr={llk.ADDR} p_name={llk.P_NAME} price={llk.PRICE} data-p_sch={llk.P_SCH}
                                                             checked={checkedState[index]} onChange={ (e) => handleOnChange(index, e) }></Form.Check>
                                                 <img src="/img/temple.png" width="32" height="32" />
                                             </Col>
                                             <Col className="col-7" style={{display: "flex", alignItems: "center"}}>{llk.T_NAME}</Col>
+                                            </Row>
                                         </Col>
-                                        <Col className="col-4">{llk.ADDR}</Col>
+                                        <Col className="col-5">{llk.ADDR}</Col>
                                         <Col className="col-5">{llk.P_NAME}</Col>
                                     </li>
                                 </Row>
