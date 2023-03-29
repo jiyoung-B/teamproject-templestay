@@ -36,7 +36,6 @@ export default function Likes ({session, likes1, likes3}) {
         PID: [],
         response: [],
     });
-    console.log('userinfo',userinfo.P_SCH)
 
     let handleOnChange = async (position, e) => {
         if (checkedState.filter((i) => i).length >= 3 && e.target.checked) return;
@@ -189,7 +188,6 @@ export default function Likes ({session, likes1, likes3}) {
     useEffect( () => {
         getCoordinates(`${temloc1}`);
     }, [`${temloc1}`]);
-    console.log(`lat: `, coordinates?.lat, `lng: `, coordinates?.lng)
 
     const [coordinates2, setCoordinates2] = useState(null);
     let getCoordinates2 = (address) => {
@@ -205,7 +203,6 @@ export default function Likes ({session, likes1, likes3}) {
     useEffect( () => {
         getCoordinates2(`${temloc2}`);
     }, [`${temloc2}`]);
-    console.log(`lat2: `, coordinates2?.lat, `lng2: `, coordinates2?.lng)
 
     const [coordinates3, setCoordinates3] = useState(null);
     let getCoordinates3 = (address) => {
@@ -221,7 +218,6 @@ export default function Likes ({session, likes1, likes3}) {
     useEffect( () => {
         getCoordinates3(`${temloc3}`);
     }, [`${temloc3}`]);
-    console.log(`lat3: `, coordinates3?.lat, `lng3: `, coordinates3?.lng)
 
     let medianLat = (coordinates?.lat + coordinates2?.lat) / 2;
     let medianLng = (coordinates?.lng + coordinates2?.lng) / 2;
