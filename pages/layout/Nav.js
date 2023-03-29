@@ -113,7 +113,7 @@ const Nav = ({props, menu, session, searchTemple}) => {
 
         } else {
             alert('로그인');
-            location.href = '/myinfo';
+            location.href = '/';
         }
 
 
@@ -285,7 +285,7 @@ const Nav = ({props, menu, session, searchTemple}) => {
                                                 {/*onClick={() => signOut()}*/}
                                                 로그아웃
                                             </Button>
-                                            <NavLink href='/myinfo'>
+                                            <NavLink href='/likes'>
                                             <Button type="button" variant="secondary">
                                                 내정보
                                             </Button>

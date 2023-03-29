@@ -3,10 +3,13 @@ import {Button, Table} from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {useState} from "react";
+import {getSession} from "next-auth/client";
 
 export async function getServerSideProps(ctx) {
-
-    let {email} = ctx.query
+    let sess = await getSession(ctx);
+    // 세션 여부에 따라 email 값 분기
+    let email;
+    (sess?.user?.email !== undefined) ?  email = sess.user.email :  email =  null
 
     let param = `?email=${email}`
     let url = `http://localhost:3000/api/preBookCheck${param}`
@@ -14,17 +17,16 @@ export async function getServerSideProps(ctx) {
     const res = await axios.get(url)
     let preBookInfo = res.data[0][0]
 
-
-    return {props:{preBookInfo}}
+    console.log('preBookInfo',preBookInfo)
+    return {props:{preBookInfo,email}}
 }
 
 
 
-export default function preBook ({preBookInfo}) {
+export default function preBook ({preBookInfo,email}) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    let email = preBookInfo.email
 
     const startDate = new Date(preBookInfo.B_STRDATE);
     const endDate = new Date(preBookInfo.B_ENDDATE);
@@ -33,6 +35,9 @@ export default function preBook ({preBookInfo}) {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
     preBookInfo.TOTAL = diffDays*(preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]);
+
+    if(preBookInfo.P_CLASS === '체험형' && preBookInfo.P_CLASS !== '1박')
+        preBookInfo.TOTAL = (preBookInfo.ADULT[0]*preBookInfo.ADULT[1] + preBookInfo.MIDDLE[0]*preBookInfo.MIDDLE[1] + preBookInfo.YOUNG[0]*preBookInfo.YOUNG[1] + preBookInfo.PRESCHOOL[0]*preBookInfo.PRESCHOOL[1]);
 
 
 
@@ -54,21 +59,21 @@ export default function preBook ({preBookInfo}) {
            let param = `?email=${email}`
            let del = await fetch('api/preBookDelete'+param)
 
-           location.href = '/'
+           location.href = `/myinfo${param}`
        }
 
     };
 
     const cancelBook = async () => {
-        let param = `?email=${preBookInfo.email}`
+        let param = `?email=${email}`
         let del = await fetch('api/preBookDelete'+param)
 
-        location.href = '/'
+        location.href = `/`
     };
     return(
         <div className={'container mt-5 mb-5'} >
             <h1>hi! 예약페이지!</h1>
-            <p>{preBookInfo.email}님의 예약정보!</p>
+            <p>{email}님의 예약정보!</p>
 
             <Table>
                 <thead>

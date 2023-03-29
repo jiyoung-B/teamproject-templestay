@@ -27,6 +27,7 @@ const unit = 28
 
 export default function temple ({temple,distintTemplePic,distinctProPic,pid}) {
 
+
     useEffect(() => {
         const script = document.createElement('script');
 
