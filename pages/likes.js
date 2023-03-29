@@ -21,12 +21,11 @@ export async function getServerSideProps(ctx) {
     let url = `http://localhost:3000/api/likeslist${param}`;
     const res = await axios.get(url);
     const likes1 = await res.data[0];
-    const likes2 = await res.data[1];
     const likes3 = await res.data[2];
 
-    return {props : {likes1: likes1, likes2: likes2, likes3: likes3}}
+    return {props : {likes1: likes1, likes3: likes3}}
 }
-export default function Likes ({session, likes1, likes2, likes3}) {
+export default function Likes ({session, likes1, likes3}) {
     const [checkedState, setCheckedState] = useState( new Array(likes1.length).fill(false) );
     const [userinfo, setUserInfo] = useState({
         T_NAME: [],
@@ -60,8 +59,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         let pid = e.target.getAttribute('pid')
         let p_sch = likes3[position].P_SCH
 
-
-
         const {T_NAME, ADDR, P_NAME, PRICE, P_SCH, PID} = userinfo;
 
                 // Case 1 : The user checks the box
@@ -81,7 +78,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                             newState.PID = [...prev.PID]
                             newState.PID.push(pid)
                             newState.response= [...prev.T_NAME, ...prev.ADDR, ...prev.P_NAME, ...prev.PRICE, ...prev.P_SCH]
-
 
                         return newState
 
@@ -103,8 +99,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     });
                 }
             };
-    // console.log(`likes`, likes);
-
 
     const [show, setShow] = useState(false);
     const handleShow = () => {
@@ -133,8 +127,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         let param = `?pid=${PID}`
         location.href = `/program${param}`;
     };
-
-    console.log(`배열`, userinfo.response)
 
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
@@ -399,7 +391,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     <tr>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[0].map(day => (
-
                                     <div>
                                         <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                         <Table style={{width:'100%'}}>
@@ -421,13 +412,11 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                             </tbody>
                                         </Table>
                                     </div>
-
                                 )
                             )}
                         </td>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[1].map(day => (
-
                                     <div>
                                         <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                         <Table style={{width:'100%'}}>
@@ -445,7 +434,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                     <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
                                                 </tr>
                                             ))}
-
                                             </tbody>
                                         </Table>
                                     </div>
@@ -498,7 +486,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                     <tr>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[0].map(day => (
-
                                 <div>
                                    <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                    <Table style={{width:'100%'}}>
@@ -516,17 +503,14 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
                                            </tr>
                                        ))}
-
                                        </tbody>
                                    </Table>
                                 </div>
-
                                 )
                             )}
                         </td>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[1].map(day => (
-
                                 <div>
                                     <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                     <Table style={{width:'100%'}}>
@@ -544,7 +528,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                 <td style={{width:'280px'}} key={shortid.generate()}>{sch.P_CONTENT}</td>
                                             </tr>
                                         ))}
-
                                         </tbody>
                                     </Table>
                                 </div>
@@ -553,7 +536,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                         </td>
                         <td style={{width:'33%'}}>
                             {userinfo.P_SCH[2].map(day => (
-
                                 <div>
                                     <p className={'fs-5 fw-bold'} key={shortid.generate()}>{day.P_DAY}</p>
                                     <Table style={{width:'100%'}}>
@@ -571,7 +553,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
                                                 <td key={shortid.generate()}>{sch.P_CONTENT}</td>
                                             </tr>
                                         ))}
-
                                         </tbody>
                                     </Table>
                                 </div>
