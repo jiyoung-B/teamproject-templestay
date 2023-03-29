@@ -135,7 +135,6 @@ export default function Likes ({session, likes1, likes2, likes3}) {
         location.href = `/program${param}`;
     };
 
-    console.log(`배열`, userinfo.response)
 
     // 구글맵 설정
     const googleMapsApiKey = "AIzaSyC5nBDG8jIWJwe02MZYhrmkhN22Fo81FTU";
