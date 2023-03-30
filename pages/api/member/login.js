@@ -5,7 +5,7 @@ export default async (req, res) => {
 
 
     try {
-        const member = new Member().login(email, passwd)
+        const member = new Member().login(email)
             .then(result => result);
 
         console.log('api member', await member)

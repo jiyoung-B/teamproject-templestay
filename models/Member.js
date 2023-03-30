@@ -58,9 +58,9 @@ class Member {
         return result;
     }
 
-    async login(email, passwd) {  // 로그인 처리
+    async login(email) {  // 로그인 처리
         let conn = null;
-        let params = [email, passwd];
+        let params = [email];
         let result = -1;
 
         try {
